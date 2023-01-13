@@ -35,8 +35,8 @@ public class DriveTrain extends SubsystemBase {
      */
     public void setSteerPosition(double position) {
         // convert position from the range [-1, 1] to angle using the steer range constant
-        // double angle = position * SwerveModuleConstants.kSteerRange;
-        //steerMotor.set(angle);
+         double angle = position * 0.7078125; // Unsure if the 0.7078125 is the correct steer range constant
+        steerMotor.set(angle);
     }
 
     /**
@@ -44,9 +44,8 @@ public class DriveTrain extends SubsystemBase {
      * @return The position of the steer encoder in the range [0, 1].
      */
     public double getSteerEncoderPosition() {
-        return 0;
-        //double position = steerEncoder.getVoltage() / SwerveModuleConstants.kEncoderRatio;
-        //return position;
+        double position = (steerEncoder.getVoltage() / 10.0);//the 10.0 is assuming the gear ratio between the Motor and the Wheel is 10.0
+        return position;
     }
 
     /**
