@@ -1,6 +1,9 @@
 package frc.robot;
-
 import edu.wpi.first.*;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 
 
 public final class Constants {
@@ -8,12 +11,14 @@ public final class Constants {
     public static final class ModuleConstants {
         public static final double kWheelDiameterMeters = Units.inchesToMeters(4);
         public static final double kDriveMotorGearRatio = 1 / 5.8462;
+        public static final double kSteerMotorGearRatio = 1 / 18.0;
         public static final double kTurningMotorGearRatio = 1 / 18.0;
         public static final double kDriveEncoderRot2Meter = kDriveMotorGearRatio * Math.PI * kWheelDiameterMeters;
-        public static final double kTurningEncoderRot2Rad = kTurningMotorGearRatio * 2 * Math.PI;
+        public static final double kSteerEncoderRot2Rad = kTurningMotorGearRatio * 2 * Math.PI;
         public static final double kDriveEncoderRPM2MeterPerSec = kDriveEncoderRot2Meter / 60;
-        public static final double kTurningEncoderRPM2RadPerSec = kTurningEncoderRot2Rad / 60;
-        public static final double kPTurning = 0.5;
+        public static final double kSteerEncoderRPM2RadPerSec = kSteerEncoderRot2Rad / 60;
+        public static final double kPSteer = 0.5;
+        public static final double kPDrive = 0.5;
     }
 
     public static final class DriveConstants {
@@ -68,9 +73,8 @@ public final class Constants {
 
         public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond / 4;
         public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = //
-                kPhysicalMaxAngularSpeedRadiansPerSecond / 4;
-        public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 3;
-        public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 3;
+        kPhysicalMaxAngularSpeedRadiansPerSecond / 4;
+         public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 3;
          public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 3;
 
 
