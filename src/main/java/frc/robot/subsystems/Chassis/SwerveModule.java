@@ -43,7 +43,6 @@ public class SwerveModule {
         steerMotor.configSelectedFeedbackCoefficient(ModuleConstants.kSteerEncoderRPM2RadPerSec);
         
         drivePIDController = new PIDController(ModuleConstants.kPDrive, 0, 0);
-
         steerPIDController = new PIDController(ModuleConstants.kPSteer, 0, 0);
         steerPIDController.enableContinuousInput(-Math.PI, Math.PI);
 

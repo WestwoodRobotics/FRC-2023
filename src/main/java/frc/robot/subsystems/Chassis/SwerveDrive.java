@@ -32,6 +32,11 @@ public class SwerveDrive extends SubsystemBase {
     public void SwerveModule(int driveID, int steerID, boolean driveMotorReversed, boolean steerMotorReversed, int absoluteEncoderId, double absoluteEncoderOffset, boolean absoluteEncoderReversed) {
         driveMotor = new WPI_TalonSRX(driveID);
         steerMotor = new WPI_TalonSRX(steerID);
+        drivePIDController = new PIDController(ModuleConstants.kPDrive, ModuleConstants.kIDrive, ModuleConstants.kDDrive);
+        steerPIDController = new PIDController(ModuleConstants.kPSteer, ModuleConstants.kISteer, ModuleConstants.kDSteer);
+        absoluteEncoder = new AnalogInput(absoluteEncoderId);
+        absoluteEncoderOffsetRad = absoluteEncoderOffset;
+        this.absoluteEncoderReversed = absoluteEncoderReversed;
         absoluteEncoder = new AnalogInput(absoluteEncoderId);
     }
 
