@@ -141,8 +141,8 @@ public final class Constants {
         public static final double kDeadband = 0.05;
     }
 
-    public static final class intakeConstants {
-        // ...
+    public static final class IntakeConstants {
+        public static final int P_INTAKE = 0;
     }
 
 
