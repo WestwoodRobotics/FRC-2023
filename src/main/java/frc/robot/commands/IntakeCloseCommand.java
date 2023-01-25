@@ -11,18 +11,17 @@ import frc.robot.subsystems.Intake.Intake;
 
 
 /** An example command that uses an example subsystem. */
-public class IntakeOpenCommand extends CommandBase {
+public class IntakeCloseCommand extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final Intake m_intake;
-  private final Timer tim;
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public IntakeOpenCommand(Intake m_intake, Timer tim) {
+  public IntakeCloseCommand(Intake m_intake) {
     this.m_intake = m_intake;
-    this.tim = tim;
+
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_intake);
@@ -33,9 +32,8 @@ public class IntakeOpenCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    tim.reset();
-    tim.start();
-    m_intake.setIntakeVoltage(0.5);
+
+    m_intake.setIntakeVoltage(-0.5);
     
   }
 
@@ -49,13 +47,12 @@ public class IntakeOpenCommand extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_intake.setIntakeVoltage(0);
 
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return tim.hasElapsed(1); 
+    return true;
   }
 }
