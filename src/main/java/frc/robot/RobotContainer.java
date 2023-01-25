@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ExampleCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.IntakeOpenCommand;
+import frc.robot.commands.IntakeCloseCommand;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -26,10 +28,12 @@ public class RobotContainer {
 
   private final JoystickButton lBumper = new JoystickButton(mainController, XboxController.Button.kLeftBumper.value);
   private final JoystickButton rBumper = new JoystickButton(mainController, XboxController.Button.kRightBumper.value);
+  
+  private final IntakeOpenCommand instanceOfIntakeOpenCommand = new IntakeOpenCommand(m_intake);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-
+    
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -41,7 +45,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    lBumper.onTrue()
+    lBumper.onTrue();
 
   }
 

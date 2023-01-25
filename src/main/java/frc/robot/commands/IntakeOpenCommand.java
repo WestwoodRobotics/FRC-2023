@@ -14,15 +14,15 @@ import frc.robot.subsystems.Intake.Intake;
 public class IntakeOpenCommand extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final Intake m_intake;
-  private final Timer tim;
+  private final Timer tim = new Timer();
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public IntakeOpenCommand(Intake m_intake, Timer tim) {
+  public IntakeOpenCommand(Intake m_intake) {
     this.m_intake = m_intake;
-    this.tim = tim;
+
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_intake);
