@@ -18,4 +18,20 @@ public class IntakeModule {
         intakeEncoderPosition = intakeMotor.getSelectedSensorPosition();
         intakeEncoderVelocity = intakeMotor.getSelectedSensorVelocity();
     }
+    
+    //Retruns the position of the intake encoder
+    public double intakeEncoderPosition(){
+        return intakeEncoderPosition;
+    }
+    //Returns the velocity of the intake encoder
+    public double intakeEncoderVelocity(){
+        return intakeEncoderVelocity;
+    }
+    //Sets the speed of the intake motor
+    public void setIntakeMotor(double speed){
+        intakeMotor.set(speed);
+    }
+
+
+
 }
