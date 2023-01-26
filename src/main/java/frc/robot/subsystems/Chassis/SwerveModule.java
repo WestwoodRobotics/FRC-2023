@@ -83,11 +83,28 @@ public class SwerveModule {
         return absoluteEncoder.getAverageVoltage();
     }
 
+    // Method for checking if the absolute encoder is reversed
+    public boolean isAbsoluteEncoderReversed(){
+        return absoluteEncoderReversed;
+    }
 
+    // Method for getting the absolute encoder offset
+    public double getAbsoluteEncoderOffset(){
+        return absoluteEncoderOffsetRad;
+    }
+
+    // Method for getting the drive PID controller
+    public PIDController getDrivePIDController(){
+        return drivePIDController;
+    }
+
+
+    // Method for setting the drive PID controller
     public void setDriveMotorSpeed(double speed){
         driveMotor.set(speed);
     }
 
+    // Method for setting the steer motor speed
     public void setSteerMotorSpeed(double speed){
         steerMotor.set(speed);
     }
