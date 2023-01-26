@@ -10,6 +10,27 @@ public final class Constants {
 
     // This class contains constants for the swerve modules
     public static final class ModuleConstants {
+        // PWM ports for the drive motors
+        public static final int kFrontLeftDriveMotorPort = 0;
+        public static final int kFrontRightDriveMotorPort = 0;
+        public static final int kBackLeftDriveMotorPort = 0;
+        public static final int kBackRightDriveMotorPort = 0;
+
+        // PWM ports for the steer motors
+        public static final int kFrontLeftSteerMotorPort = 0;
+        public static final int kFrontRightSteerMotorPort = 0;
+        public static final int kBackLeftSteerMotorPort = 0;
+        public static final int kBackRightSteerMotorPort = 0;
+
+        // PWM ports for the turning motors
+        public static final int kFrontLeftDriveEncoderPort = 0;
+        public static final int kFrontRightDriveEncoderPort = 0;
+        public static final int kBackLeftDriveEncoderPort = 0;
+        public static final int kBackRightDriveEncoderPort = 0;
+
+        
+    
+        // Drivetrain Dimensions
         public static final double kWheelDiameterMeters = Units.inchesToMeters(4);
         // Gear ratio of the drive motor
         public static final double kDriveMotorGearRatio = 1 / 5.8462;
@@ -141,9 +162,12 @@ public final class Constants {
         public static final double kDeadband = 0.05;
     }
 
-    public static final class intakeConstants {
-        // ...
+    public static final class IntakeConstants {
+        public static final int kIntakeMotorPort = 0;
+        public static final int kIntakeMotorEncoderPort = 0;
     }
+
+
 
 
 }
