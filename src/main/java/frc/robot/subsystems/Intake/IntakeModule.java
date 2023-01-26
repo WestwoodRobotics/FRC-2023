@@ -1,9 +1,8 @@
 package frc.robot.subsystems.Intake;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Intake.IntakeModule;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import frc.robot.Constants.*;
+
 
 public class IntakeModule {
     // Motor for the intake mechanism
