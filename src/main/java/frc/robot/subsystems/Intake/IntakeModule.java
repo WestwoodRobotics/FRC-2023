@@ -14,18 +14,17 @@ public class IntakeModule {
     // Constructor for initializing the intake module
     public IntakeModule(int intakeMotorId, int intakeEncoderId) {
         intakeMotor = new WPI_TalonSRX(intakeMotorId);
-        intakeEncoderPosition = intakeMotor.getSelectedSensorPosition();
-        intakeEncoderVelocity = intakeMotor.getSelectedSensorVelocity();
     }
 
     // Retruns the position of the intake encoder
-    public double intakeEncoderPosition() {
-        return intakeEncoderPosition;
+    public double getIntakeEncoderPosition() {
+        return intakeMotor.getSelectedSensorPosition();
+        
     }
 
     // Returns the velocity of the intake encoder
     public double intakeEncoderVelocity() {
-        return intakeEncoderVelocity;
+        return intakeMotor.getSelectedSensorVelocity();
     }
 
     // Sets the speed of the intake motor
