@@ -7,9 +7,10 @@ public class IntakeModule {
     // Motor for the intake mechanism
     private WPI_TalonSRX intakeMotor;
     // Encoder for measuring the position of the intake motor
-    private double intakeEncoderPosition;
+    //private double intakeEncoderPosition;
+    
     // Encoder for measuring the velocity of the intake motor
-    private double intakeEncoderVelocity;
+    //private double intakeEncoderVelocity;
 
     // Constructor for initializing the intake module
     public IntakeModule(int intakeMotorId, int intakeEncoderId) {
@@ -23,7 +24,7 @@ public class IntakeModule {
     }
 
     // Returns the velocity of the intake encoder
-    public double intakeEncoderVelocity() {
+    public double getIntakeEncoderVelocity() {
         return intakeMotor.getSelectedSensorVelocity();
     }
 
