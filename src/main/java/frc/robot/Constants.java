@@ -10,23 +10,7 @@ public final class Constants {
 
     // This class contains constants for the swerve modules
     public static final class ModuleConstants {
-        // PWM ports for the drive motors
-        public static final int kFrontLeftDriveMotorPort = 0;
-        public static final int kFrontRightDriveMotorPort = 0;
-        public static final int kBackLeftDriveMotorPort = 0;
-        public static final int kBackRightDriveMotorPort = 0;
-
-        // PWM ports for the steer motors
-        public static final int kFrontLeftSteerMotorPort = 0;
-        public static final int kFrontRightSteerMotorPort = 0;
-        public static final int kBackLeftSteerMotorPort = 0;
-        public static final int kBackRightSteerMotorPort = 0;
-
-        // PWM ports for the turning motors
-        public static final int kFrontLeftDriveEncoderPort = 0;
-        public static final int kFrontRightDriveEncoderPort = 0;
-        public static final int kBackLeftDriveEncoderPort = 0;
-        public static final int kBackRightDriveEncoderPort = 0;
+        
 
         
     
@@ -48,6 +32,7 @@ public final class Constants {
         public static final double kSteerEncoderRPM2RadPerSec = kSteerEncoderRot2Rad / 60;
         
 
+
     }
 
     // This class contains constants for the swerve drive system
@@ -63,17 +48,7 @@ public final class Constants {
                 new Translation2d(-kWheelBase / 2, -kTrackWidth / 2),
                 new Translation2d(-kWheelBase / 2, kTrackWidth / 2));
 
-        // PWM ports for the drive motors
-        public static final int kFrontLeftDriveMotorPort = 8;
-        public static final int kBackLeftDriveMotorPort = 2;
-        public static final int kFrontRightDriveMotorPort = 6;
-        public static final int kBackRightDriveMotorPort = 4;
 
-        // PWM ports for the steer motors
-        public static final int kFrontLeftTurningMotorPort = 7;
-        public static final int kBackLeftTurningMotorPort = 1;
-        public static final int kFrontRightTurningMotorPort = 5;
-        public static final int kBackRightTurningMotorPort = 3;
 
         // Inversion states for the steer encoders
         public static final boolean kFrontLeftTurningEncoderReversed = true;
@@ -86,11 +61,7 @@ public final class Constants {
         public static final boolean kFrontRightDriveEncoderReversed = false;
         public static final boolean kBackRightDriveEncoderReversed = false;
 
-        // Analog input ports for the absolute encoders
-        public static final int kFrontLeftDriveAbsoluteEncoderPort = 0;
-        public static final int kBackLeftDriveAbsoluteEncoderPort = 2;
-        public static final int kFrontRightDriveAbsoluteEncoderPort = 1;
-        public static final int kBackRightDriveAbsoluteEncoderPort = 3;
+
 
         // Inversion states for the absolute encoders
         public static final boolean kFrontLeftDriveAbsoluteEncoderReversed = false;
@@ -120,6 +91,8 @@ public final class Constants {
         public static final double kDSwerveDriveSteerMotor = 0;
 
 
+
+
     }
 
     public static final class AutoConstants {
@@ -146,8 +119,7 @@ public final class Constants {
     }
 
     public static final class OIConstants {
-        // USB port of the driver controller
-        public static final int kDriverControllerPort = 0;
+        
 
         // Axis ID for the Y-axis of the driver controller
         public static final int kDriverYAxis = 1;
@@ -163,9 +135,55 @@ public final class Constants {
     }
 
     public static final class IntakeConstants {
+
+    }
+
+    public static final class PortConstants {
+        //CAN Coder Ports
+        public static final int kFrontLeftCANCoderPort = 0;
+        public static final int kFrontRightCANCoderPort = 0;
+        public static final int kBackLeftCANCoderPort = 0;
+        public static final int kBackRightCANCoderPort = 0;
+
+        // PWM ports for the drive motors
+        public static final int kFrontLeftDriveMotorPort = 8;
+        public static final int kBackLeftDriveMotorPort = 2;
+        public static final int kFrontRightDriveMotorPort = 6;
+        public static final int kBackRightDriveMotorPort = 4;
+
+        // PWM ports for the steer motors
+        public static final int kFrontLeftTurningMotorPort = 7;
+        public static final int kBackLeftTurningMotorPort = 1;
+        public static final int kFrontRightTurningMotorPort = 5;
+        public static final int kBackRightTurningMotorPort = 3;
+
+        // PWM ports for the steer motors
+        public static final int kFrontLeftSteerMotorPort = 0;
+        public static final int kFrontRightSteerMotorPort = 0;
+        public static final int kBackLeftSteerMotorPort = 0;
+        public static final int kBackRightSteerMotorPort = 0;
+
+        // PWM ports for the drive motors
+        public static final int kFrontLeftDriveEncoderPort = 0;
+        public static final int kFrontRightDriveEncoderPort = 0;
+        public static final int kBackLeftDriveEncoderPort = 0;
+        public static final int kBackRightDriveEncoderPort = 0;
+
+        // PWM ports for the intake motors
         public static final int kIntakeMotorPort = 0;
         public static final int kIntakeMotorEncoderPort = 0;
+
+        // USB port of the driver controller
+        public static final int kDriverControllerPort = 0;
+        
+        // Analog input ports for the absolute encoders
+        public static final int kFrontLeftDriveAbsoluteEncoderPort = 0;
+        public static final int kBackLeftDriveAbsoluteEncoderPort = 2;
+        public static final int kFrontRightDriveAbsoluteEncoderPort = 1;
+        public static final int kBackRightDriveAbsoluteEncoderPort = 3;
     }
+
+
 
 
 

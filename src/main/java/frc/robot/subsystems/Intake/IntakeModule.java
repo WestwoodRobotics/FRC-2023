@@ -19,17 +19,20 @@ public class IntakeModule {
     }
     
     //Retruns the position of the intake encoder
-    public double intakeEncoderPosition(){
+    public double getIntakeEncoderPosition(){
         return intakeEncoderPosition;
     }
     //Returns the velocity of the intake encoder
-    public double intakeEncoderVelocity(){
+    public double getIntakeEncoderVelocity(){
         return intakeEncoderVelocity;
     }
     //Sets the speed of the intake motor
     public void setIntakeMotor(double speed){
         intakeMotor.set(speed);
     }
+    
+    
+    
 
 
 
