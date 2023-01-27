@@ -8,12 +8,14 @@ import java.lang.ModuleLayer.Controller;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.ExampleCommand;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.IntakeOpenCommand;
+import frc.robot.commands.SetIntakePositionCommand;
 import frc.robot.commands.IntakeCloseCommand;
-import frc.robot.subsystems.Intake.*;;
+import frc.robot.subsystems.Intake.*;
+import frc.robot.Constants.IntakeConstants;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -30,6 +32,7 @@ public class RobotContainer {
 
   private final JoystickButton lBumper = new JoystickButton(mainController, XboxController.Button.kLeftBumper.value);
   private final JoystickButton rBumper = new JoystickButton(mainController, XboxController.Button.kRightBumper.value);
+  private final JoystickButton buttonA = new JoystickButton(mainController, XboxController.Button.kA.value);
   
   //private final IntakeOpenCommand instanceOfIntakeOpenCommand = new IntakeOpenCommand(m_intake);
 
@@ -47,8 +50,8 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    lBumper.onTrue(new IntakeOpenCommand(m_intake)).toggleOnFalse(new IntakeCloseCommand(m_intake));
-
+    lBumper.onTrue(new IntakeOpenCommand(m_intake)).onFalse(new IntakeCloseCommand(m_intake));
+    buttonA.onTrue(new SetIntakePositionCommand(m_intake, IntakeConstants.kOPEN_INTAKE)).onFalse(new SetIntakePositionCommand(m_intake, IntakeConstants.kCLOSE_INTAKE));
   }
 
   /**

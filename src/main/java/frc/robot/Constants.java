@@ -143,6 +143,9 @@ public final class Constants {
 
     public static final class IntakeConstants {
         public static final int P_INTAKE = 0;
+        public static final int kOPEN_INTAKE = 50;
+        public static final int kCLOSE_INTAKE = 50;
+
     }
 
 
