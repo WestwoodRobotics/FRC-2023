@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.IntakeOpenCommand;
 import frc.robot.commands.IntakeCloseCommand;
+import frc.robot.subsystems.Intake.*;;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -22,6 +23,7 @@ import frc.robot.commands.IntakeCloseCommand;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
+  private final Intake m_intake = new Intake();
 
   private final XboxController mainController = new XboxController(/*fake number */0);
 
@@ -29,7 +31,7 @@ public class RobotContainer {
   private final JoystickButton lBumper = new JoystickButton(mainController, XboxController.Button.kLeftBumper.value);
   private final JoystickButton rBumper = new JoystickButton(mainController, XboxController.Button.kRightBumper.value);
   
-  private final IntakeOpenCommand instanceOfIntakeOpenCommand = new IntakeOpenCommand(m_intake);
+  //private final IntakeOpenCommand instanceOfIntakeOpenCommand = new IntakeOpenCommand(m_intake);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -45,7 +47,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    lBumper.onTrue();
+    lBumper.onTrue(new IntakeOpenCommand(m_intake)).toggleOnFalse(new IntakeCloseCommand(m_intake));
 
   }
 
@@ -56,6 +58,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+    return null;
   }
 }
