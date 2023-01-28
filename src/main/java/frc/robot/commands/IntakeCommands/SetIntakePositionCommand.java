@@ -4,9 +4,7 @@
 
 package frc.robot.commands.IntakeCommands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.ExampleSubsystem;
 import frc.robot.subsystems.Intake.Intake;
 
 
@@ -20,9 +18,9 @@ public class SetIntakePositionCommand extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public SetIntakePositionCommand(Intake m_intake, double WntPosition) {
+  public SetIntakePositionCommand(Intake m_intake, double wntPosition) {
     this.m_intake = m_intake;
-    this.wntPosition = WntPosition;
+    this.wntPosition = wntPosition; // Intake motor sensor position value
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_intake);
@@ -43,7 +41,7 @@ public class SetIntakePositionCommand extends CommandBase {
       m_intake.setIntakeVoltage(1);
     }
     else if(m_intake.getPosition() > wntPosition){
-      m_intake.setIntakeVoltage(-1);
+      m_intake.setIntakeVoltage(-1);              //might oscillate if isFinished doesn't call fast enough
     }   
   }
 

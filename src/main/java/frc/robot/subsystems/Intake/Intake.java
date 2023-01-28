@@ -11,7 +11,7 @@ import frc.robot.Constants.IntakeConstants;
 
 public class Intake extends SubsystemBase {
 
-    private final TalonFX intakeMotor = new TalonFX(IntakeConstants.P_INTAKE);
+    private final TalonFX intakeMotor = new TalonFX(IntakeConstants.CANID_INTAKE);
 
     public Intake(){
         intakeMotor.setNeutralMode(NeutralMode.Brake);
