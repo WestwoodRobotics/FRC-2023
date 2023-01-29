@@ -11,25 +11,22 @@ public final class Constants {
     // This class contains constants for the swerve modules
     public static final class ModuleConstants {
         
-
-        
-    
         // Drivetrain Dimensions
         public static final double kWheelDiameterMeters = Units.inchesToMeters(4);
         // Gear ratio of the drive motor
         public static final double kDriveMotorGearRatio = 1 / 5.8462;
         // Gear ratio of the steer motor
         public static final double kSteerMotorGearRatio = 1 / 18.0;
-        // Gear ratio of the turning motor
-        public static final double kTurningMotorGearRatio = 1 / 18.0;
         // Conversion factor from drive encoder rotations to meters
         public static final double kDriveEncoderRot2Meter = kDriveMotorGearRatio * Math.PI * kWheelDiameterMeters;
         // Conversion factor from steer encoder rotations to radians
-        public static final double kSteerEncoderRot2Rad = kTurningMotorGearRatio * 2 * Math.PI;
+        public static final double kSteerEncoderRot2Rad = kSteerMotorGearRatio * 2 * Math.PI;
         // Conversion factor from drive encoder RPM to meters per second
         public static final double kDriveEncoderRPM2MeterPerSec = kDriveEncoderRot2Meter / 60;
         // Conversion factor from steer encoder RPM to radians per second
         public static final double kSteerEncoderRPM2RadPerSec = kSteerEncoderRot2Rad / 60;
+        //Rated Voltage of Falcon 500's
+        public static final double kFalcon500Voltage = 12;
         
 
 
@@ -90,6 +87,14 @@ public final class Constants {
         public static final double kISwerveDriveSteerMotor = 0;
         public static final double kDSwerveDriveSteerMotor = 0;
 
+        public static final double kDistanceFromCenterWidth = Units.inchesToMeters(21) / 2;
+        public static final double kDistanceFromCenterLength = Units.inchesToMeters(25.5) / 2;
+
+
+        private final Translation2d m_frontRightLocation = new Translation2d(kDistanceFromCenterWidth, kDistanceFromCenterLength),
+           m_frontLeftLocation = new Translation2d(kDistanceFromCenterWidth, -kDistanceFromCenterLength),
+           m_backRightLocation = new Translation2d(-kDistanceFromCenterWidth, kDistanceFromCenterLength),
+           m_backLeftLocation = new Translation2d(-kDistanceFromCenterWidth, -kDistanceFromCenterLength);
 
 
 
@@ -181,6 +186,10 @@ public final class Constants {
         public static final int kBackLeftDriveAbsoluteEncoderPort = 2;
         public static final int kFrontRightDriveAbsoluteEncoderPort = 1;
         public static final int kBackRightDriveAbsoluteEncoderPort = 3;
+    }
+
+    public static final class FilePathConstants{
+        public static final String steerEncoderOffsetSavesPath = "/src/main/java/frc/robot/sybsystems/Chassis/EncoderOffsets/SteerEncoderOffsets.txt";
     }
 
 
