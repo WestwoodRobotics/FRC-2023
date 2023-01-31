@@ -58,8 +58,6 @@ public final class Constants {
         public static final boolean kFrontRightDriveEncoderReversed = false;
         public static final boolean kBackRightDriveEncoderReversed = false;
 
-
-
         // Inversion states for the absolute encoders
         public static final boolean kFrontLeftDriveAbsoluteEncoderReversed = false;
         public static final boolean kBackLeftDriveAbsoluteEncoderReversed = false;
@@ -91,10 +89,13 @@ public final class Constants {
         public static final double kDistanceFromCenterLength = Units.inchesToMeters(25.5) / 2;
 
 
-        private final Translation2d m_frontRightLocation = new Translation2d(kDistanceFromCenterWidth, kDistanceFromCenterLength),
-           m_frontLeftLocation = new Translation2d(kDistanceFromCenterWidth, -kDistanceFromCenterLength),
-           m_backRightLocation = new Translation2d(-kDistanceFromCenterWidth, kDistanceFromCenterLength),
-           m_backLeftLocation = new Translation2d(-kDistanceFromCenterWidth, -kDistanceFromCenterLength);
+        //private final Translation2d m_frontRightLocation = new Translation2d(kDistanceFromCenterWidth, kDistanceFromCenterLength);
+        //private final Translation2d m_frontLeftLocation = new Translation2d(kDistanceFromCenterWidth, -kDistanceFromCenterLength);
+        //private final Translation2d m_backRightLocation = new Translation2d(-kDistanceFromCenterWidth, kDistanceFromCenterLength);
+        //private final Translation2d m_backLeftLocation = new Translation2d(-kDistanceFromCenterWidth, -kDistanceFromCenterLength);
+
+
+        
 
 
 
