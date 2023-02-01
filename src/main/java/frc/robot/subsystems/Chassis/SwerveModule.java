@@ -97,8 +97,8 @@ public class SwerveModule {
         steerMotor.configSelectedFeedbackCoefficient(ModuleConstants.kSteerEncoderRPM2RadPerSec);
         
         // Initialize the drive and steer PID controllers using the constants from DriveConstants
-        drivePIDController = new PIDController(DriveConstants.kPSwerveDriveDriveMotor, 0, 0);
-        steerPIDController = new PIDController(DriveConstants.kPSwerveDriveSteerMotor, 0, 0);
+        drivePIDController = new PIDController(DriveConstants.kPSwerveDriveDriveMotor, DriveConstants.kISwerveDriveDriveMotor, DriveConstants.kDSwerveDriveDriveMotor);
+        steerPIDController = new PIDController(DriveConstants.kPSwerveDriveSteerMotor, DriveConstants.kISwerveDriveSteerMotor, DriveConstants.kDSwerveDriveSteerMotor);
         steerPIDController.enableContinuousInput(-Math.PI, Math.PI);
 
         // Reset the encoder positions to zero
