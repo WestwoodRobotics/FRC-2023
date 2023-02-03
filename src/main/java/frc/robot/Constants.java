@@ -12,7 +12,7 @@ public final class Constants {
     public static final class ModuleConstants {
         
         // Drivetrain Dimensions
-        public static final double kWheelDiameterMeters = Units.inchesToMeters(4); //TODO: Update with actual wheel diameter
+        public static final double kWheelDiameterMeters = Units.inchesToMeters(3);
         // Gear ratio of the drive motor
         public static final double kDriveMotorGearRatio = 1 / 5.8462; //TODO: Update with actual Gear Ratio
         // Gear ratio of the steer motor
@@ -65,11 +65,12 @@ public final class Constants {
         public static final double kDistanceFromCenterLength = Units.inchesToMeters(25.5) / 2; //  TODO: Update with actual distance from center
 
 
-        //private final Translation2d m_frontRightLocation = new Translation2d(kDistanceFromCenterWidth, kDistanceFromCenterLength);
-        //private final Translation2d m_frontLeftLocation = new Translation2d(kDistanceFromCenterWidth, -kDistanceFromCenterLength);
-        //private final Translation2d m_backRightLocation = new Translation2d(-kDistanceFromCenterWidth, kDistanceFromCenterLength);
-        //private final Translation2d m_backLeftLocation = new Translation2d(-kDistanceFromCenterWidth, -kDistanceFromCenterLength);
+        public final static Translation2d frontRight = new Translation2d(kDistanceFromCenterWidth, kDistanceFromCenterLength);
+        public final static Translation2d frontLeft = new Translation2d(kDistanceFromCenterWidth, -kDistanceFromCenterLength);
+        public final static Translation2d backRight = new Translation2d(-kDistanceFromCenterWidth, kDistanceFromCenterLength);
+        public final static Translation2d backLeft = new Translation2d(-kDistanceFromCenterWidth, -kDistanceFromCenterLength);
 
+        
 
         
 
@@ -113,7 +114,8 @@ public final class Constants {
         public static final int kDriverFieldOrientedButtonIdx = 1; //TODO: Update with actual button ID
 
         // Deadband for the driver controller axes
-        public static final double kDeadband = 0.05; //TODO: Update with actual deadband
+        public static final double kDeadbandCircle = 0.08; //TODO: Update with actual deadband
+        public static final double kDeadBandRectangle = 0.12; //TODO: Update with actual deadband
     }
 
     public static final class IntakeConstants {
@@ -156,18 +158,23 @@ public final class Constants {
         public static final int kIntakeMotorEncoderPort = 0;//TODO: Update with actual PWM port
 
         // USB port of the driver controller
-        public static final int kDriverControllerPort = 0;//TODO: Update with actual USB port
+        public static final int XboxController1 = 0;//TODO: Update with actual port
+        public static final int XboxController2 = 0;//TODO: Update with actual port 
         
         // Analog input ports for the absolute encoders
         public static final int kFrontLeftDriveAbsoluteEncoderPort = 0; //TODO: Update with actual analog input port
         public static final int kBackLeftDriveAbsoluteEncoderPort = 2;//TODO: Update with actual analog input port
         public static final int kFrontRightDriveAbsoluteEncoderPort = 1;//TODO: Update with actual analog input port
         public static final int kBackRightDriveAbsoluteEncoderPort = 3;//TODO: Update with actual analog input port
+
+        //PWM Port for Pigeon (Gyroscope)
+        public static final int kPigeonPort = 0;//TODO: Update with actual PWM port
     }
 
     public static final class FilePathConstants{
         public static final String steerEncoderOffsetSavesPath = "/src/main/java/frc/robot/sybsystems/Chassis/EncoderOffsets/SteerEncoderOffsets.txt";
     }
+
 
 
 
