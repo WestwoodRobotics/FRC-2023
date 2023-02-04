@@ -2,8 +2,8 @@ package frc.robot.commands.SwerveDriveCommands;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Chassis.DetermineDriveSpeed;
-import frc.robot.subsystems.Chassis.SwerveDrive;
+import frc.robot.subsystems.swerve.DetermineDriveSpeed;
+import frc.robot.subsystems.swerve.SwerveDrive;
 
 import static frc.robot.Constants.AutoConstants;
 import static frc.robot.Constants.OIConstants;

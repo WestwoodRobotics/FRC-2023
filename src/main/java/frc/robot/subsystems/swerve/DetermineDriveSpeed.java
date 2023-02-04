@@ -1,4 +1,4 @@
-package frc.robot.subsystems.Chassis;
+package frc.robot.subsystems.swerve;
 
 public class DetermineDriveSpeed {
   private final double brakeSpeed;

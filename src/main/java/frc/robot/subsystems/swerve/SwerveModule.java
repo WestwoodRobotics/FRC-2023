@@ -1,4 +1,4 @@
-package frc.robot.subsystems.Chassis;
+package frc.robot.subsystems.swerve;
 
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -9,10 +9,12 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.FilePathConstants;
 import frc.robot.Constants.ModuleConstants;
+import frc.robot.util.Conversions;
 
 import java.io.*;
 
@@ -70,9 +72,6 @@ public class SwerveModule {
     this.absoluteEncoderReversed = absoluteEncoderReversed;
     absoluteEncoder = new CANCoder(absoluteEncoderCANId);
 
-    //Setting Integrator Range (I in PID) | (Makes sure we don't go over the voltage limit)
-    drivePIDController.setIntegratorRange(-ModuleConstants.kFalcon500Voltage, ModuleConstants.kFalcon500Voltage);
-
     this.isDriveMotorReversed = isDriveMotorReversed;
     this.isSteerMotorReversed = isSteerMotorReversed;
 
@@ -108,7 +107,8 @@ public class SwerveModule {
     driveMotor.setSelectedSensorPosition(0); // Resets the  Drive Motor Encoder
     steerMotor.setSelectedSensorPosition(0); // Resets the Steer Motor Encoder
 
-
+    // Setting Integrator Range (I in PID) | (Makes sure we don't go over the voltage limit)
+    drivePIDController.setIntegratorRange(-ModuleConstants.kFalcon500Voltage, ModuleConstants.kFalcon500Voltage);
   }
 
   //Accessor Methods for private instance variables
@@ -179,7 +179,7 @@ public class SwerveModule {
     }
 
     double currentAngle = (steerMotor.getSelectedSensorPosition() / (360.0 / (ModuleConstants.kSteerMotorGearRatio * 2048.0))); //Converts the encoder ticks to angle
-    double offset = absoluteEncoder.getAbsolutePosition() - currentAngle; //Gets the offset
+    double offset = absoluteEncoder.getAbsolutePosition() - currentAngle; // Gets the offset
     steerEncoderPosition = offset; //Sets the offset to the encoder position
     saveEncoderOffset(); //Saves the offset
   }
@@ -251,5 +251,17 @@ public class SwerveModule {
     // This method will be called once per scheduler run
   }
 
-
+  public SwerveModulePosition getPosition() {
+    double position =
+      Conversions.FalconToMeters(
+        driveMotor.getSelectedSensorPosition(),
+        ModuleConstants.kWheelDiameterMeters,
+        ModuleConstants.kDriveMotorGearRatio);
+    Rotation2d angle =
+      Rotation2d.fromDegrees(
+        Conversions.falconToDegrees(
+          steerMotor.getSelectedSensorPosition(),
+          ModuleConstants.kSteerMotorGearRatio));
+    return new SwerveModulePosition(position, angle);
+  }
 }
