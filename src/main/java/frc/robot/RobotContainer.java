@@ -6,18 +6,11 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.SwerveDriveCommands.DriveConstantControlCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.Constants.*;
-import frc.robot.subsystems.Chassis.*;
-import edu.wpi.first.cscore.*;
-import edu.wpi.first.util.sendable.Sendable;
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.PortConstants;
+import frc.robot.commands.SwerveDriveCommands.DriveConstantControlCommand;
+import frc.robot.subsystems.Chassis.SwerveDrive;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -31,7 +24,7 @@ public class RobotContainer {
   private final XboxController primaryController = new XboxController(PortConstants.XboxController1);
   private final XboxController secondaryController = new XboxController(PortConstants.XboxController2);
   // The robot's subsystems and commands are defined here...
-  private final SwerveDrive SwerveDriveSystem = new SwerveDrive(); 
+  private final SwerveDrive SwerveDriveSystem = new SwerveDrive();
 
   //private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem); <--- This is an example "command" implementation
 
@@ -51,10 +44,9 @@ public class RobotContainer {
   private final JoystickButton hangarAButton = new JoystickButton(secondaryController, XboxController.Button.kA.value);
 
 
-
-
-
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  /**
+   * The container for the robot. Contains subsystems, OI devices, and commands.
+   */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
