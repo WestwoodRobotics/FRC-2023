@@ -4,9 +4,13 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.PortConstants;
 import frc.robot.commands.SwerveDriveCommands.DriveConstantControlCommand;
@@ -25,6 +29,9 @@ public class RobotContainer {
   private final XboxController secondaryController = new XboxController(PortConstants.XboxController2);
   // The robot's subsystems and commands are defined here...
   private final SwerveDrive SwerveDriveSystem = new SwerveDrive();
+
+  //Instantiating the timer
+  private final Timer timer = new Timer();
 
   //private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem); <--- This is an example "command" implementation
 
@@ -63,7 +70,19 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+
+    //The following code is for the primary controller
+    
+
+
+
+    Sendable resetEncoderCommand = new InstantCommand(() -> {
+    System.out.println("Encoders reset!");
+    SwerveDriveSystem.resetAllEncoders();
+    });
+
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -76,4 +95,18 @@ public class RobotContainer {
     SwerveDriveSystem.setDefaultCommand(x);
     return x;
   }
+
+  public void teleopTimer() {
+    timer.reset();
+    timer.start();
+  }
+
+    public void periodic() {
+    SmartDashboard.putNumber("Timer:", 135 - timer.get());
+  }
+
+    public void disabledInit() {
+    SwerveDriveSystem.saveEncoderOffsets();
+  }
+
 }

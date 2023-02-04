@@ -72,4 +72,20 @@ public class SwerveDrive extends SubsystemBase {
     positions[3] = backRightModule.getPosition();
     return positions;
   }
+
+  public void saveEncoderOffsets() {
+    frontLeftModule.setEncoderOffset();
+    frontRightModule.setEncoderOffset();
+    backLeftModule.setEncoderOffset();
+    backRightModule.setEncoderOffset();
+}
+
+public void resetAllEncoders() {
+    frontLeftModule.resetEncoders();
+    frontRightModule.resetEncoders();
+    backLeftModule.resetEncoders();
+    backRightModule.resetEncoders();
+
+    
+}
 }

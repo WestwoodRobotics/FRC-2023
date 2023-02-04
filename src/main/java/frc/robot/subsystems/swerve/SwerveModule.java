@@ -239,6 +239,11 @@ public class SwerveModule {
     steerMotor.setNeutralMode(NeutralMode.Brake);
   }
 
+  public void resetEncoders() {
+    driveMotor.setSelectedSensorPosition(0);
+    steerMotor.setSelectedSensorPosition(0);
+  }
+
   public Pose2d getPose() {
     return swerveModulePose;
   }
