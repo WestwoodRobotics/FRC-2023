@@ -163,6 +163,9 @@ public final class Constants {
 
     //PWM Port for Pigeon (Gyroscope)
     public static final int kPigeonPort = 0;//TODO: Update with actual PWM port
+
+    public static final int kArmMotorPort = 0;//TODO: Update with actual PWM port
+    public static final int kArmEncoderPort = 0;//TODO: Update with actual arm encoder port
   }
 
   public static final class FilePathConstants {

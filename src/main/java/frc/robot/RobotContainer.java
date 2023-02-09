@@ -7,9 +7,12 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.PortConstants;
+import frc.robot.commands.ArmCommands.UseArm;
 import frc.robot.commands.SwerveDriveCommands.DriveConstantControlCommand;
+import frc.robot.subsystems.arm.armModule;
 import frc.robot.subsystems.swerve.SwerveDrive;
 
 /**
@@ -25,12 +28,13 @@ public class RobotContainer {
   private final XboxController secondaryController = new XboxController(PortConstants.XboxController2);
   // The robot's subsystems and commands are defined here...
   private final SwerveDrive SwerveDriveSystem = new SwerveDrive();
+  private final armModule armSystem = new armModule();
 
   //private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem); <--- This is an example "command" implementation
 
   // The buttons on the Primary Xbox Controller are being initialized here
   private final JoystickButton rBumper = new JoystickButton(primaryController, XboxController.Button.kRightBumper.value);
-  private final JoystickButton Bumper = new JoystickButton(primaryController, XboxController.Button.kLeftBumper.value);
+  private final JoystickButton lBumper = new JoystickButton(primaryController, XboxController.Button.kLeftBumper.value);
   private final JoystickButton yButton = new JoystickButton(primaryController, XboxController.Button.kY.value);
   private final JoystickButton xButton = new JoystickButton(primaryController, XboxController.Button.kX.value);
   private final JoystickButton bButton = new JoystickButton(primaryController, XboxController.Button.kB.value);
@@ -55,6 +59,15 @@ public class RobotContainer {
 
   private void setDefaultCommands() {
     SwerveDriveSystem.setDefaultCommand(new DriveConstantControlCommand(SwerveDriveSystem, primaryController));
+    Commands.run(() -> {
+      if(primaryController.getRightTriggerAxis() >= 0.05){
+        armSystem.moveUp(primaryController.getRightTriggerAxis());
+      } else if (primaryController.getLeftTriggerAxis() >= 0.05){
+        armSystem.moveDown(primaryController.getLeftTriggerAxis());
+      } else {
+        armSystem.haltArm();
+      }
+    }, armSystem);
   }
 
   /**
