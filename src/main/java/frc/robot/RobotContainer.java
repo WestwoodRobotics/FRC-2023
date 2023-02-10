@@ -11,9 +11,9 @@ import edu.wpi.first.wpilibj.XboxController;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.IntakeOpenCommand;
-import frc.robot.commands.SetIntakePositionCommand;
-import frc.robot.commands.IntakeCloseCommand;
+import frc.robot.commands.IntakeCommands.IntakeOpenCommand;
+import frc.robot.commands.IntakeCommands.SetIntakePositionCommand;
+import frc.robot.commands.IntakeCommands.IntakeCloseCommand;
 import frc.robot.subsystems.Intake.*;
 import frc.robot.Constants.IntakeConstants;
 
