@@ -31,6 +31,10 @@ public final class Constants {
 
   }
 
+  public static final class tickConstants {
+    public static final int kArmEncoderConstant = 40960;
+  }
+
   // This class contains constants for the swerve drive system
   public static final class DriveConstants {
     // Distance between right and left wheels
