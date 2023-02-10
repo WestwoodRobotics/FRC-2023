@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.PortConstants;
+import frc.robot.commands.TransportCommands.UseArm;
 import frc.robot.commands.SwerveDriveCommands.DriveConstantControlCommand;
 import frc.robot.commands.TransportCommands.ArmDownCommand;
 import frc.robot.commands.TransportCommands.ArmStopCommand;
@@ -64,6 +65,7 @@ public class RobotContainer {
 
   private void setDefaultCommands() {
     // SwerveDriveSystem.setDefaultCommand(new DriveConstantControlCommand(SwerveDriveSystem, primaryController));
+    transport.setDefaultCommand(new UseArm(primaryController, transport));
   }
 
   /**
@@ -72,15 +74,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {
-    aButton
-      .onTrue(new ArmUpCommand(transport, .1))
-      .onFalse(new ArmStopCommand(transport));
-    bButton
-      .onTrue(new ArmDownCommand(transport, 0.1))
-      .onFalse(new ArmStopCommand(transport));
-    
-  }
+  private void configureButtonBindings() {}
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
