@@ -12,10 +12,13 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.PortConstants;
-import frc.robot.commands.ArmCommands.UseArm;
 import frc.robot.commands.SwerveDriveCommands.DriveConstantControlCommand;
-import frc.robot.subsystems.arm.Arm;
+import frc.robot.commands.TransportCommands.ArmDownCommand;
+import frc.robot.commands.TransportCommands.ArmStopCommand;
+import frc.robot.commands.TransportCommands.ArmUpCommand;
+import frc.robot.subsystems.intake.IntakeModule;
 import frc.robot.subsystems.swerve.SwerveDrive;
+import frc.robot.subsystems.transport.Transport;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -29,8 +32,8 @@ public class RobotContainer {
   private final XboxController primaryController = new XboxController(PortConstants.XboxController1);
   private final XboxController secondaryController = new XboxController(PortConstants.XboxController2);
   // The robot's subsystems and commands are defined here...
-  private final SwerveDrive SwerveDriveSystem = new SwerveDrive();
-  private final Arm armSystem = new Arm();
+  // private final SwerveDrive SwerveDriveSystem = new SwerveDrive();
+  private final Transport transport = new Transport();
 
   //private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem); <--- This is an example "command" implementation
 
@@ -60,16 +63,7 @@ public class RobotContainer {
   }
 
   private void setDefaultCommands() {
-    SwerveDriveSystem.setDefaultCommand(new DriveConstantControlCommand(SwerveDriveSystem, primaryController));
-    new RunCommand(() -> {
-      if(primaryController.getRightTriggerAxis() >= 0.05){
-        armSystem.moveUp(primaryController.getRightTriggerAxis());
-      } else if (primaryController.getLeftTriggerAxis() >= 0.05){
-        armSystem.moveDown(primaryController.getLeftTriggerAxis());
-      } else {
-        armSystem.haltArm();
-      }
-    }, armSystem);
+    // SwerveDriveSystem.setDefaultCommand(new DriveConstantControlCommand(SwerveDriveSystem, primaryController));
   }
 
   /**
@@ -78,7 +72,15 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+    aButton
+      .onTrue(new ArmUpCommand(transport, .1))
+      .onFalse(new ArmStopCommand(transport));
+    bButton
+      .onTrue(new ArmDownCommand(transport, 0.1))
+      .onFalse(new ArmStopCommand(transport));
+    
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -87,8 +89,8 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    DriveConstantControlCommand x = new DriveConstantControlCommand(SwerveDriveSystem, primaryController);
-    SwerveDriveSystem.setDefaultCommand(x);
-    return x;
+  //  DriveConstantControlCommand x = new DriveConstantControlCommand(SwerveDriveSystem, primaryController);
+    // SwerveDriveSystem.setDefaultCommand(x);
+    return new ArmStopCommand(transport);
   }
 }

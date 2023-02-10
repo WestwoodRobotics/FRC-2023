@@ -120,18 +120,24 @@ public final class Constants {
 
   }
 
+  public static final class TransportConstant {
+    public static final int CANID_TRANSPORT = 15;
+    public static final int CANID_TRANSPORT1 = 20;
+    public static final int CANID_TRANSPORT2 = 22;
+  }
+
   public static final class PortConstants {
     //CAN Coder Ports
-    public static final int kFrontLeftCANCoderPort = 0; // TODO: Update with actual CANCoder port
-    public static final int kFrontRightCANCoderPort = 0; // TODO: Update with actual CANCoder port
-    public static final int kBackLeftCANCoderPort = 0;  // TODO: Update with actual CANCoder port
-    public static final int kBackRightCANCoderPort = 0; // TODO: Update with actual CANCoder port
+    public static final int kFrontLeftCANCoderPort = 2; // TODO: Update with actual CANCoder port
+    public static final int kFrontRightCANCoderPort = 4; // TODO: Update with actual CANCoder port
+    public static final int kBackLeftCANCoderPort = 3;  // TODO: Update with actual CANCoder port
+    public static final int kBackRightCANCoderPort = 1;
 
     // PWM ports for the drive motors
-    public static final int kFrontLeftDriveMotorPort = 8; //TODO: Update with actual PWM port
-    public static final int kBackLeftDriveMotorPort = 2; //TODO: Update with actual PWM port
-    public static final int kFrontRightDriveMotorPort = 6;//TODO: Update with actual PWM port
-    public static final int kBackRightDriveMotorPort = 4;//TODO: Update with actual PWM port
+    public static final int kFrontLeftDriveMotorPort = 12; 
+    public static final int kBackLeftDriveMotorPort = 16; 
+    public static final int kFrontRightDriveMotorPort = 13;
+    public static final int kBackRightDriveMotorPort = 17;
 
     // PWM ports for the steer motors
     public static final int kFrontLeftTurningMotorPort = 7;//TODO: Update with actual PWM port
