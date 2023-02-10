@@ -109,6 +109,10 @@ public class SwerveModule {
 
     // Setting Integrator Range (I in PID) | (Makes sure we don't go over the voltage limit)
     drivePIDController.setIntegratorRange(-ModuleConstants.kFalcon500Voltage, ModuleConstants.kFalcon500Voltage);
+
+    // TODO: remove this
+//    this.driveMotorFeedForward = new SimpleMotorFeedforward(DriveConstants.ksVolts, DriveConstants.kvVoltSecondsPerMeter, DriveConstants.kaVoltSecondsSquaredPerMeter);
+    this.driveMotorFeedForward = new SimpleMotorFeedforward(0.0355919531, 0.00004297063293, 0.0000000000355919531);
   }
 
   //Accessor Methods for private instance variables
