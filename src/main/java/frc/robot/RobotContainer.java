@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.PortConstants;
 import frc.robot.commands.ArmCommands.UseArm;
@@ -59,7 +60,7 @@ public class RobotContainer {
 
   private void setDefaultCommands() {
     SwerveDriveSystem.setDefaultCommand(new DriveConstantControlCommand(SwerveDriveSystem, primaryController));
-    Commands.run(() -> {
+    new RunCommand(() -> {
       if(primaryController.getRightTriggerAxis() >= 0.05){
         armSystem.moveUp(primaryController.getRightTriggerAxis());
       } else if (primaryController.getLeftTriggerAxis() >= 0.05){
