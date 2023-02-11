@@ -18,11 +18,14 @@ public class Intake extends SubsystemBase {
         intakeMotor.setInverted(false);
     }
 
-    public void setIntakeVoltage(double voltage){
-        intakeMotor.set(ControlMode.Current, voltage);
+    public void setIntakePower(double power){
+        intakeMotor.set(ControlMode.PercentOutput, power);
         SmartDashboard.putNumber("intake Motor Position", intakeMotor.getSelectedSensorPosition());
     }
 
+    public void setIntakePosition(double sensorPosition){
+        intakeMotor.set(ControlMode.Position, sensorPosition);
+    }
     public double getPosition(){
         return intakeMotor.getSelectedSensorPosition();
     }

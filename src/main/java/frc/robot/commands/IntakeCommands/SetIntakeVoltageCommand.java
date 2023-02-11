@@ -10,7 +10,7 @@ import frc.robot.subsystems.Intake.Intake;
 
 
 /** An example command that uses an example subsystem. */
-public class SetIntakePositionCommand extends CommandBase {
+public class SetIntakeVoltageCommand extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final Intake m_intake;
   private final double wntPosition;
@@ -19,7 +19,7 @@ public class SetIntakePositionCommand extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public SetIntakePositionCommand(Intake m_intake, double wntPosition) {
+  public SetIntakeVoltageCommand(Intake m_intake, double wntPosition) {
     this.m_intake = m_intake;
     this.wntPosition = wntPosition; // Intake motor sensor position value
 
@@ -39,11 +39,11 @@ public class SetIntakePositionCommand extends CommandBase {
   @Override
   public void execute() {
     if(m_intake.getPosition() < wntPosition){
-      m_intake.setIntakePosition(Constants.IntakeConstants.kOPEN_INTAKE);
+      m_intake.setIntakePower(1);
       
     }
     else if(m_intake.getPosition() > wntPosition){
-      m_intake.setIntakePosition(Constants.IntakeConstants.kCLOSE_INTAKE);          
+      m_intake.setIntakePower(-1);          
     }   
   }
 
