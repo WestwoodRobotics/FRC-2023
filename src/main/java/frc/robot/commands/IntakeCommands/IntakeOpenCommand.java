@@ -35,7 +35,7 @@ public class IntakeOpenCommand extends CommandBase {
   public void initialize() {
     tim.reset();
     tim.start();
-    m_intake.setIntakeVoltage(0.5);
+    m_intake.setIntakePower(0.5);
     
   }
 
@@ -49,7 +49,7 @@ public class IntakeOpenCommand extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_intake.setIntakeVoltage(0);
+    m_intake.setIntakePower(0);
 
   }
 
