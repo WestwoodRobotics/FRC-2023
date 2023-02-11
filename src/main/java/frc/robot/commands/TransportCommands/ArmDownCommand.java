@@ -1,25 +1,27 @@
 package frc.robot.commands.TransportCommands;
-
+import frc.robot.RobotContainer;
 import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.Logger;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.transport.Transport;
 
-public class ArmDownCommand extends CommandBase {
-   private final double power;
-   private final Transport m_arm;
 
-    public ArmDownCommand(Transport m_arm, double power) {
+public class ArmDownCommand extends CommandBase {
+   private final double tick;
+   private final Transport m_arm;
+   
+
+    public ArmDownCommand(Transport m_arm, double tick) {
         this.m_arm = m_arm;
-        this.power = power;
+        this.tick = tick;
     }
 
     // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     System.out.println(getName());
-    m_arm.setArmMotorPower(power * -1);
+    m_arm.addToArmMotorPosition(tick);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -26,4 +26,12 @@ public class Transport extends SubsystemBase {
     public void setArmMotorPower(double power) {
         armMotor.set(ControlMode.PercentOutput, power);
     }
+    public void setArmMotorPosition(double tick){
+        armMotor.set(ControlMode.Position,tick);
+    }
+    public void addToArmMotorPosition(double tick){
+        System.out.println(armMotor.getSelectedSensorPosition() + tick);
+        armMotor.set(ControlMode.Position, armMotor.getSelectedSensorPosition() + tick);
+        
+    }
 }
