@@ -221,9 +221,9 @@ public class SwerveModule {
     double drive_vel = getVelocity();
     driveMotorOutput = drivePIDController.calculate(drive_vel, targetDriveSpeed);
 
-    double driveFeedforward = driveMotorFeedForward.calculate(targetDriveSpeed);
+    //double driveFeedforward = driveMotorFeedForward.calculate(targetDriveSpeed);
 
-    driveMotor.set(ControlMode.PercentOutput, (isDriveMotorReversed ? -1 : 1) * (driveFeedforward + driveMotorOutput));
+    driveMotor.set(ControlMode.PercentOutput, (isDriveMotorReversed ? -1 : 1) * (driveMotorOutput)); //TODO: Change the 0 to driveFeedForward (It wasn't done here because making the 0, driveFeedForward caused errors)
     steerMotor.set(ControlMode.Position, outputState.angle.getDegrees() / (360.0 / (ModuleConstants.kSteerMotorGearRatio * 2048.0))); //Converts the angle to encoder ticks
   }
 

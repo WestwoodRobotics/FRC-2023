@@ -52,11 +52,11 @@ public final class Constants {
     public static final double kMaxCentripetalAccel = Units.inchesToMeters(120); //TODO: Update with actual max centripetal acceleration
     public static final TrapezoidProfile.Constraints kDriveVelocityConstraints = new TrapezoidProfile.Constraints(kMaxVel, kMaxAccel);
 
-    public static final double kPSwerveDriveDriveMotor = 0.5; //TODO: Update with actual PIDF values
+    public static final double kPSwerveDriveDriveMotor = 1; //TODO: Update with actual PIDF values
     public static final double kISwerveDriveDriveMotor = 0; //TODO: Update with actual PIDF values
     public static final double kDSwerveDriveDriveMotor = 0; //TODO: Update with actual PIDF values
 
-    public static final double kPSwerveDriveSteerMotor = 0.5; //TODO: Update with actual PIDF values
+    public static final double kPSwerveDriveSteerMotor = 1; //TODO: Update with actual PIDF values
     public static final double kISwerveDriveSteerMotor = 0; //TODO: Update with actual PIDF values
     public static final double kDSwerveDriveSteerMotor = 0;//TODO: Update with actual PIDF values
 
@@ -118,38 +118,32 @@ public final class Constants {
 
   public static final class PortConstants {
     //CAN Coder Ports
-    public static final int kFrontLeftCANCoderPort = 0; // TODO: Update with actual CANCoder port
-    public static final int kFrontRightCANCoderPort = 0; // TODO: Update with actual CANCoder port
-    public static final int kBackLeftCANCoderPort = 0;  // TODO: Update with actual CANCoder port
-    public static final int kBackRightCANCoderPort = 0; // TODO: Update with actual CANCoder port
+    public static final int kFrontLeftCANCoderPort = 2;
+    public static final int kFrontRightCANCoderPort = 4; 
+    public static final int kBackLeftCANCoderPort = 3;  
+    public static final int kBackRightCANCoderPort = 1; 
 
     // PWM ports for the drive motors
-    public static final int kFrontLeftDriveMotorPort = 8; //TODO: Update with actual PWM port
-    public static final int kBackLeftDriveMotorPort = 2; //TODO: Update with actual PWM port
-    public static final int kFrontRightDriveMotorPort = 6;//TODO: Update with actual PWM port
-    public static final int kBackRightDriveMotorPort = 4;//TODO: Update with actual PWM port
+    public static final int kFrontLeftDriveMotorPort = 12; 
+    public static final int kBackLeftDriveMotorPort = 16; 
+    public static final int kFrontRightDriveMotorPort = 13;
+    public static final int kBackRightDriveMotorPort = 17;
 
     // PWM ports for the steer motors
-    public static final int kFrontLeftTurningMotorPort = 7;//TODO: Update with actual PWM port
-    public static final int kBackLeftTurningMotorPort = 1;//TODO: Update with actual PWM port
-    public static final int kFrontRightTurningMotorPort = 5;//TODO: Update with actual PWM port
-    public static final int kBackRightTurningMotorPort = 3;//TODO: Update with actual PWM port
-
-    // PWM ports for the steer motors
-    public static final int kFrontLeftSteerMotorPort = 0;//TODO: Update with actual PWM port
-    public static final int kFrontRightSteerMotorPort = 0;//TODO: Update with actual PWM port
-    public static final int kBackLeftSteerMotorPort = 0;//TODO: Update with actual PWM port
-    public static final int kBackRightSteerMotorPort = 0;//TODO: Update with actual PWM port
+    public static final int kFrontLeftSteerMotorPort = 11;
+    public static final int kFrontRightSteerMotorPort = 14;
+    public static final int kBackLeftSteerMotorPort = 15;
+    public static final int kBackRightSteerMotorPort = 18; 
 
     // PWM ports for the drive motors
-    public static final int kFrontLeftDriveEncoderPort = 0; //TODO: Update with actual PWM port
-    public static final int kFrontRightDriveEncoderPort = 0;//TODO: Update with actual PWM port
-    public static final int kBackLeftDriveEncoderPort = 0;//TODO: Update with actual PWM port
-    public static final int kBackRightDriveEncoderPort = 0;//TODO: Update with actual PWM port
+    public static final int kFrontLeftDriveEncoderPort = 0;  //TODO: Update with actual PWM port
+    public static final int kFrontRightDriveEncoderPort = 0; //TODO: Update with actual PWM port
+    public static final int kBackLeftDriveEncoderPort = 0; //TODO: Update with actual PWM port
+    public static final int kBackRightDriveEncoderPort = 0; //TODO: Update with actual PWM port
 
     // PWM ports for the intake motors
-    public static final int kIntakeMotorPort = 0; //TODO: Update with actual PWM port
-    public static final int kIntakeMotorEncoderPort = 0;//TODO: Update with actual PWM port
+    public static final int kIntakeMotorPort = 0; //TODO: Update with actual PWM port 
+    public static final int kIntakeMotorEncoderPort = 0; //TODO: Update with actual PWM port
 
     // USB port of the driver controller
     public static final int XboxController1 = 0;//TODO: Update with actual port
