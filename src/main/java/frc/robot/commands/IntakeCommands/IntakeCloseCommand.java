@@ -33,7 +33,7 @@ public class IntakeCloseCommand extends CommandBase {
   @Override
   public void initialize() {
 
-    m_intake.setIntakeVoltage(-0.5);
+    m_intake.setIntakePower(-0.5);
     
   }
 
