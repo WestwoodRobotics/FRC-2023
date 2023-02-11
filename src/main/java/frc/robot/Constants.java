@@ -117,7 +117,9 @@ public final class Constants {
   }
 
   public static final class TransportConstant {
-    public static final int CANID_TRANSPORT = 13;
+    public static final int CANID_TRANSPORT = 15;
+    public static final int CANID_TRANSPORT1 = 20;
+    public static final int CANID_TRANSPORT2 = 22;
   }
 
   public static final class PortConstants {

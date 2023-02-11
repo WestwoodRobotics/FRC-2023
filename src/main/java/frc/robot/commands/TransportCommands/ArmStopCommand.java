@@ -6,12 +6,11 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.transport.Transport;
 
 public class ArmStopCommand extends CommandBase{
-    private final double power;
     private final Transport m_arm;
 
-    public ArmStopCommand(Transport m_arm, double power) {
+    public ArmStopCommand(Transport m_arm) {
         this.m_arm = m_arm;
-        this.power = power;
+
     }
 
     // Called when the command is initially scheduled.
