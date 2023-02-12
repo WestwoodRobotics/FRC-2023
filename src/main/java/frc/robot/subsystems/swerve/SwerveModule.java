@@ -1,6 +1,5 @@
 package frc.robot.subsystems.swerve;
 
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -40,32 +39,38 @@ public class SwerveModule {
   private final boolean isSteerMotorReversed; // Boolean for determining if the steer motor is reversed
   private Pose2d swerveModulePose = new Pose2d();
 
-
   // The constructor
   /*
    * @param driveMotorId The CAN ID of the drive motor
+   * 
    * @param steerMotorId The CAN ID of the steer motor
-   * @param driveMotorReversed Boolean for determining if the drive motor is reversed
-   * @param steerMotorReversed Boolean for determining if the steer motor is reversed
+   * 
+   * @param driveMotorReversed Boolean for determining if the drive motor is
+   * reversed
+   * 
+   * @param steerMotorReversed Boolean for determining if the steer motor is
+   * reversed
+   * 
    * @param absoluteEncoderId The CAN ID of the absolute encoder
+   * 
    * @param absoluteEncoderOffset The offset for the absolute encoder
-   * @param absoluteEncoderReversed Boolean for determining if the absolute encoder is reversed
+   * 
+   * @param absoluteEncoderReversed Boolean for determining if the absolute
+   * encoder is reversed
+   * 
    * @param ModuleNum The module number (1-4)
    */
   public SwerveModule(int driveMotorCANId,
-                      int steerMotorCANId,
-                      boolean isDriveMotorReversed,
-                      boolean isSteerMotorReversed,
-                      int absoluteEncoderCANId,
-                      double absoluteEncoderOffset,
-                      boolean absoluteEncoderReversed
-  ) {
-
+      int steerMotorCANId,
+      boolean isDriveMotorReversed,
+      boolean isSteerMotorReversed,
+      int absoluteEncoderCANId,
+      double absoluteEncoderOffset,
+      boolean absoluteEncoderReversed) {
 
     // Initialize the drive and steer motors using the provided CAN IDs
     driveMotor = new WPI_TalonSRX(driveMotorCANId);
     steerMotor = new WPI_TalonSRX(steerMotorCANId);
-
 
     // Initialize the absolute encoder using the provided CAN ID
     this.absoluteEncoderOffsetRad = absoluteEncoderOffset;
@@ -75,7 +80,8 @@ public class SwerveModule {
     this.isDriveMotorReversed = isDriveMotorReversed;
     this.isSteerMotorReversed = isSteerMotorReversed;
 
-    // Set the inversion for the drive and steer motors based on the provided booleans
+    // Set the inversion for the drive and steer motors based on the provided
+    // booleans
     driveMotor.setInverted(isDriveMotorReversed);
     steerMotor.setInverted(isSteerMotorReversed);
 
@@ -91,23 +97,26 @@ public class SwerveModule {
     driveEncoderVelocity = driveMotor.getSelectedSensorVelocity();
     steerEncoderVelocity = steerMotor.getSelectedSensorVelocity();
 
-
     // Set the encoder coefficients for the drive and steer motors
     driveMotor.configSelectedFeedbackCoefficient(ModuleConstants.kDriveEncoderRot2Meter);
     driveMotor.configSelectedFeedbackCoefficient(ModuleConstants.kDriveEncoderRPM2MeterPerSec);
     steerMotor.configSelectedFeedbackCoefficient(ModuleConstants.kSteerEncoderRot2Rad);
     steerMotor.configSelectedFeedbackCoefficient(ModuleConstants.kSteerEncoderRPM2RadPerSec);
 
-    // Initialize the drive and steer PID controllers using the constants from DriveConstants
-    drivePIDController = new PIDController(DriveConstants.kPSwerveDriveDriveMotor, DriveConstants.kISwerveDriveDriveMotor, DriveConstants.kDSwerveDriveDriveMotor);
-    steerPIDController = new PIDController(DriveConstants.kPSwerveDriveSteerMotor, DriveConstants.kISwerveDriveSteerMotor, DriveConstants.kDSwerveDriveSteerMotor);
+    // Initialize the drive and steer PID controllers using the constants from
+    // DriveConstants
+    drivePIDController = new PIDController(DriveConstants.kPSwerveDriveDriveMotor,
+        DriveConstants.kISwerveDriveDriveMotor, DriveConstants.kDSwerveDriveDriveMotor);
+    steerPIDController = new PIDController(DriveConstants.kPSwerveDriveSteerMotor,
+        DriveConstants.kISwerveDriveSteerMotor, DriveConstants.kDSwerveDriveSteerMotor);
     steerPIDController.enableContinuousInput(-Math.PI, Math.PI);
 
     // Reset the encoder positions to zero
-    driveMotor.setSelectedSensorPosition(0); // Resets the  Drive Motor Encoder
+    driveMotor.setSelectedSensorPosition(0); // Resets the Drive Motor Encoder
     steerMotor.setSelectedSensorPosition(0); // Resets the Steer Motor Encoder
 
-    // Setting Integrator Range (I in PID) | (Makes sure we don't go over the voltage limit)
+    // Setting Integrator Range (I in PID) | (Makes sure we don't go over the
+    // voltage limit)
     drivePIDController.setIntegratorRange(-ModuleConstants.kFalcon500Voltage, ModuleConstants.kFalcon500Voltage);
 
     // TODO: remove this
@@ -115,7 +124,7 @@ public class SwerveModule {
     this.driveMotorFeedForward = new SimpleMotorFeedforward(0.0355919531, 0.00004297063293, 0.0000000000355919531);
   }
 
-  //Accessor Methods for private instance variables
+  // Accessor Methods for private instance variables
   public double getDriveEncoderPosition() {
     return driveEncoderPosition;
   }
@@ -148,7 +157,6 @@ public class SwerveModule {
     return isSteerMotorReversed;
   }
 
-
   private void saveEncoderOffset() {
     try {
       BufferedWriter writer = new BufferedWriter(new FileWriter(FilePathConstants.steerEncoderOffsetSavesPath));
@@ -179,13 +187,14 @@ public class SwerveModule {
 
   public void setEncoderOffset() {
     if (absoluteEncoderOffsetRad == 0.0) {
-      getEncoderOffset(); //Loads the offset
+      getEncoderOffset(); // Loads the offset
     }
 
-    double currentAngle = (steerMotor.getSelectedSensorPosition() / (360.0 / (ModuleConstants.kSteerMotorGearRatio * 2048.0))); //Converts the encoder ticks to angle
+    double currentAngle = (steerMotor.getSelectedSensorPosition()
+        / (360.0 / (ModuleConstants.kSteerMotorGearRatio * 2048.0))); // Converts the encoder ticks to angle
     double offset = absoluteEncoder.getAbsolutePosition() - currentAngle; // Gets the offset
-    steerEncoderPosition = offset; //Sets the offset to the encoder position
-    saveEncoderOffset(); //Saves the offset
+    steerEncoderPosition = offset; // Sets the offset to the encoder position
+    saveEncoderOffset(); // Saves the offset
   }
 
   private double getEncoderOffset() {
@@ -198,7 +207,9 @@ public class SwerveModule {
   public void setAbsoluteEncoderAsBaseline() {
     double offset = getEncoderOffset();
     double currentAngle = (absoluteEncoder.getAbsolutePosition() + 360 - offset) % 360;
-    double absolutePosition = currentAngle * (360.0 / (ModuleConstants.kSteerMotorGearRatio * 2048.0)); //Converts the angle to encoder ticks
+    double absolutePosition = currentAngle * (360.0 / (ModuleConstants.kSteerMotorGearRatio * 2048.0)); // Converts the
+                                                                                                        // angle to
+                                                                                                        // encoder ticks
     steerMotor.setSelectedSensorPosition(absolutePosition);
   }
 
@@ -208,16 +219,26 @@ public class SwerveModule {
 
   public SwerveModuleState getState() {
     return new SwerveModuleState(
-      getVelocity(),
-      Rotation2d.fromDegrees(steerMotor.getSelectedSensorPosition() * (360.0 / (ModuleConstants.kSteerMotorGearRatio * 2048.0)))); //Converts the encoder ticks to angle
+        getVelocity(),
+        Rotation2d.fromDegrees(
+            steerMotor.getSelectedSensorPosition() * (360.0 / (ModuleConstants.kSteerMotorGearRatio * 2048.0)))); // Converts
+                                                                                                                  // the
+                                                                                                                  // encoder
+                                                                                                                  // ticks
+                                                                                                                  // to
+                                                                                                                  // angle
   }
 
   public void setDesiredState(SwerveModuleState state) {
     state.speedMetersPerSecond = state.speedMetersPerSecond * 204800 / 6.12;
 
-    double currentAngle = steerMotor.getSelectedSensorPosition() * (360.0 / (ModuleConstants.kSteerMotorGearRatio * 2048.0));
+    double currentAngle = steerMotor.getSelectedSensorPosition()
+        * (360.0 / (ModuleConstants.kSteerMotorGearRatio * 2048.0));
 
     SwerveModuleState outputState = SwerveModuleState.optimize(state, new Rotation2d(currentAngle));
+    while (currentAngle > 360) {
+      currentAngle -= 360;
+    }
 
     double angleDiff = currentAngle - outputState.angle.getRadians();
     double targetDriveSpeed = outputState.speedMetersPerSecond * Math.cos(angleDiff);
@@ -225,10 +246,20 @@ public class SwerveModule {
     double drive_vel = getVelocity();
     driveMotorOutput = drivePIDController.calculate(drive_vel, targetDriveSpeed);
 
-    double driveFeedforward = driveMotorFeedForward.calculate(targetDriveSpeed);
+    // double driveFeedforward = driveMotorFeedForward.calculate(targetDriveSpeed);
 
-    driveMotor.set(ControlMode.PercentOutput, (isDriveMotorReversed ? -1 : 1) * (driveFeedforward + driveMotorOutput));
-    steerMotor.set(ControlMode.Position, outputState.angle.getDegrees() / (360.0 / (ModuleConstants.kSteerMotorGearRatio * 2048.0))); //Converts the angle to encoder ticks
+    driveMotor.set(ControlMode.PercentOutput, (isDriveMotorReversed ? -1 : 1) * (driveMotorOutput)); // TODO: Change the
+                                                                                                     // 0 to
+                                                                                                     // driveFeedForward
+                                                                                                     // (It wasn't done
+                                                                                                     // here because
+                                                                                                     // making the 0,
+                                                                                                     // driveFeedForward
+                                                                                                     // caused errors)
+    steerMotor.set(ControlMode.Position,
+        outputState.angle.getDegrees() / (360.0 / (ModuleConstants.kSteerMotorGearRatio * 2048.0))); // Converts the
+                                                                                                     // angle to encoder
+                                                                                                     // ticks
   }
 
   /**
@@ -261,16 +292,14 @@ public class SwerveModule {
   }
 
   public SwerveModulePosition getPosition() {
-    double position =
-      Conversions.FalconToMeters(
+    double position = Conversions.FalconToMeters(
         driveMotor.getSelectedSensorPosition(),
         ModuleConstants.kWheelDiameterMeters,
         ModuleConstants.kDriveMotorGearRatio);
-    Rotation2d angle =
-      Rotation2d.fromDegrees(
+    Rotation2d angle = Rotation2d.fromDegrees(
         Conversions.falconToDegrees(
-          steerMotor.getSelectedSensorPosition(),
-          ModuleConstants.kSteerMotorGearRatio));
+            steerMotor.getSelectedSensorPosition(),
+            ModuleConstants.kSteerMotorGearRatio));
     return new SwerveModulePosition(position, angle);
   }
 }
