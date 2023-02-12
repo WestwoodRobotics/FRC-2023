@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.PortConstants;
 import frc.robot.commands.SwerveDriveCommands.DriveConstantControlCommand;
-import frc.robot.subsystems.swerve.SwerveDrive;
+import frc.robot.subsystems.swerve.SwerveDriveOld;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -28,7 +28,7 @@ public class RobotContainer {
   private final XboxController primaryController = new XboxController(PortConstants.XboxController1);
   private final XboxController secondaryController = new XboxController(PortConstants.XboxController2);
   // The robot's subsystems and commands are defined here...
-  private final SwerveDrive SwerveDriveSystem = new SwerveDrive();
+  private final SwerveDriveOld SwerveDriveSystem = new SwerveDriveOld();
 
   //Instantiating the timer
   private final Timer timer = new Timer();
@@ -81,6 +81,7 @@ public class RobotContainer {
     System.out.println("Encoders reset!");
     SwerveDriveSystem.resetAllEncoders();
     });
+    SmartDashboard.putData("Reset Encoder", resetEncoderCommand);
 
   }
 
