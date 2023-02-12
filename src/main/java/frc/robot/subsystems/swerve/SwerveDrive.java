@@ -79,6 +79,22 @@ public class SwerveDrive extends SubsystemBase {
     return positions;
   }
 
+  public void setStates(SwerveModuleState[] states) {
+    frontLeftModule.setDesiredState(states[0]);
+    frontRightModule.setDesiredState(states[1]);
+    backLeftModule.setDesiredState(states[2]);
+    backRightModule.setDesiredState(states[3]);
+  }
+
+  public SwerveModuleState[] getStates() {
+    SwerveModuleState[] states = new SwerveModuleState[4];
+    states[0] = frontLeftModule.getState();
+    states[1] = frontRightModule.getState();
+    states[2] = backLeftModule.getState();
+    states[3] = backRightModule.getState();
+    return states;
+  }
+
   public void saveEncoderOffsets() {
     frontLeftModule.setEncoderOffset();
     frontRightModule.setEncoderOffset();
@@ -92,5 +108,9 @@ public class SwerveDrive extends SubsystemBase {
     backLeftModule.resetEncoders();
     backRightModule.resetEncoders();
 
+  }
+
+  public void resetPose(Pose2d pose) {
+    odometry.resetOdometry(pose);
   }
 }
