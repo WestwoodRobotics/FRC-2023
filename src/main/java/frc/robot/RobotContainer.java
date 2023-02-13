@@ -33,6 +33,7 @@ public class RobotContainer {
   private final JoystickButton lBumper = new JoystickButton(mainController, XboxController.Button.kLeftBumper.value);
   private final JoystickButton rBumper = new JoystickButton(mainController, XboxController.Button.kRightBumper.value);
   private final JoystickButton buttonA = new JoystickButton(mainController, XboxController.Button.kA.value);
+  private final JoystickButton buttonB = new JoystickButton(mainController, XboxController.Button.kB.value);
   
   //private final IntakeOpenCommand instanceOfIntakeOpenCommand = new IntakeOpenCommand(m_intake);
 
@@ -50,8 +51,10 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    lBumper.onTrue(new IntakeOpenCommand(m_intake)).onFalse(new IntakeCloseCommand(m_intake));
-    buttonA.onTrue(new SetIntakePositionCommand(m_intake, IntakeConstants.kOPEN_INTAKE)).onFalse(new SetIntakePositionCommand(m_intake, IntakeConstants.kCLOSE_INTAKE));
+    lBumper.onTrue(new IntakeOpenCommand(m_intake));
+    rBumper.onTrue(new IntakeCloseCommand(m_intake));
+    // buttonA.onTrue(new SetIntakePositionCommand(m_intake, IntakeConstants.kOPEN_INTAKE));
+    // buttonB.onTrue(new SetIntakePositionCommand(m_intake, IntakeConstants.kCLOSE_INTAKE));
   }
 
   /**
