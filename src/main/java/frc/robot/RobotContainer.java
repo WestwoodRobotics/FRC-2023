@@ -43,7 +43,8 @@ public class RobotContainer {
     
     // Configure the button bindings
     configureButtonBindings();
-    m_intake.setDefaultCommand(Commands.run(() -> {SmartDashboard.putNumber("Claw Position", m_intake.getPosition());}, m_intake));
+    m_intake.setDefaultCommand(Commands.run(() -> {System.out.println(m_intake.getPosition());}, m_intake));
+    
   }
 
   /**
@@ -55,10 +56,8 @@ public class RobotContainer {
   private void configureButtonBindings() {
     lBumper.whileTrue(new IntakeOpenCommand(m_intake));
     rBumper.whileTrue(new IntakeCloseCommand(m_intake));
-    // buttonA.onTrue(new SetIntakePositionCommand(m_intake, IntakeConstants.kOPEN_INTAKE));
-    // buttonB.onTrue(new SetIntakePositionCommand(m_intake, IntakeConstants.kCLOSE_INTAKE));
-    
-    System.out.println();
+    buttonA.onTrue(new SetIntakePositionCommand(m_intake, (m_intake.initialPosition + Constants.IntakeConstants.kCLOSE_OPEN_DIFFERENCE)));
+    buttonB.onTrue(new SetIntakePositionCommand(m_intake, m_intake.initialPosition));
   }
 
   /**

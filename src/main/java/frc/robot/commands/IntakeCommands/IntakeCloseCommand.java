@@ -33,8 +33,8 @@ public class IntakeCloseCommand extends CommandBase {
   @Override
   public void initialize() {
 
-    m_intake.setIntakeVelocity(-300);
-    
+    // m_intake.setIntakeVelocity(-100);
+    m_intake.setIntakePower(-.2);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -47,7 +47,7 @@ public class IntakeCloseCommand extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_intake.setIntakeVelocity(0);
+    // m_intake.setIntakeVelocity(0);
     m_intake.setIntakePower(0);
   }
 

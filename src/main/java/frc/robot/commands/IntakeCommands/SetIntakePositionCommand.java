@@ -38,12 +38,12 @@ public class SetIntakePositionCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_intake.getPosition() < wntPosition){
-      m_intake.setIntakePosition(Constants.IntakeConstants.kOPEN_INTAKE);
+    if(m_intake.getPosition() < wntPosition + m_intake.initialPosition){
+      m_intake.setIntakePosition(Constants.IntakeConstants.kCLOSE_OPEN_DIFFERENCE + m_intake.initialPosition);
       
     }
     else if(m_intake.getPosition() > wntPosition){
-      m_intake.setIntakePosition(Constants.IntakeConstants.kCLOSE_INTAKE);          
+      m_intake.setIntakePosition(m_intake.initialPosition);          
     }   
   }
 
