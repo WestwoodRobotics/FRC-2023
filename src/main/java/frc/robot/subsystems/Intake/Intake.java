@@ -29,6 +29,11 @@ public class Intake extends SubsystemBase {
     public double getPosition(){
         return intakeMotor.getSelectedSensorPosition();
     }
+
+    public void setIntakeVelocity(double velocity){
+        intakeMotor.set(ControlMode.Velocity, velocity);
+        
+    }
     
 
    

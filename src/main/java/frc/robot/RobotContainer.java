@@ -8,8 +8,9 @@ import java.lang.ModuleLayer.Controller;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.IntakeCommands.IntakeOpenCommand;
 import frc.robot.commands.IntakeCommands.SetIntakePositionCommand;
@@ -42,6 +43,7 @@ public class RobotContainer {
     
     // Configure the button bindings
     configureButtonBindings();
+    m_intake.setDefaultCommand(Commands.run(() -> {SmartDashboard.putNumber("Claw Position", m_intake.getPosition());}, m_intake));
   }
 
   /**
@@ -51,10 +53,12 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    lBumper.onTrue(new IntakeOpenCommand(m_intake));
-    rBumper.onTrue(new IntakeCloseCommand(m_intake));
+    lBumper.whileTrue(new IntakeOpenCommand(m_intake));
+    rBumper.whileTrue(new IntakeCloseCommand(m_intake));
     // buttonA.onTrue(new SetIntakePositionCommand(m_intake, IntakeConstants.kOPEN_INTAKE));
     // buttonB.onTrue(new SetIntakePositionCommand(m_intake, IntakeConstants.kCLOSE_INTAKE));
+    
+    System.out.println();
   }
 
   /**

@@ -33,9 +33,8 @@ public class IntakeOpenCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    tim.reset();
-    tim.start();
-    m_intake.setIntakePower(0.5);
+
+    m_intake.setIntakeVelocity(300);
     
   }
 
@@ -49,6 +48,7 @@ public class IntakeOpenCommand extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_intake.setIntakeVelocity(0);
     m_intake.setIntakePower(0);
 
   }
@@ -56,6 +56,6 @@ public class IntakeOpenCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return tim.hasElapsed(1); 
+    return false;
   }
 }
