@@ -56,8 +56,8 @@ public class RobotContainer {
   private void configureButtonBindings() {
     lBumper.whileTrue(new IntakeOpenCommand(m_intake));
     rBumper.whileTrue(new IntakeCloseCommand(m_intake));
-    buttonA.onTrue(new SetIntakePositionCommand(m_intake, (m_intake.initialPosition + Constants.IntakeConstants.kCLOSE_OPEN_DIFFERENCE)));
-    buttonB.onTrue(new SetIntakePositionCommand(m_intake, m_intake.initialPosition));
+    // buttonA.onTrue(new SetIntakePositionCommand(m_intake, (m_intake.initialPosition + Constants.IntakeConstants.kCLOSE_OPEN_DIFFERENCE)));
+    // buttonB.onTrue(new SetIntakePositionCommand(m_intake, m_intake.initialPosition));
   }
 
   /**

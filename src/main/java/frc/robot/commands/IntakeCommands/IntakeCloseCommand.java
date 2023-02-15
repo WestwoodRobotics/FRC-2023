@@ -34,7 +34,7 @@ public class IntakeCloseCommand extends CommandBase {
   public void initialize() {
 
     // m_intake.setIntakeVelocity(-100);
-    m_intake.setIntakePower(-.2);
+    m_intake.setIntakePower(-.1);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
