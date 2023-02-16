@@ -144,7 +144,7 @@ public final class Constants {
     public static final class IntakeConstants {
         public static final int CANID_INTAKE = 21;
         public static final int kOPEN_INTAKE = 50;
-        public static final int kCLOSE_INTAKE = 20;
+        public static final int kCLOSED_INTAKE = 20;
         public static final int kCLOSE_OPEN_DIFFERENCE = 30;
 
     }
