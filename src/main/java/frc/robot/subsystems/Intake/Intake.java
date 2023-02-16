@@ -20,6 +20,10 @@ public class Intake extends SubsystemBase {
         initialPosition = getPosition();
     }
 
+    public double getIntakePower(){
+        intakeMotor.get
+    }
+
     public void setIntakePower(double power){
         intakeMotor.set(ControlMode.PercentOutput, power);
         SmartDashboard.putNumber("intake Motor Position", intakeMotor.getSelectedSensorPosition());
