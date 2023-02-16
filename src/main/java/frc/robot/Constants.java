@@ -52,13 +52,13 @@ public final class Constants {
     public static final double kMaxCentripetalAccel = Units.inchesToMeters(20); //TODO: Update with actual max centripetal acceleration
     public static final TrapezoidProfile.Constraints kDriveVelocityConstraints = new TrapezoidProfile.Constraints(kMaxVel, kMaxAccel);
 
-    public static final double kPSwerveDriveDriveMotor = 1; //TODO: Update with actual PIDF values
-    public static final double kISwerveDriveDriveMotor = 0; //TODO: Update with actual PIDF values
-    public static final double kDSwerveDriveDriveMotor = 0; //TODO: Update with actual PIDF values
+    public static final double kPSwerveDriveDriveMotor = 0.055; //TODO: Update with actual PIDF values
+    public static final double kISwerveDriveDriveMotor = 0.001; //TODO: Update with actual PIDF values
+    public static final double kDSwerveDriveDriveMotor = 0.001; //TODO: Update with actual PIDF values
 
-    public static final double kPSwerveDriveSteerMotor = 1; //TODO: Update with actual PIDF values
-    public static final double kISwerveDriveSteerMotor = 0; //TODO: Update with actual PIDF values
-    public static final double kDSwerveDriveSteerMotor = 0;//TODO: Update with actual PIDF values
+    public static final double kPSwerveDriveSteerMotor = 0.055; //TODO: Update with actual PIDF values
+    public static final double kISwerveDriveSteerMotor = 0.001; //TODO: Update with actual PIDF values
+    public static final double kDSwerveDriveSteerMotor = 0.001;//TODO: Update with actual PIDF values
 
     public static final double kDistanceFromCenterWidth = Units.inchesToMeters(21) / 2; //  TODO: Update with actual distance from center
     public static final double kDistanceFromCenterLength = Units.inchesToMeters(25.5) / 2; //  TODO: Update with actual distance from center

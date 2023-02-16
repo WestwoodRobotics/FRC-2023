@@ -207,9 +207,7 @@ public class SwerveModule {
   public void setAbsoluteEncoderAsBaseline() {
     double offset = getEncoderOffset();
     double currentAngle = (absoluteEncoder.getAbsolutePosition() + 360 - offset) % 360;
-    double absolutePosition = currentAngle * (360.0 / (ModuleConstants.kSteerMotorGearRatio * 2048.0)); // Converts the
-                                                                                                        // angle to
-                                                                                                        // encoder ticks
+    double absolutePosition = currentAngle * (360.0 / (ModuleConstants.kSteerMotorGearRatio * 2048.0)); // Converts the angle to encoder ticks
     steerMotor.setSelectedSensorPosition(absolutePosition);
   }
 
@@ -221,12 +219,7 @@ public class SwerveModule {
     return new SwerveModuleState(
         getVelocity(),
         Rotation2d.fromDegrees(
-            steerMotor.getSelectedSensorPosition() * (360.0 / (ModuleConstants.kSteerMotorGearRatio * 2048.0)))); // Converts
-                                                                                                                  // the
-                                                                                                                  // encoder
-                                                                                                                  // ticks
-                                                                                                                  // to
-                                                                                                                  // angle
+            steerMotor.getSelectedSensorPosition() * (360.0 / (ModuleConstants.kSteerMotorGearRatio * 2048.0)))); //COnverts the encoder ticks to angle
   }
 
   public void setDesiredState(SwerveModuleState state) {
@@ -236,10 +229,9 @@ public class SwerveModule {
         * (360.0 / (ModuleConstants.kSteerMotorGearRatio * 2048.0));
 
     SwerveModuleState outputState = SwerveModuleState.optimize(state, new Rotation2d(currentAngle));
-    while (currentAngle > 360) {
+    while (currentAngle >= 360) {
       currentAngle -= 360;
     }
-
     double angleDiff = currentAngle - outputState.angle.getRadians();
     double targetDriveSpeed = outputState.speedMetersPerSecond * Math.cos(angleDiff);
 
@@ -248,18 +240,9 @@ public class SwerveModule {
 
     // double driveFeedforward = driveMotorFeedForward.calculate(targetDriveSpeed);
 
-    driveMotor.set(ControlMode.PercentOutput, (isDriveMotorReversed ? -1 : 1) * (driveMotorOutput)); // TODO: Change the
-                                                                                                     // 0 to
-                                                                                                     // driveFeedForward
-                                                                                                     // (It wasn't done
-                                                                                                     // here because
-                                                                                                     // making the 0,
-                                                                                                     // driveFeedForward
-                                                                                                     // caused errors)
+    driveMotor.set(ControlMode.PercentOutput, (isDriveMotorReversed ? -1 : 1) * (driveMotorOutput)); //TODO: Change 0 to driveFeedforward (driveFeedForward NOT WORKING)
     steerMotor.set(ControlMode.Position,
-        outputState.angle.getDegrees() / (360.0 / (ModuleConstants.kSteerMotorGearRatio * 2048.0))); // Converts the
-                                                                                                     // angle to encoder
-                                                                                                     // ticks
+        outputState.angle.getDegrees() / (360.0 / (ModuleConstants.kSteerMotorGearRatio * 2048.0))); // Converts the angle to encoder ticks
   }
 
   /**
@@ -292,14 +275,8 @@ public class SwerveModule {
   }
 
   public SwerveModulePosition getPosition() {
-    double position = Conversions.FalconToMeters(
-        driveMotor.getSelectedSensorPosition(),
-        ModuleConstants.kWheelDiameterMeters,
-        ModuleConstants.kDriveMotorGearRatio);
-    Rotation2d angle = Rotation2d.fromDegrees(
-        Conversions.falconToDegrees(
-            steerMotor.getSelectedSensorPosition(),
-            ModuleConstants.kSteerMotorGearRatio));
+    double position = Conversions.FalconToMeters(driveMotor.getSelectedSensorPosition(), ModuleConstants.kWheelDiameterMeters, ModuleConstants.kDriveMotorGearRatio);
+    Rotation2d angle = Rotation2d.fromDegrees(Conversions.falconToDegrees(steerMotor.getSelectedSensorPosition(),ModuleConstants.kSteerMotorGearRatio));
     return new SwerveModulePosition(position, angle);
   }
 }
