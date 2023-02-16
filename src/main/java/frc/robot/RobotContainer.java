@@ -44,7 +44,8 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
     m_intake.setDefaultCommand(Commands.run(() -> {System.out.println(m_intake.getPosition());}, m_intake));
-    
+    // -264 open
+    // 155 closed
   }
 
   /**
