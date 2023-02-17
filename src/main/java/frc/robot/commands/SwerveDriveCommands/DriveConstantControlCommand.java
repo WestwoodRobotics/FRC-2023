@@ -1,47 +1,50 @@
 package frc.robot.commands.SwerveDriveCommands;
 
+import static frc.robot.Constants.C_DEADZONE_CIRCLE;
+import static frc.robot.Constants.C_DEADZONE_RECTANGLE;
+import static frc.robot.Constants.DriveConstants.C_MAX_ANGULAR_SPEED;
+import static frc.robot.Constants.DriveConstants.C_MAX_SPEED;
+
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.swerve.DetermineDriveSpeed;
-import frc.robot.subsystems.swerve.SwerveDrive;
+import frc.robot.subsystems.swerve.DriveSpeed;
+import frc.robot.subsystems.swerve.SwerveDriveOld;
 
-import static frc.robot.Constants.AutoConstants;
-import static frc.robot.Constants.OIConstants;
 
 public class DriveConstantControlCommand extends CommandBase {
 
-  private final SwerveDrive m_swerveDrive;
-  private final XboxController controller;
-  private final DetermineDriveSpeed limJoystickLeft = new DetermineDriveSpeed(0.05);
-  private final DetermineDriveSpeed limJoystickRight = new DetermineDriveSpeed(0.05);
+    private final SwerveDriveOld m_swerveDrive;
+    private final XboxController controller;
+    private final DriveSpeed limJoystickLeft = new DriveSpeed(0.05);
+    private final DriveSpeed limJoystickRight = new DriveSpeed(0.05);
 
-  public DriveConstantControlCommand(SwerveDrive swerveDrive, XboxController controller) {
-    m_swerveDrive = swerveDrive;
-    this.controller = controller;
+    public DriveConstantControlCommand(SwerveDriveOld swerveDrive, XboxController controller) {
+        m_swerveDrive = swerveDrive;
+        this.controller = controller;
 
-    addRequirements(swerveDrive);
-  }
+        addRequirements(swerveDrive);
+    }
 
-  @Override
-  public void initialize() {}
+    @Override
+    public void initialize() {}
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    double leftX, leftY, rightX;
+    // Called every time the scheduler runs while the command is scheduled.
+    @Override
+    public void execute() {
+        double leftX, leftY, rightX;
 
     leftX = -controller.getLeftX();
     leftY = -controller.getLeftY();
     rightX = controller.getRightX();
 
-    // Find radii for controller dead-zones (circular)
-    double leftRadius = Math.sqrt(Math.pow(leftX, 2) + Math.pow(leftY, 2));
-    double rightRadius = Math.abs(rightX);
+        // Find radii for controller dead-zones (circular)
+        double leftRadius = Math.sqrt(Math.pow(leftX, 2) + Math.pow(leftY, 2));
+        double rightRadius = Math.abs(rightX);
 
-    // add input curves
-    leftX = Math.pow(leftX, 3);
-    leftY = Math.pow(leftY, 3);
-    rightX = Math.pow(rightX, 3);
+        // add input curves
+        leftX = Math.pow(leftX, 3);
+        leftY = Math.pow(leftY, 3);
+        rightX = Math.pow(rightX, 3);
 
     // apply deadzones
     if (leftRadius < OIConstants.kDeadzoneCircle) {
@@ -53,17 +56,17 @@ public class DriveConstantControlCommand extends CommandBase {
       rightX = 0;
     }
 
-    limJoystickLeft.compute(leftX, leftY);
-    limJoystickRight.compute(rightX, 0);
+        limJoystickLeft.compute(leftX, leftY);
+        limJoystickRight.compute(rightX, 0);
 
-    leftX = limJoystickLeft.xSpeed;
-    leftY = limJoystickLeft.ySpeed;
-    rightX = limJoystickRight.xSpeed;
+        leftX = limJoystickLeft.xSpeed;
+        leftY = limJoystickLeft.ySpeed;
+        rightX = limJoystickRight.xSpeed;
 
-    // apply max speeds
-    leftX *= AutoConstants.kMaxSpeedMetersPerSecond;
-    leftY *= AutoConstants.kMaxSpeedMetersPerSecond;
-    rightX *= AutoConstants.kMaxAngularSpeedRadiansPerSecond;
+        // apply max speeds
+        leftX *= C_MAX_SPEED;
+        leftY *= C_MAX_SPEED;
+        rightX *= C_MAX_ANGULAR_SPEED;
 
     // if left stick is active, drive in that direction
     if (leftRadius >= OIConstants.kDeadzoneRectangle) {
@@ -85,14 +88,14 @@ public class DriveConstantControlCommand extends CommandBase {
     return Math.pow(val, 3);
   }
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {}
+    // Called once the command ends or is interrupted.
+    @Override
+    public void end(boolean interrupted) {}
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    // should never end in teleop
-    return false;
-  }
+    // Returns true when the command should end.
+    @Override
+    public boolean isFinished() {
+        // should never end in teleop
+        return false;
+    }
 }

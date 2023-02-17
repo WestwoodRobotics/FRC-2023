@@ -1,3 +1,7 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
 package frc.robot.subsystems.swerve;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -19,6 +23,10 @@ import frc.robot.Constants.*;
 import frc.robot.Constants.PIDConstants;
 
 import frc.robot.util.Conversions;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -26,8 +34,20 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-// This class represents a swerve module, which consists of a drive motor and a steer motor
-// It also includes encoders and PID controllers for both the drive and steer motors, as well as an absolute encoder
+    public final TalonFX m_turningMotor;
+    public final TalonFX m_driveMotor;
+    public final CANCoder e_Encoder;
+    public final PIDController driveMotorPID;
+    public final PIDController turnMotorPID;
+    public final SimpleMotorFeedforward m_driveFeedforward;
+    private final int moduleNum;
+    private final boolean drive_inverted;
+    private final boolean turn_inverted;
+    Pose2d swerveModulePose = new Pose2d();
+    private ShuffleboardTab tab;
+    private double driveMotorOutput;
+    private double turningMotorOutput;
+    //    private double lastAngle;
 
 public class SwerveModule {
   private static double[] turnEncoderOffsets;
@@ -44,6 +64,9 @@ public class SwerveModule {
   private static final double DEGREES_TO_FALCON = Conversions.degreesToFalcon(1, ModuleConstants.kSteerMotorGearRatio);
   private boolean encoderOffsetModified = false;
 
+        m_driveMotor = driveMotor;
+        m_turningMotor = turningMotor;
+        e_Encoder = encoder;
 
   /**
    * @param driveMotorCANId         The CAN ID of the drive motor
@@ -70,11 +93,13 @@ public class SwerveModule {
     driveMotor.setInverted(isDriveMotorReversed);
     steerMotor.setInverted(isSteerMotorReversed);
 
-    // Set the neutral mode for the drive and steer motors to brake
-    driveMotor.setNeutralMode(NeutralMode.Brake);
-    steerMotor.setNeutralMode(NeutralMode.Coast);
-    driveMotor.clearStickyFaults();
-    steerMotor.clearStickyFaults();
+        // put in constants later
+        swerveAngleFXConfig.slot0.kP = .6;
+        swerveAngleFXConfig.slot0.kI = 0.0;
+        swerveAngleFXConfig.slot0.kD = 12;
+        swerveAngleFXConfig.slot0.kF = 0.0;
+        swerveAngleFXConfig.supplyCurrLimit = angleSupplyLimit;
+        swerveAngleFXConfig.initializationStrategy = SensorInitializationStrategy.BootToZero;
 
     TalonFXConfiguration swerveAngleFXConfig = new TalonFXConfiguration();
 
@@ -174,9 +199,10 @@ public class SwerveModule {
     resetToAbsolute();
   }
 
-  public double getVelocity() {
-    return driveMotor.getSelectedSensorVelocity() * ModuleConstants.kDriveEncoderRot2Meter * 10;
-  }
+        double currentAngle = m_turningMotor.getSelectedSensorPosition()
+                / Conversions.degreesToFalcon(1, Constants.SwerveModuleConstants.C_TURNING_MOTOR_GEAR_RATIO);
+        double offset = e_Encoder.getAbsolutePosition() - currentAngle;
+        turnEncoderOffsets[moduleNum] = offset;
 
   public SwerveModuleState getState() {
     return new SwerveModuleState(getVelocity(), Rotation2d.fromDegrees(steerMotor.getSelectedSensorPosition() * (360.0 / (ModuleConstants.kSteerMotorGearRatio * 2048.0)))); //COnverts the encoder ticks to angle
@@ -194,8 +220,10 @@ public class SwerveModule {
 
     SwerveModuleState outputState = CTREModuleState.optimize(state, new Rotation2d(currentAngle));
 
-    double angleDiff = currentAngle - outputState.angle.getRadians();
-    double targetDriveSpeed = outputState.speedMetersPerSecond * Math.cos(angleDiff);
+    public void resetEncoderOffset() {
+        for (int i = 0; i < 4; i++) {
+            turnEncoderOffsets[i] = 0;
+        }
 
     System.out.printf("Trying to reach angle %f%n", outputState.angle.getDegrees());
 
@@ -208,34 +236,31 @@ public class SwerveModule {
     steerMotor.set(ControlMode.Position, Conversions.degreesToFalcon(outputState.angle.getDegrees(), ModuleConstants.kSteerMotorGearRatio));
   }
 
-  /**
-   * Turn off the drive motor.
-   */
-  public void zeroDriveMotor() {
-    driveMotor.set(ControlMode.PercentOutput, 0);
-  }
+    public SwerveModuleState getState() {
+        return new SwerveModuleState(
+                getVelocity(),
+                Rotation2d.fromDegrees(Conversions.falconToDegrees(
+                        m_turningMotor.getSelectedSensorPosition(), C_TURNING_MOTOR_GEAR_RATIO)));
+    }
 
-  public void setBrakeMode(boolean mode) { // True is brake, false is coast
-    driveMotor.setNeutralMode(mode ? NeutralMode.Brake : NeutralMode.Coast);
-    steerMotor.setNeutralMode(NeutralMode.Brake);
-  }
+    /**
+     * Sets the desired state of the swerve module, using the PID controllers to calculate the necessary motor outputs.
+     *
+     * @param state The desired state.
+     */
+    public void setDesiredState(SwerveModuleState state) {
+        state.speedMetersPerSecond = state.speedMetersPerSecond * 204800 / 6.12;
 
-  public void resetEncoders() {
-    driveMotor.setSelectedSensorPosition(0);
-    steerMotor.setSelectedSensorPosition(0);
-  }
+        double currentAngle =
+                Conversions.FalconToRadians(m_turningMotor.getSelectedSensorPosition(), C_TURNING_MOTOR_GEAR_RATIO);
 
-  public Pose2d getPose() {
-    return swerveModulePose;
-  }
+        SwerveModuleState outputState = SwerveModuleState.optimize(state, new Rotation2d(currentAngle));
 
-  public void setPose(Pose2d pose) {
-    swerveModulePose = pose;
-  }
+        double angleDiff = currentAngle - outputState.angle.getRadians();
+        double targetDriveSpeed = outputState.speedMetersPerSecond * Math.cos(angleDiff);
 
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
+        double drive_vel = getVelocity();
+        driveMotorOutput = driveMotorPID.calculate(drive_vel, targetDriveSpeed);
 
   public SwerveModulePosition getPosition() {
     double position = Conversions.FalconToMeters(driveMotor.getSelectedSensorPosition(), ModuleConstants.kWheelDiameterMeters, ModuleConstants.kDriveMotorGearRatio);
