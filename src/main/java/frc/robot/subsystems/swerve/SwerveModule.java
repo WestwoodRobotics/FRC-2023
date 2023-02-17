@@ -8,18 +8,23 @@ import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.FilePathConstants;
-import frc.robot.Constants.ModuleConstants;
+import frc.robot.Constants.*;
+import frc.robot.Constants.PIDConstants;
+
 import frc.robot.util.Conversions;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
 
 // This class represents a swerve module, which consists of a drive motor and a steer motor
 // It also includes encoders and PID controllers for both the drive and steer motors, as well as an absolute encoder
@@ -27,7 +32,6 @@ import java.io.*;
 public class SwerveModule {
   private static double[] turnEncoderOffsets;
   private final int moduleNum;
-
   private final TalonFX driveMotor;
   private final TalonFX steerMotor;
   private final CANCoder absoluteEncoder; // Absolute Encoder
@@ -37,6 +41,9 @@ public class SwerveModule {
   private double driveMotorOutput; // Output for the drive motor
   private double turningMotorOutput; // Output for the turning motor
   private Pose2d swerveModulePose = new Pose2d();
+  private static final double DEGREES_TO_FALCON = Conversions.degreesToFalcon(1, ModuleConstants.kSteerMotorGearRatio);
+  private boolean encoderOffsetModified = false;
+
 
   /**
    * @param driveMotorCANId         The CAN ID of the drive motor
@@ -75,7 +82,7 @@ public class SwerveModule {
     SupplyCurrentLimitConfiguration angleSupplyLimit = new SupplyCurrentLimitConfiguration(true, 20, 30, 0.1);
 
     // put in constants later
-    swerveAngleFXConfig.slot0.kP = .6;
+    swerveAngleFXConfig.slot0.kP = PIDConstants.kPSwerveAngle;
     swerveAngleFXConfig.slot0.kI = 0.0;
     swerveAngleFXConfig.slot0.kD = 12;
     swerveAngleFXConfig.slot0.kF = 0.0;
@@ -84,7 +91,7 @@ public class SwerveModule {
 
 //    // Initialize the drive and steer PID controllers using the constants from
 //    // DriveConstants
-    drivePIDController = new PIDController(DriveConstants.kPSwerveDriveDriveMotor, DriveConstants.kISwerveDriveDriveMotor, DriveConstants.kDSwerveDriveDriveMotor);
+    drivePIDController = new PIDController(PIDConstants.kPSwerveDriveDriveMotor, PIDConstants.kISwerveDriveDriveMotor, PIDConstants.kDSwerveDriveDriveMotor);
 //    steerPIDController = new PIDController(DriveConstants.kPSwerveDriveSteerMotor, DriveConstants.kISwerveDriveSteerMotor, DriveConstants.kDSwerveDriveSteerMotor);
 //    steerPIDController.enableContinuousInput(-Math.PI, Math.PI);
 
@@ -102,19 +109,6 @@ public class SwerveModule {
     this.driveMotorFeedForward = new SimpleMotorFeedforward(0.0355919531, 0.00004297063293, 0.0000000000355919531);
   }
 
-  private static void saveEncoderOffset() {
-    try {
-      BufferedWriter writer = new BufferedWriter(new FileWriter(FilePathConstants.steerEncoderOffsetSavesPath));
-      for (int i = 0; i < 4; i++) {
-        writer.write(Double.toString(turnEncoderOffsets[i]));
-        writer.newLine();
-      }
-      writer.close();
-    } catch (IOException e) {
-      System.out.println("\u001b[31;1mFailed to write turn encoder offsets to file.\u001b[0m");
-    }
-  }
-
   /**
    * Gets the persisted encoder offset from the previous robot session.
    *
@@ -122,37 +116,44 @@ public class SwerveModule {
    */
   private double getEncoderOffset() {
     if (turnEncoderOffsets == null) {
-      turnEncoderOffsets = new double[4];
       try {
-        BufferedReader reader = new BufferedReader(new java.io.FileReader(FilePathConstants.steerEncoderOffsetSavesPath));
-        for (int i = 0; i < 4; i++) {
-          turnEncoderOffsets[i] = Double.parseDouble(reader.readLine());
-        }
-        reader.close();
-      } catch (IOException e) {
-        System.out.println(
-          "\u001b[31;1mFailed to read turn encoder offsets from file, please align wheels manually, "
-            + "then reset encoders.\u001b[0m");
-
-        for (int i = 0; i < 4; i++) {
-          turnEncoderOffsets[i] = 0;
-        }
+          //Reads all the lines of the file, and ignores any data beyond the Standard Character Set
+          List<String> lines = Files.readAllLines(Paths.get(FilePathConstants.steerEncoderOffsetSavesPath), StandardCharsets.UTF_8);
+          turnEncoderOffsets = lines.stream().limit(4).mapToDouble(Double::parseDouble).toArray();
+      } catch (IOException | NumberFormatException e) {
+          System.out.println(
+              "\u001b[31;1mFailed to read turn encoder offsets from file, please align wheels manually, then reset encoders.\u001b[0m");
+          turnEncoderOffsets = new double[4];
       }
-    }
+  }
 
     return turnEncoderOffsets[moduleNum];
   }
+
+  private void saveEncoderOffset() {
+    if (encoderOffsetModified) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FilePathConstants.steerEncoderOffsetSavesPath))) {
+            for (double encoderOffset : turnEncoderOffsets) {
+                writer.write(Double.toString(encoderOffset));
+                writer.newLine();
+            }
+            encoderOffsetModified = false;
+        } catch (IOException e) {
+            System.out.println("\u001b[31;1mFailed to write turn encoder offsets to file.\u001b[0m");
+        }
+    }
+}
 
   public void setEncoderOffset() {
     if (turnEncoderOffsets == null) {
       getEncoderOffset();
     }
 
-    double currentAngle = steerMotor.getSelectedSensorPosition() / Conversions.degreesToFalcon(1, ModuleConstants.kSteerMotorGearRatio);
+    double currentAngle = steerMotor.getSelectedSensorPosition() / DEGREES_TO_FALCON;
     double offset = absoluteEncoder.getAbsolutePosition() - currentAngle;
     turnEncoderOffsets[moduleNum] = offset;
+    encoderOffsetModified = true;
 
-    // TODO: Make this not write to a file every time.
     saveEncoderOffset();
   }
 
@@ -162,8 +163,7 @@ public class SwerveModule {
     double currentAngle = (absoluteEncoder.getAbsolutePosition() + 360 - offset) % 360;
     double absolutePosition =
       Conversions.degreesToFalcon(currentAngle, ModuleConstants.kSteerMotorGearRatio);
-
-    steerMotor.setSelectedSensorPosition(absolutePosition);
+      steerMotor.setSelectedSensorPosition(absolutePosition);
   }
 
   public void resetEncoderOffset() {

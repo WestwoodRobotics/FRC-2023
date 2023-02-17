@@ -4,6 +4,8 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import frc.robot.util.*;
+
 
 // This class contains constants used throughout the robot code
 public final class Constants {
@@ -16,8 +18,7 @@ public final class Constants {
     // Gear ratio of the drive motor
     public static final double kDriveMotorGearRatio = 1 / 5.8462; //TODO: Update with actual Gear Ratio
     // Gear ratio of the steer motor
-//    public static final double kSteerMotorGearRatio = 1 / 18.0; //TODO: Update with actual Gear Ratio
-    public static final double kSteerMotorGearRatio = 12.8;
+    public static final double kSteerMotorGearRatio = (150/7);
     // Conversion factor from drive encoder rotations to meters
     public static final double kDriveEncoderRot2Meter = kDriveMotorGearRatio * Math.PI * kWheelDiameterMeters;
     // Conversion factor from steer encoder rotations to radians
@@ -53,14 +54,7 @@ public final class Constants {
     public static final double kMaxCentripetalAccel = Units.inchesToMeters(20); //TODO: Update with actual max centripetal acceleration
     public static final TrapezoidProfile.Constraints kDriveVelocityConstraints = new TrapezoidProfile.Constraints(kMaxVel, kMaxAccel);
 
-    public static final double kPSwerveDriveDriveMotor = 0.055; //TODO: Update with actual PIDF values
-    public static final double kISwerveDriveDriveMotor = 0.001; //TODO: Update with actual PIDF values
-    public static final double kDSwerveDriveDriveMotor = 0.001; //TODO: Update with actual PIDF values
-
-    public static final double kPSwerveDriveSteerMotor = 0.055; //TODO: Update with actual PIDF values
-    public static final double kISwerveDriveSteerMotor = 0.001; //TODO: Update with actual PIDF values
-    public static final double kDSwerveDriveSteerMotor = 0.001;//TODO: Update with actual PIDF values
-
+   
     public static final double kDistanceFromCenterWidth = Units.inchesToMeters(21) / 2; //  TODO: Update with actual distance from center
     public static final double kDistanceFromCenterLength = Units.inchesToMeters(25.5) / 2; //  TODO: Update with actual distance from center
 
@@ -136,6 +130,22 @@ public final class Constants {
   public static final class FilePathConstants {
     public static final String steerEncoderOffsetSavesPath = "/home/lvuser/SteerEncoderOffsets.txt";
   }
+
+  public static final class PIDConstants{
+    public static final double kPSwerveDriveDriveMotor = 0.055; //TODO: Update with actual PID values
+    public static final double kISwerveDriveDriveMotor = 0.001; //TODO: Update with actual PID values
+    public static final double kDSwerveDriveDriveMotor = 0.001; //TODO: Update with actual PID values
+
+    public static final double kPSwerveDriveSteerMotor = 0.055; //TODO: Update with actual PID values
+    public static final double kISwerveDriveSteerMotor = 0.001; //TODO: Update with actual PID values
+    public static final double kDSwerveDriveSteerMotor = 0.001; //TODO: Update with actual PID values
+
+    public static final double kPSwerveAngle = 0.055; //TODO: Update with actual PID values
+    public static final double kISwerveAngle = 0.001; //TODO: Update with actual PID values
+    public static final double kDSwerveAngle = 0.001; //TODO: Update with actual PID values
+  }
+
+
 
 
 }
