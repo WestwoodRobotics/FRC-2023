@@ -16,8 +16,9 @@ public class Intake extends SubsystemBase {
 
     public Intake(){
         intakeMotor.setNeutralMode(NeutralMode.Brake);
-        intakeMotor.setInverted(false);
+        intakeMotor.setInverted(true);
         initialPosition = getPosition();
+        //intakeMotor.setSelectedSensorPosition(sensorPos)
     }
 
     public void setIntakePower(double power){
