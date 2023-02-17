@@ -36,10 +36,9 @@ public class SwerveModule {
   private final TalonFX steerMotor;
   private final CANCoder absoluteEncoder; // Absolute Encoder
   private final PIDController drivePIDController; // PID Controller for the drive motor
+  private PIDController steerPIDController; // PID Controller for the steer motor
   private final SimpleMotorFeedforward driveMotorFeedForward; // Feedforward for the drive motor
-  private double absoluteEncoderOffsetRad; // Offset for the absolute encoder
   private double driveMotorOutput; // Output for the drive motor
-  private double turningMotorOutput; // Output for the turning motor
   private Pose2d swerveModulePose = new Pose2d();
   private static final double DEGREES_TO_FALCON = Conversions.degreesToFalcon(1, ModuleConstants.kSteerMotorGearRatio);
   private boolean encoderOffsetModified = false;
@@ -83,8 +82,8 @@ public class SwerveModule {
 
     // put in constants later
     swerveAngleFXConfig.slot0.kP = PIDConstants.kPSwerveAngle;
-    swerveAngleFXConfig.slot0.kI = 0.0;
-    swerveAngleFXConfig.slot0.kD = 12;
+    swerveAngleFXConfig.slot0.kI = PIDConstants.kISwerveAngle;
+    swerveAngleFXConfig.slot0.kD = PIDConstants.kDSwerveAngle;
     swerveAngleFXConfig.slot0.kF = 0.0;
     swerveAngleFXConfig.supplyCurrLimit = angleSupplyLimit;
     swerveAngleFXConfig.initializationStrategy = SensorInitializationStrategy.BootToZero;
@@ -92,17 +91,21 @@ public class SwerveModule {
 //    // Initialize the drive and steer PID controllers using the constants from
 //    // DriveConstants
     drivePIDController = new PIDController(PIDConstants.kPSwerveDriveDriveMotor, PIDConstants.kISwerveDriveDriveMotor, PIDConstants.kDSwerveDriveDriveMotor);
+    steerPIDController = new PIDController(PIDConstants.kPSwerveDriveSteerMotor, PIDConstants.kISwerveDriveSteerMotor, PIDConstants.kDSwerveDriveSteerMotor);
 //    steerPIDController = new PIDController(DriveConstants.kPSwerveDriveSteerMotor, DriveConstants.kISwerveDriveSteerMotor, DriveConstants.kDSwerveDriveSteerMotor);
 //    steerPIDController.enableContinuousInput(-Math.PI, Math.PI);
 
     steerMotor.configFactoryDefault();
     steerMotor.configAllSettings(swerveAngleFXConfig);
-    steerMotor.setNeutralMode(NeutralMode.Coast);
+
+
+
     resetToAbsolute();
 
     // Setting Integrator Range (I in PID) | (Makes sure we don't go over the
     // voltage limit)
     drivePIDController.setIntegratorRange(-ModuleConstants.kFalcon500Voltage, ModuleConstants.kFalcon500Voltage);
+    steerPIDController.setIntegratorRange(-ModuleConstants.kFalcon500Voltage, ModuleConstants.kFalcon500Voltage);
 
     // TODO: remove this
 //    this.driveMotorFeedForward = new SimpleMotorFeedforward(DriveConstants.ksVolts, DriveConstants.kvVoltSecondsPerMeter, DriveConstants.kaVoltSecondsSquaredPerMeter);
