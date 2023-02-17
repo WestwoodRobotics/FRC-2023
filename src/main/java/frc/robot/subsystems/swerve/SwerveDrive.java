@@ -29,13 +29,13 @@ public class SwerveDrive extends SubsystemBase {
 
     // initialize swerve mods (possibly move into a list for conciseness eventually)
     frontLeftModule = new SwerveModule(PortConstants.kFrontLeftDriveMotorPort, PortConstants.kFrontLeftSteerMotorPort,
-        false, false, PortConstants.kFrontLeftCANCoderPort, 0, false);
+        false, false, PortConstants.kFrontLeftCANCoderPort, 0, 0);
     frontRightModule = new SwerveModule(PortConstants.kFrontRightDriveMotorPort,
-        PortConstants.kFrontRightSteerMotorPort, false, false, PortConstants.kFrontRightCANCoderPort, 0, false);
+        PortConstants.kFrontRightSteerMotorPort, false, false, PortConstants.kFrontRightCANCoderPort, 0, 1);
     backLeftModule = new SwerveModule(PortConstants.kBackLeftDriveMotorPort, PortConstants.kBackLeftSteerMotorPort,
-        false, false, PortConstants.kBackLeftCANCoderPort, 0, false);
+        false, false, PortConstants.kBackLeftCANCoderPort, 0, 2);
     backRightModule = new SwerveModule(PortConstants.kBackRightDriveMotorPort, PortConstants.kBackRightSteerMotorPort,
-        false, false, PortConstants.kBackRightCANCoderPort, 0, false);
+        false, false, PortConstants.kBackRightCANCoderPort, 0, 3);
 
     // initialize classes which require Swerve
     odometry = new Odometry(this);

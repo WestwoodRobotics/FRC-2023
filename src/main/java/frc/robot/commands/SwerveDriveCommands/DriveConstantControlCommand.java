@@ -30,7 +30,7 @@ public class DriveConstantControlCommand extends CommandBase {
   public void execute() {
     double leftX, leftY, rightX;
 
-    leftX = controller.getLeftX();
+    leftX = -controller.getLeftX();
     leftY = -controller.getLeftY();
     rightX = controller.getRightX();
 

@@ -16,7 +16,8 @@ public final class Constants {
     // Gear ratio of the drive motor
     public static final double kDriveMotorGearRatio = 1 / 5.8462; //TODO: Update with actual Gear Ratio
     // Gear ratio of the steer motor
-    public static final double kSteerMotorGearRatio = 1 / 18.0; //TODO: Update with actual Gear Ratio
+//    public static final double kSteerMotorGearRatio = 1 / 18.0; //TODO: Update with actual Gear Ratio
+    public static final double kSteerMotorGearRatio = 12.8;
     // Conversion factor from drive encoder rotations to meters
     public static final double kDriveEncoderRot2Meter = kDriveMotorGearRatio * Math.PI * kWheelDiameterMeters;
     // Conversion factor from steer encoder rotations to radians
@@ -123,10 +124,6 @@ public final class Constants {
     public static final int kFrontRightSteerMotorPort = 14;
     public static final int kBackLeftSteerMotorPort = 15;
     public static final int kBackRightSteerMotorPort = 18;
-
-    // PWM ports for the intake motors
-    public static final int kIntakeMotorPort = 0; //TODO: Update with actual PWM port 
-    public static final int kIntakeMotorEncoderPort = 0; //TODO: Update with actual PWM port
 
     // USB port of the driver controller
     public static final int XboxController1 = 1;
