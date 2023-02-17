@@ -33,9 +33,9 @@ public class DriveConstantControlCommand extends CommandBase {
     public void execute() {
         double leftX, leftY, rightX;
 
-        leftX = controller.getLeftX();
-        leftY = -controller.getLeftY();
-        rightX = controller.getRightX();
+    leftX = -controller.getLeftX();
+    leftY = -controller.getLeftY();
+    rightX = controller.getRightX();
 
         // Find radii for controller dead-zones (circular)
         double leftRadius = Math.sqrt(Math.pow(leftX, 2) + Math.pow(leftY, 2));
@@ -46,15 +46,15 @@ public class DriveConstantControlCommand extends CommandBase {
         leftY = Math.pow(leftY, 3);
         rightX = Math.pow(rightX, 3);
 
-        // apply deadzones
-        if (leftRadius < C_DEADZONE_CIRCLE) {
-            leftX = 0;
-            leftY = 0;
-        }
+    // apply deadzones
+    if (leftRadius < OIConstants.kDeadzoneCircle) {
+      leftX = 0;
+      leftY = 0;
+    }
 
-        if (rightRadius < C_DEADZONE_CIRCLE) {
-            rightX = 0;
-        }
+    if (rightRadius < OIConstants.kDeadzoneCircle) {
+      rightX = 0;
+    }
 
         limJoystickLeft.compute(leftX, leftY);
         limJoystickRight.compute(rightX, 0);
@@ -68,25 +68,25 @@ public class DriveConstantControlCommand extends CommandBase {
         leftY *= C_MAX_SPEED;
         rightX *= C_MAX_ANGULAR_SPEED;
 
-        // if left stick is active, drive in that direction
-        if (leftRadius >= C_DEADZONE_RECTANGLE) {
-            m_swerveDrive.drive(leftX, leftY, rightX, false);
-        } else if (rightRadius >= C_DEADZONE_RECTANGLE) {
-            // otherwise, if right stick is active, turn in that direction
-            m_swerveDrive.drive(0, 0, rightX, false);
-        } else {
-            // otherwise, stop drive motors
-            m_swerveDrive.zeroDrive();
-        }
+    // if left stick is active, drive in that direction
+    if (leftRadius >= OIConstants.kDeadzoneRectangle) {
+      m_swerveDrive.drive(leftX, leftY, rightX, false);
+    } else if (rightRadius >= OIConstants.kDeadzoneRectangle) {
+      // otherwise, if right stick is active, turn in that direction
+      m_swerveDrive.drive(0, 0, rightX, false);
+    } else {
+      // otherwise, stop drive motors
+      m_swerveDrive.zeroDrive();
     }
+  }
 
-    private double checkDeadzone(double val) {
-        // zeros if within deadzone rectangle
-        if (Math.abs(val) < C_DEADZONE_RECTANGLE) return 0;
-        // squares the value to decrease sensitivity
-        // else if (val < 0) return -Math.pow(val, 3);
-        return Math.pow(val, 3);
-    }
+  private double checkDeadzone(double val) {
+    // zeros if within deadzone rectangle
+    if (Math.abs(val) < OIConstants.kDeadzoneRectangle) return 0;
+    // squares the value to decrease sensitivity
+    // else if (val < 0) return -Math.pow(val, 3);
+    return Math.pow(val, 3);
+  }
 
     // Called once the command ends or is interrupted.
     @Override
