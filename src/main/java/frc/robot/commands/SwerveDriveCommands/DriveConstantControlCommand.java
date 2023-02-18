@@ -8,17 +8,17 @@ import static frc.robot.Constants.DriveConstants.C_MAX_SPEED;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.swerve.DriveSpeed;
-import frc.robot.subsystems.swerve.SwerveDriveOld;
-
+import frc.robot.subsystems.swerve.SwerveDrive;
+import frc.robot.Constants.*;
 
 public class DriveConstantControlCommand extends CommandBase {
 
-    private final SwerveDriveOld m_swerveDrive;
+    private final SwerveDrive m_swerveDrive;
     private final XboxController controller;
     private final DriveSpeed limJoystickLeft = new DriveSpeed(0.05);
     private final DriveSpeed limJoystickRight = new DriveSpeed(0.05);
 
-    public DriveConstantControlCommand(SwerveDriveOld swerveDrive, XboxController controller) {
+    public DriveConstantControlCommand(SwerveDrive swerveDrive, XboxController controller) {
         m_swerveDrive = swerveDrive;
         this.controller = controller;
 
