@@ -115,8 +115,8 @@ public final class Constants {
     // PWM ports for the steer motors
     public static final int kFrontLeftSteerMotorPort = 11;
     public static final int kFrontRightSteerMotorPort = 14;
-    public static final int kBackLeftSteerMotorPort = 15;
-    public static final int kBackRightSteerMotorPort = 18;
+    public static final int kBackLeftSteerMotorPort = 18;
+    public static final int kBackRightSteerMotorPort = 19;
 
     // USB port of the driver controller
     public static final int XboxController1 = 1;
@@ -139,9 +139,9 @@ public final class Constants {
     public static final double kISwerveDriveSteerMotor = 0.001; //TODO: Update with actual PID values
     public static final double kDSwerveDriveSteerMotor = 0.001; //TODO: Update with actual PID values
 
-    public static final double kPSwerveAngle = 0.055; //TODO: Update with actual PID values
-    public static final double kISwerveAngle = 0.001; //TODO: Update with actual PID values
-    public static final double kDSwerveAngle = 0.001; //TODO: Update with actual PID values
+    public static final double kPSwerveAngle = 0.6; //TODO: Update with actual PID values
+    public static final double kISwerveAngle = 0.0; //TODO: Update with actual PID values
+    public static final double kDSwerveAngle = 12; //TODO: Update with actual PID values
   }
 
 

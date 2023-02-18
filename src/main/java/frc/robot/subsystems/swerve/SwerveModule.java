@@ -20,12 +20,6 @@ import frc.robot.Constants.PIDConstants;
 
 import frc.robot.util.Conversions;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
-
 // This class represents a swerve module, which consists of a drive motor and a steer motor
 // It also includes encoders and PID controllers for both the drive and steer motors, as well as an absolute encoder
 
@@ -36,13 +30,13 @@ public class SwerveModule {
   private final TalonFX steerMotor;
   private final CANCoder absoluteEncoder; // Absolute Encoder
   private final PIDController drivePIDController; // PID Controller for the drive motor
-  private PIDController steerPIDController; // PID Controller for the steer motor
+  //private PIDController steerPIDController; // PID Controller for the steer motor
   private final SimpleMotorFeedforward driveMotorFeedForward; // Feedforward for the drive motor
   private double driveMotorOutput; // Output for the drive motor
   private Pose2d swerveModulePose = new Pose2d();
   private static final double DEGREES_TO_FALCON = Conversions.degreesToFalcon(1, ModuleConstants.kSteerMotorGearRatio);
-  private boolean encoderOffsetModified = false;
-
+  private double turnEncoderOffset;
+  private boolean disabled;
 
   /**
    * @param driveMotorCANId         The CAN ID of the drive motor
@@ -54,6 +48,8 @@ public class SwerveModule {
    */
   public SwerveModule(int driveMotorCANId, int steerMotorCANId, boolean isDriveMotorReversed, boolean isSteerMotorReversed, int absoluteEncoderCANId, double absoluteEncoderOffset, int moduleNum) {
     this.moduleNum = moduleNum;
+    this.turnEncoderOffset = 0;
+    this.disabled = false;
 
     // Initialize the drive and steer motors using the provided CAN IDs
     driveMotor = new WPI_TalonFX(driveMotorCANId);
@@ -91,7 +87,7 @@ public class SwerveModule {
 //    // Initialize the drive and steer PID controllers using the constants from
 //    // DriveConstants
     drivePIDController = new PIDController(PIDConstants.kPSwerveDriveDriveMotor, PIDConstants.kISwerveDriveDriveMotor, PIDConstants.kDSwerveDriveDriveMotor);
-    steerPIDController = new PIDController(PIDConstants.kPSwerveDriveSteerMotor, PIDConstants.kISwerveDriveSteerMotor, PIDConstants.kDSwerveDriveSteerMotor);
+   // steerPIDController = new PIDController(PIDConstants.kPSwerveDriveSteerMotor, PIDConstants.kISwerveDriveSteerMotor, PIDConstants.kDSwerveDriveSteerMotor);
 //    steerPIDController = new PIDController(DriveConstants.kPSwerveDriveSteerMotor, DriveConstants.kISwerveDriveSteerMotor, DriveConstants.kDSwerveDriveSteerMotor);
 //    steerPIDController.enableContinuousInput(-Math.PI, Math.PI);
 
@@ -105,7 +101,7 @@ public class SwerveModule {
     // Setting Integrator Range (I in PID) | (Makes sure we don't go over the
     // voltage limit)
     drivePIDController.setIntegratorRange(-ModuleConstants.kFalcon500Voltage, ModuleConstants.kFalcon500Voltage);
-    steerPIDController.setIntegratorRange(-ModuleConstants.kFalcon500Voltage, ModuleConstants.kFalcon500Voltage);
+   // steerPIDController.setIntegratorRange(-ModuleConstants.kFalcon500Voltage, ModuleConstants.kFalcon500Voltage);
 
     // TODO: remove this
 //    this.driveMotorFeedForward = new SimpleMotorFeedforward(DriveConstants.ksVolts, DriveConstants.kvVoltSecondsPerMeter, DriveConstants.kaVoltSecondsSquaredPerMeter);
@@ -117,61 +113,35 @@ public class SwerveModule {
    *
    * @return Absolute encoder's offset (in degrees) from 0 (forward).
    */
-  private double getEncoderOffset() {
-    if (turnEncoderOffsets == null) {
-      try {
-          //Reads all the lines of the file, and ignores any data beyond the Standard Character Set
-          List<String> lines = Files.readAllLines(Paths.get(FilePathConstants.steerEncoderOffsetSavesPath), StandardCharsets.UTF_8);
-          turnEncoderOffsets = lines.stream().limit(4).mapToDouble(Double::parseDouble).toArray();
-      } catch (IOException | NumberFormatException e) {
-          System.out.println(
-              "\u001b[31;1mFailed to read turn encoder offsets from file, please align wheels manually, then reset encoders.\u001b[0m");
-          turnEncoderOffsets = new double[4];
-      }
+  public void setEncoderOffset(double turnEncoderOffset) {
+    this.turnEncoderOffset = turnEncoderOffset;
   }
 
-    return turnEncoderOffsets[moduleNum];
+  public double getEncoderOffset() {
+    return this.turnEncoderOffset;
   }
 
-  private void saveEncoderOffset() {
-    if (encoderOffsetModified) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FilePathConstants.steerEncoderOffsetSavesPath))) {
-            for (double encoderOffset : turnEncoderOffsets) {
-                writer.write(Double.toString(encoderOffset));
-                writer.newLine();
-            }
-            encoderOffsetModified = false;
-        } catch (IOException e) {
-            System.out.println("\u001b[31;1mFailed to write turn encoder offsets to file.\u001b[0m");
-        }
-    }
-}
+  public void setDisabled(boolean disabled) {
+    this.disabled = disabled;
+  }
 
-  public void setEncoderOffset() {
-    if (turnEncoderOffsets == null) {
-      getEncoderOffset();
-    }
-
+  public double calculateEncoderOffset() {
     double currentAngle = steerMotor.getSelectedSensorPosition() / DEGREES_TO_FALCON;
     double offset = absoluteEncoder.getAbsolutePosition() - currentAngle;
-    turnEncoderOffsets[moduleNum] = offset;
-    encoderOffsetModified = true;
-
-    saveEncoderOffset();
+    turnEncoderOffset = offset;
+    return turnEncoderOffset;
   }
 
   private void resetToAbsolute() {
-    double offset = getEncoderOffset();
-
-    double currentAngle = (absoluteEncoder.getAbsolutePosition() + 360 - offset) % 360;
+    double currentAngle = (absoluteEncoder.getAbsolutePosition() + 360 - turnEncoderOffset) % 360;
     double absolutePosition =
       Conversions.degreesToFalcon(currentAngle, ModuleConstants.kSteerMotorGearRatio);
-      steerMotor.setSelectedSensorPosition(absolutePosition);
+    steerMotor.setSelectedSensorPosition(absolutePosition);
   }
 
   public void resetEncoderOffset() {
     for (int i = 0; i < 4; i++) {
-      turnEncoderOffsets[i] = 0;
+      turnEncoderOffset = 0;
     }
 
     resetToAbsolute();
@@ -200,15 +170,21 @@ public class SwerveModule {
     double angleDiff = currentAngle - outputState.angle.getRadians();
     double targetDriveSpeed = outputState.speedMetersPerSecond * Math.cos(angleDiff);
 
-    System.out.printf("Trying to reach angle %f%n", outputState.angle.getDegrees());
+    System.out.printf("Trying to reach angle %f %d %n", outputState.angle.getDegrees(), this.moduleNum);
 
     double drive_vel = getVelocity();
     driveMotorOutput = drivePIDController.calculate(drive_vel, targetDriveSpeed);
 
     double driveFeedforward = driveMotorFeedForward.calculate(targetDriveSpeed);
 
-    driveMotor.set(ControlMode.PercentOutput, driveFeedforward + driveMotorOutput);
-    steerMotor.set(ControlMode.Position, Conversions.degreesToFalcon(outputState.angle.getDegrees(), ModuleConstants.kSteerMotorGearRatio));
+    if(disabled) {
+      driveMotor.set(ControlMode.PercentOutput, 0);
+      steerMotor.set(ControlMode.PercentOutput, 0);
+    }
+    else {
+      driveMotor.set(ControlMode.PercentOutput, driveFeedforward + driveMotorOutput);
+      steerMotor.set(ControlMode.Position, Conversions.degreesToFalcon(outputState.angle.getDegrees(), ModuleConstants.kSteerMotorGearRatio));
+    }
   }
 
   /**
