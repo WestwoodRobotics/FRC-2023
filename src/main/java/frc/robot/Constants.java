@@ -5,6 +5,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
+
 // This class contains constants used throughout the robot code
 public final class Constants {
 
@@ -16,7 +17,7 @@ public final class Constants {
     // Gear ratio of the drive motor
     public static final double kDriveMotorGearRatio = 1 / 5.8462; //TODO: Update with actual Gear Ratio
     // Gear ratio of the steer motor
-    public static final double kSteerMotorGearRatio = 1 / 18.0; //TODO: Update with actual Gear Ratio
+    public static final double kSteerMotorGearRatio = (150/7);
     // Conversion factor from drive encoder rotations to meters
     public static final double kDriveEncoderRot2Meter = kDriveMotorGearRatio * Math.PI * kWheelDiameterMeters;
     // Conversion factor from steer encoder rotations to radians
@@ -47,19 +48,12 @@ public final class Constants {
     // Physical characteristics of the drivetrain
     public static final double kPhysicalWheelbase = Units.inchesToMeters(25.5); //TODO: Update with actual wheel base
     public static final double kPhysicalTrackwidth = Units.inchesToMeters(21); //TODO: Update with actual track width
-    public static final double kMaxVel = Units.inchesToMeters(120); //TODO: Update with actual max velocity
-    public static final double kMaxAccel = Units.inchesToMeters(120); //TODO: Update with actual max acceleration
-    public static final double kMaxCentripetalAccel = Units.inchesToMeters(120); //TODO: Update with actual max centripetal acceleration
+    public static final double kMaxVel = Units.inchesToMeters(20); //TODO: Update with actual max velocity
+    public static final double kMaxAccel = Units.inchesToMeters(20); //TODO: Update with actual max acceleration
+    public static final double kMaxCentripetalAccel = Units.inchesToMeters(20); //TODO: Update with actual max centripetal acceleration
     public static final TrapezoidProfile.Constraints kDriveVelocityConstraints = new TrapezoidProfile.Constraints(kMaxVel, kMaxAccel);
 
-    public static final double kPSwerveDriveDriveMotor = 0.5; //TODO: Update with actual PIDF values
-    public static final double kISwerveDriveDriveMotor = 0; //TODO: Update with actual PIDF values
-    public static final double kDSwerveDriveDriveMotor = 0; //TODO: Update with actual PIDF values
-
-    public static final double kPSwerveDriveSteerMotor = 0.5; //TODO: Update with actual PIDF values
-    public static final double kISwerveDriveSteerMotor = 0; //TODO: Update with actual PIDF values
-    public static final double kDSwerveDriveSteerMotor = 0;//TODO: Update with actual PIDF values
-
+   
     public static final double kDistanceFromCenterWidth = Units.inchesToMeters(21) / 2; //  TODO: Update with actual distance from center
     public static final double kDistanceFromCenterLength = Units.inchesToMeters(25.5) / 2; //  TODO: Update with actual distance from center
 
@@ -82,11 +76,11 @@ public final class Constants {
     // Maximum angular acceleration of the robot in radians per second squared
     public static final double kMaxAngularAccelerationRadiansPerSecondSquared = Math.PI / 4; //TODO: Update with actual max angular acceleration
     // Proportional gain for the X controller
-    public static final double kPXController = 1.5; //TODO: Update with actual PIDF values
+    public static final double kPXController = 1.5;
     // Proportional gain for the Y controller
-    public static final double kPYController = 1.5; //TODO: Update with actual PIDF values
+    public static final double kPYController = 1.5;
     // Proportional gain for the Theta controller
-    public static final double kPThetaController = 3; //TODO: Update with actual PIDF values
+    public static final double kPThetaController = 3;
 
     // Constraints for the Theta controller
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = //
@@ -96,20 +90,9 @@ public final class Constants {
   }
 
   public static final class OIConstants {
-
-
-    // Axis ID for the Y-axis of the driver controller
-    public static final int kDriverYAxis = 1; //TODO: Update with actual axis ID
-    // Axis ID for the X-axis of the driver controller
-    public static final int kDriverXAxis = 0; //TODO: Update with actual axis ID
-    // Axis ID for the rotational axis of the driver controller
-    public static final int kDriverRotAxis = 4; //TODO: Update with actual axis ID
-    // Button ID for the field-oriented button of the driver controller
-    public static final int kDriverFieldOrientedButtonIdx = 1; //TODO: Update with actual button ID
-
     // Deadband for the driver controller axes
-    public static final double kDeadbandCircle = 0.08; //TODO: Update with actual deadband
-    public static final double kDeadBandRectangle = 0.12; //TODO: Update with actual deadband
+    public static final double kDeadzoneCircle = 0.08;
+    public static final double kDeadzoneRectangle = 0.12;
   }
 
   public static final class IntakeConstants {
@@ -118,56 +101,50 @@ public final class Constants {
 
   public static final class PortConstants {
     //CAN Coder Ports
-    public static final int kFrontLeftCANCoderPort = 0; // TODO: Update with actual CANCoder port
-    public static final int kFrontRightCANCoderPort = 0; // TODO: Update with actual CANCoder port
-    public static final int kBackLeftCANCoderPort = 0;  // TODO: Update with actual CANCoder port
-    public static final int kBackRightCANCoderPort = 0; // TODO: Update with actual CANCoder port
+    public static final int kFrontLeftCANCoderPort = 2;
+    public static final int kFrontRightCANCoderPort = 4;
+    public static final int kBackLeftCANCoderPort = 3;
+    public static final int kBackRightCANCoderPort = 1;
 
     // PWM ports for the drive motors
-    public static final int kFrontLeftDriveMotorPort = 8; //TODO: Update with actual PWM port
-    public static final int kBackLeftDriveMotorPort = 2; //TODO: Update with actual PWM port
-    public static final int kFrontRightDriveMotorPort = 6;//TODO: Update with actual PWM port
-    public static final int kBackRightDriveMotorPort = 4;//TODO: Update with actual PWM port
+    public static final int kFrontLeftDriveMotorPort = 12;
+    public static final int kBackLeftDriveMotorPort = 16;
+    public static final int kFrontRightDriveMotorPort = 13;
+    public static final int kBackRightDriveMotorPort = 17;
 
     // PWM ports for the steer motors
-    public static final int kFrontLeftTurningMotorPort = 7;//TODO: Update with actual PWM port
-    public static final int kBackLeftTurningMotorPort = 1;//TODO: Update with actual PWM port
-    public static final int kFrontRightTurningMotorPort = 5;//TODO: Update with actual PWM port
-    public static final int kBackRightTurningMotorPort = 3;//TODO: Update with actual PWM port
-
-    // PWM ports for the steer motors
-    public static final int kFrontLeftSteerMotorPort = 0;//TODO: Update with actual PWM port
-    public static final int kFrontRightSteerMotorPort = 0;//TODO: Update with actual PWM port
-    public static final int kBackLeftSteerMotorPort = 0;//TODO: Update with actual PWM port
-    public static final int kBackRightSteerMotorPort = 0;//TODO: Update with actual PWM port
-
-    // PWM ports for the drive motors
-    public static final int kFrontLeftDriveEncoderPort = 0; //TODO: Update with actual PWM port
-    public static final int kFrontRightDriveEncoderPort = 0;//TODO: Update with actual PWM port
-    public static final int kBackLeftDriveEncoderPort = 0;//TODO: Update with actual PWM port
-    public static final int kBackRightDriveEncoderPort = 0;//TODO: Update with actual PWM port
-
-    // PWM ports for the intake motors
-    public static final int kIntakeMotorPort = 0; //TODO: Update with actual PWM port
-    public static final int kIntakeMotorEncoderPort = 0;//TODO: Update with actual PWM port
+    public static final int kFrontLeftSteerMotorPort = 11;
+    public static final int kFrontRightSteerMotorPort = 14;
+    public static final int kBackLeftSteerMotorPort = 15;
+    public static final int kBackRightSteerMotorPort = 18;
 
     // USB port of the driver controller
-    public static final int XboxController1 = 0;//TODO: Update with actual port
-    public static final int XboxController2 = 0;//TODO: Update with actual port
-
-    // Analog input ports for the absolute encoders
-    public static final int kFrontLeftDriveAbsoluteEncoderPort = 0; //TODO: Update with actual analog input port
-    public static final int kBackLeftDriveAbsoluteEncoderPort = 2;//TODO: Update with actual analog input port
-    public static final int kFrontRightDriveAbsoluteEncoderPort = 1;//TODO: Update with actual analog input port
-    public static final int kBackRightDriveAbsoluteEncoderPort = 3;//TODO: Update with actual analog input port
+    public static final int XboxController1 = 1;
+    public static final int XboxController2 = 2;
 
     //PWM Port for Pigeon (Gyroscope)
     public static final int kPigeonPort = 0;//TODO: Update with actual PWM port
   }
 
   public static final class FilePathConstants {
-    public static final String steerEncoderOffsetSavesPath = "/src/main/java/frc/robot/sybsystems/Chassis/EncoderOffsets/SteerEncoderOffsets.txt";
+    public static final String steerEncoderOffsetSavesPath = "/home/lvuser/SteerEncoderOffsets.txt";
   }
+
+  public static final class PIDConstants{
+    public static final double kPSwerveDriveDriveMotor = 0.055; //TODO: Update with actual PID values
+    public static final double kISwerveDriveDriveMotor = 0.001; //TODO: Update with actual PID values
+    public static final double kDSwerveDriveDriveMotor = 0.001; //TODO: Update with actual PID values
+
+    public static final double kPSwerveDriveSteerMotor = 0.055; //TODO: Update with actual PID values
+    public static final double kISwerveDriveSteerMotor = 0.001; //TODO: Update with actual PID values
+    public static final double kDSwerveDriveSteerMotor = 0.001; //TODO: Update with actual PID values
+
+    public static final double kPSwerveAngle = 0.055; //TODO: Update with actual PID values
+    public static final double kISwerveAngle = 0.001; //TODO: Update with actual PID values
+    public static final double kDSwerveAngle = 0.001; //TODO: Update with actual PID values
+  }
+
+
 
 
 }
