@@ -2,8 +2,8 @@ package frc.robot.commands.SwerveDriveCommands;
 
 import static frc.robot.Constants.C_DEADZONE_CIRCLE;
 import static frc.robot.Constants.C_DEADZONE_RECTANGLE;
-import static frc.robot.Constants.DriveConstants.C_MAX_ANGULAR_SPEED;
-import static frc.robot.Constants.DriveConstants.C_MAX_SPEED;
+import static frc.robot.Constants.DriveConstants.maxAngularSpeed;
+import static frc.robot.Constants.DriveConstants.maxSpeed;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -64,9 +64,9 @@ public class DriveConstantControlCommand extends CommandBase {
         rightX = limJoystickRight.xSpeed;
 
         // apply max speeds
-        leftX *= C_MAX_SPEED;
-        leftY *= C_MAX_SPEED;
-        rightX *= C_MAX_ANGULAR_SPEED;
+        leftX *= maxSpeed;
+        leftY *= maxSpeed;
+        rightX *= maxAngularSpeed;
 
     // if left stick is active, drive in that direction
     if (leftRadius >= OIConstants.kDeadzoneRectangle) {
