@@ -4,10 +4,8 @@
 
 package frc.robot.commands.IntakeCommands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.ExampleSubsystem;
-import frc.robot.subsystems.Intake.Intake;
+import frc.robot.subsystems.intake.Intake;
 
 
 /** An example command that uses an example subsystem. */
@@ -27,7 +25,7 @@ public class IntakeCloseCommand extends CommandBase {
     addRequirements(m_intake);
   }
 
-  
+
 
   // Called when the command is initially scheduled.
   @Override
@@ -40,7 +38,7 @@ public class IntakeCloseCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
- 
+
 
   }
 

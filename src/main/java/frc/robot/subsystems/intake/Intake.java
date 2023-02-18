@@ -1,4 +1,4 @@
-package frc.robot.subsystems.Intake;
+package frc.robot.subsystems.intake;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -35,15 +35,15 @@ public class Intake extends SubsystemBase {
 
     public void setIntakeVelocity(double velocity){
         intakeMotor.set(ControlMode.Velocity, velocity);
-        
+
     }
 
     public void neutralMode(){
         intakeMotor.setNeutralMode(NeutralMode.Brake);
     }
-    
 
-   
 
-    
+
+
+
 }
