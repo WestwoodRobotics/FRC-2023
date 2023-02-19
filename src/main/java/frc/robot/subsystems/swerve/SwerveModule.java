@@ -111,12 +111,7 @@ public class SwerveModule {
         drivePIDController.setIntegratorRange(-ModuleConstants.kFalcon500Voltage, ModuleConstants.kFalcon500Voltage);
         steerPIDController.setIntegratorRange(-ModuleConstants.kFalcon500Voltage, ModuleConstants.kFalcon500Voltage);
 
-        // TODO: remove this
-        // this.driveMotorFeedForward = new
-        // SimpleMotorFeedforward(DriveConstants.ksVolts,
-        // DriveConstants.kvVoltSecondsPerMeter,
-        // DriveConstants.kaVoltSecondsSquaredPerMeter);
-        this.driveMotorFeedForward = new SimpleMotorFeedforward(0.0355919531, 0.00004297063293, 0.0000000000355919531);
+        this.driveMotorFeedForward = new SimpleMotorFeedforward(FeedForwardConstants.kSwerveDriveDriveMotorStaticGainConstant, FeedForwardConstants.kSwerveDriveDriveMotorVelocityGainConstant, FeedForwardConstants.kSwerveDriveDriveMotorAccelerationGainConstant);
     }
 
     /**

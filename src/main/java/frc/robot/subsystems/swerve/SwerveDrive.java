@@ -15,6 +15,7 @@ public class SwerveDrive extends SubsystemBase {
     private final SwerveModule frontRightModule;
     private final SwerveModule backLeftModule;
     private final SwerveModule backRightModule;
+    private final WPI_Pigeon2 pigeon = new WPI_Pigeon2(PortConstants.kPigeonPort);
 
     // private final SwerveDriveKinematics m_kinematics = new
     // SwerveDriveKinematics(DriveConstants.frontRight, DriveConstants.frontLeft,
@@ -109,7 +110,12 @@ public class SwerveDrive extends SubsystemBase {
         frontRightModule.resetEncoders();
         backLeftModule.resetEncoders();
         backRightModule.resetEncoders();
+    }
 
+
+
+    public void resetPigeon() {
+        pigeon.setYaw(0);
     }
 
     public void resetPose(Pose2d pose) {

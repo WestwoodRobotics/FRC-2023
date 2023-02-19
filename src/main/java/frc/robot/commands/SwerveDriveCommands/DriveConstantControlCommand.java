@@ -1,7 +1,5 @@
 package frc.robot.commands.SwerveDriveCommands;
 
-import static frc.robot.Constants.C_DEADZONE_CIRCLE;
-import static frc.robot.Constants.C_DEADZONE_RECTANGLE;
 import static frc.robot.Constants.DriveConstants.maxAngularSpeed;
 import static frc.robot.Constants.DriveConstants.maxSpeed;
 

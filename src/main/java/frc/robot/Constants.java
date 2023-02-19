@@ -19,7 +19,7 @@ public final class Constants {
     // Drivetrain Dimensions
     public static final double kWheelDiameterMeters = Units.inchesToMeters(3);
     // Gear ratio of the drive motor
-    public static final double kDriveMotorGearRatio = 1 / 5.8462; // TODO: Update with actual Gear Ratio
+    public static final double kDriveMotorGearRatio = 6.75;
     // Gear ratio of the steer motor
     public static final double kSteerMotorGearRatio = (150 / 7);
     // Conversion factor from drive encoder rotations to meters
@@ -50,16 +50,16 @@ public final class Constants {
 
   public static final class AutoConstants {
 
-    public static final double kMaxVel = Units.inchesToMeters(20); // TODO: Update with actual max velocity
-    public static final double kMaxAccel = Units.inchesToMeters(20); // TODO: Update with actual max acceleration
+    public static final double kMaxVel = Units.inchesToMeters(20);
+    public static final double kMaxAccel = Units.inchesToMeters(20);
     // Maximum speed of the robot in meters per second
     public static final double kMaxSpeedMetersPerSecond = kMaxVel / 4;
     // Maximum angular speed of the robot in radians per second
     public static final double kMaxAngularSpeedRadiansPerSecond = kMaxAccel / 10;
     // Maximum linear acceleration of the robot in meters per second squared
-    public static final double kMaxAccelerationMetersPerSecondSquared = 3; // TODO: Update with actual max acceleration
+    public static final double kMaxAccelerationMetersPerSecondSquared = 3;
     // Maximum angular acceleration of the robot in radians per second squared
-    public static final double kMaxAngularAccelerationRadiansPerSecondSquared = Math.PI / 4; // TODO: Update with actual
+    public static final double kMaxAngularAccelerationRadiansPerSecondSquared = Math.PI / 4;
     // max angular acceleration
     // Proportional gain for the X controller
     public static final double kPXController = 1.5;
@@ -127,6 +127,14 @@ public final class Constants {
     public static final double kPSwerveAngle = 0.055; // TODO: Update with actual PID values
     public static final double kISwerveAngle = 0.001; // TODO: Update with actual PID values
     public static final double kDSwerveAngle = 0.001; // TODO: Update with actual PID values
+
+
+  }
+
+  public static final class FeedForwardConstants{ 
+    public static final double kSwerveDriveDriveMotorStaticGainConstant = 0.0355919531; //TODO: Update with actual feedforward values
+    public static final double kSwerveDriveDriveMotorVelocityGainConstant = 0.00004297063293;  //TODO: Update with actual feedforward values
+    public static final double kSwerveDriveDriveMotorAccelerationGainConstant = 0.0000000000355919531; //TODO: Update with actual feedforward values
   }
 
 }
