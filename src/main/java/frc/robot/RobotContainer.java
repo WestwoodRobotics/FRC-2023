@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
 import frc.robot.Constants.PortConstants;
 import frc.robot.commands.SwerveDriveCommands.DriveConstantControlCommand;
 import frc.robot.subsystems.swerve.SwerveDrive;
@@ -27,7 +27,8 @@ public class RobotContainer {
 
   //THe XBox Controllers are being initialized here
   private final XboxController primaryController = new XboxController(PortConstants.XboxController1);
-  private final XboxController secondaryController = new XboxController(PortConstants.XboxController2);
+  //private final XboxController secondaryController = new XboxController(PortConstants.XboxController2);
+
   // The robot's subsystems and commands are defined here...
   private final SwerveDrive SwerveDriveSystem = new SwerveDrive();
 
@@ -36,20 +37,7 @@ public class RobotContainer {
 
   //private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem); <--- This is an example "command" implementation
 
-  // The buttons on the Primary Xbox Controller are being initialized here
-  private final JoystickButton rBumper = new JoystickButton(primaryController, XboxController.Button.kRightBumper.value);
-  private final JoystickButton Bumper = new JoystickButton(primaryController, XboxController.Button.kLeftBumper.value);
-  private final JoystickButton yButton = new JoystickButton(primaryController, XboxController.Button.kY.value);
-  private final JoystickButton xButton = new JoystickButton(primaryController, XboxController.Button.kX.value);
-  private final JoystickButton bButton = new JoystickButton(primaryController, XboxController.Button.kB.value);
-  private final JoystickButton aButton = new JoystickButton(primaryController, XboxController.Button.kA.value);
 
-  //The buttons on the Secondary Xbox Controller are being initialized here
-  private final JoystickButton startButton = new JoystickButton(primaryController, XboxController.Button.kStart.value);
-  private final JoystickButton hangarYButton = new JoystickButton(secondaryController, XboxController.Button.kY.value);
-  private final JoystickButton hangarXButton = new JoystickButton(secondaryController, XboxController.Button.kX.value);
-  private final JoystickButton hangarBButton = new JoystickButton(secondaryController, XboxController.Button.kB.value);
-  private final JoystickButton hangarAButton = new JoystickButton(secondaryController, XboxController.Button.kA.value);
 
 
   /**
@@ -63,6 +51,7 @@ public class RobotContainer {
 
   private void setDefaultCommands() {
     SwerveDriveSystem.setDefaultCommand(new DriveConstantControlCommand(SwerveDriveSystem, primaryController));
+
   }
 
   /**
@@ -76,7 +65,7 @@ public class RobotContainer {
     //The following code is for the primary controller
 
 
-    Sendable resetEncoderCommand = new InstantCommand(() -> {
+    Sendable resetMotorEncoderCommand = new InstantCommand(() -> {
       System.out.println("Encoders reset!");
       SwerveDriveSystem.resetAllEncoders();
     });
@@ -85,12 +74,11 @@ public class RobotContainer {
       SwerveDriveSystem.printDriveTrainSteerMotorDegrees();
     });
 
-    SmartDashboard.putData("Reset Encoders:", resetEncoderCommand);
-    SmartDashboard.putData("Current Presumed Steer Motor Angles:", printAssumedCurrentWheelAngles);
-
-
-
+    SmartDashboard.putData("Reset Motor Encoders:", resetMotorEncoderCommand);
+    SmartDashboard.putData("Current Presumed Steer Motor Angles:", printAssumedCurrentWheelAngles); //Returns positive values if the wheel turned clockwise from it's starting position. (Starting position is the wheel's front facing the front of the robot)
   }
+
+    
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
