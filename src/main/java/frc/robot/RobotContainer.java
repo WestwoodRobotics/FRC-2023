@@ -80,7 +80,15 @@ public class RobotContainer {
       System.out.println("Encoders reset!");
       SwerveDriveSystem.resetAllEncoders();
     });
-    SmartDashboard.putData("Reset Encoder", resetEncoderCommand);
+
+    Sendable printAssumedCurrentWheelAngles = new InstantCommand(() -> {
+      SwerveDriveSystem.printDriveTrainSteerMotorDegrees();
+    });
+
+    SmartDashboard.putData("Reset Encoders:", resetEncoderCommand);
+    SmartDashboard.putData("Current Presumed Steer Motor Angles:", printAssumedCurrentWheelAngles);
+
+
 
   }
 

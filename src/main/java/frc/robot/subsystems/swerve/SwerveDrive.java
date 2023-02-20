@@ -112,6 +112,33 @@ public class SwerveDrive extends SubsystemBase {
         backRightModule.resetEncoders();
     }
 
+    public double getFrontLeftModuleSteerMotorTicks() {
+        return frontLeftModule.getSteerMotorEncoderTicks();
+    }
+
+    public double getFrontRightModuleSteerMotorTicks() {
+        return frontRightModule.getSteerMotorEncoderTicks();
+    }
+
+    public double getBackLeftModuleSteerMotorTicks() {
+        return backLeftModule.getSteerMotorEncoderTicks();
+    }
+
+    public double getBackRightModuleSteerMotorTicks() {
+        return backRightModule.getSteerMotorEncoderTicks();
+    }
+
+    public String printDriveTrainSteerMotorDegrees(){
+        double frontLeftSteerMotorEncoderTicksTODegrees = getFrontLeftModuleSteerMotorTicks() * 360 / 4096;
+        double frontRightSteerMotorEncoderTicksTODegrees = getFrontRightModuleSteerMotorTicks() * 360 / 4096;
+        double backLeftSteerMotorEncoderTicksTODegrees = getBackLeftModuleSteerMotorTicks() * 360 / 4096;
+        double backRightSteerMotorEncoderTicksTODegrees = getBackRightModuleSteerMotorTicks() * 360 / 4096;
+        return("Front Left Steer Motor: " + frontLeftSteerMotorEncoderTicksTODegrees + " degrees" + "\n" +
+                "Front Right Steer Motor: " + frontRightSteerMotorEncoderTicksTODegrees + " degrees" + "\n" +
+                "Back Left Steer Motor: " + backLeftSteerMotorEncoderTicksTODegrees + " degrees" + "\n" +
+                "Back Right Steer Motor: " + backRightSteerMotorEncoderTicksTODegrees + " degrees");
+    }
+
 
 
     public void resetPigeon() {

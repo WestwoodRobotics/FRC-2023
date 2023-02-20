@@ -241,6 +241,10 @@ public class SwerveModule {
         steerMotor.setSelectedSensorPosition(0);
     }
 
+    public double getSteerMotorEncoderTicks() {
+        return steerMotor.getSelectedSensorPosition();
+    }
+
     public Pose2d getPose() {
         return swerveModulePose;
     }
@@ -261,4 +265,5 @@ public class SwerveModule {
                 ModuleConstants.kSteerMotorGearRatio));
         return new SwerveModulePosition(position, angle);
     }
+
 }
