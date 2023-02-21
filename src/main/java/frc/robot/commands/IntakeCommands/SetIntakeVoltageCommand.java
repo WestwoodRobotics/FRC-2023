@@ -5,8 +5,7 @@
 package frc.robot.commands.IntakeCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
-import frc.robot.subsystems.Intake.Intake;
+import frc.robot.subsystems.intake.Intake;
 
 
 /** An example command that uses an example subsystem. */
@@ -27,12 +26,12 @@ public class SetIntakeVoltageCommand extends CommandBase {
     addRequirements(m_intake);
   }
 
-  
+
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -40,11 +39,11 @@ public class SetIntakeVoltageCommand extends CommandBase {
   public void execute() {
     if(m_intake.getPosition() < wntPosition){
       m_intake.setIntakePower(1);
-      
+
     }
     else if(m_intake.getPosition() > wntPosition){
-      m_intake.setIntakePower(-1);          
-    }   
+      m_intake.setIntakePower(-1);
+    }
   }
 
   // Called once the command ends or is interrupted.

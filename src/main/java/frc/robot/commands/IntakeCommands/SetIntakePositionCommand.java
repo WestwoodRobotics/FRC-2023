@@ -6,7 +6,7 @@ package frc.robot.commands.IntakeCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.Intake.Intake;
+import frc.robot.subsystems.intake.Intake;
 
 
 /** An example command that uses an example subsystem. */
@@ -27,18 +27,18 @@ public class SetIntakePositionCommand extends CommandBase {
     addRequirements(m_intake);
   }
 
-  
+
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     if(m_intake.getPosition() < wntPosition + m_intake.initialPosition){
       m_intake.setIntakePosition(Constants.IntakeConstants.kOPEN_INTAKE + m_intake.initialPosition);
-      
+
     }
     else if(m_intake.getPosition() > wntPosition){
-      m_intake.setIntakePosition(m_intake.initialPosition);          
-    }   
+      m_intake.setIntakePosition(m_intake.initialPosition);
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
