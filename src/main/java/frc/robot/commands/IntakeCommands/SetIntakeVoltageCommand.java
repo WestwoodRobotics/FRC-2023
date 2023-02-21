@@ -11,7 +11,7 @@ import frc.robot.subsystems.Intake.Intake;
 
 /** An example command that uses an example subsystem. */
 public class SetIntakeVoltageCommand extends CommandBase {
-  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
+  //@SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final Intake m_intake;
   private final double wntPosition;
   /**

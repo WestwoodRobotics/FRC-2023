@@ -56,7 +56,7 @@ public class SetIntakePositionCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (Math.abs(m_intake.getPosition() - wntPosition) < 5) {
+    if (Math.abs(m_intake.getPosition() - wntPosition) < 50) {
       return true;
     }
     return false;
