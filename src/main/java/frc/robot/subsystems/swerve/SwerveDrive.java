@@ -15,7 +15,6 @@ public class SwerveDrive extends SubsystemBase {
     private final SwerveModule frontRightModule;
     private final SwerveModule backLeftModule;
     private final SwerveModule backRightModule;
-    private final WPI_Pigeon2 pigeon = new WPI_Pigeon2(PortConstants.kPigeonPort);
 
     // private final SwerveDriveKinematics m_kinematics = new
     // SwerveDriveKinematics(DriveConstants.frontRight, DriveConstants.frontLeft,
@@ -26,7 +25,7 @@ public class SwerveDrive extends SubsystemBase {
 
     public SwerveDrive() {
         setName("SwerveDrive");
-        gyro = new Gyro();
+//        gyro = new Gyro();
 
         // initialize swerve mods (possibly move into a list for conciseness eventually)
         frontLeftModule = new SwerveModule(PortConstants.kFrontLeftDriveMotorPort,
@@ -41,7 +40,7 @@ public class SwerveDrive extends SubsystemBase {
                 false, false, PortConstants.kBackRightCANCoderPort, 0, 3);
 
         // initialize classes which require Swerve
-        odometry = new Odometry(this);
+//        odometry = new Odometry(this);
     }
 
     public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
@@ -128,7 +127,7 @@ public class SwerveDrive extends SubsystemBase {
         return backRightModule.getSteerMotorEncoderTicks();
     }
 
-    public String printDriveTrainSteerMotorDegrees(){
+    public String printDriveTrainSteerMotorDegrees() {
         double frontLeftSteerMotorEncoderTicksTODegrees = getFrontLeftModuleSteerMotorTicks() * 360 / 4096;
         double frontRightSteerMotorEncoderTicksTODegrees = getFrontRightModuleSteerMotorTicks() * 360 / 4096;
         double backLeftSteerMotorEncoderTicksTODegrees = getBackLeftModuleSteerMotorTicks() * 360 / 4096;
@@ -137,13 +136,6 @@ public class SwerveDrive extends SubsystemBase {
                 "Front Right Steer Motor: " + frontRightSteerMotorEncoderTicksTODegrees + " degrees" + "\n" +
                 "Back Left Steer Motor: " + backLeftSteerMotorEncoderTicksTODegrees + " degrees" + "\n" +
                 "Back Right Steer Motor: " + backRightSteerMotorEncoderTicksTODegrees + " degrees");
-    }
-
-
-
-
-    public void resetPigeon() {
-        pigeon.setYaw(0);
     }
 
     public void resetPose(Pose2d pose) {

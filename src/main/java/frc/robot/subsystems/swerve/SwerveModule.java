@@ -36,7 +36,6 @@ public class SwerveModule {
     private final TalonFX steerMotor;
     private final CANCoder absoluteEncoder; // Absolute Encoder
     private final PIDController drivePIDController; // PID Controller for the drive motor
-    private PIDController steerPIDController; // PID Controller for the steer motor
     private final SimpleMotorFeedforward driveMotorFeedForward; // Feedforward for the drive motor
     private double driveMotorOutput; // Output for the drive motor
     private Pose2d swerveModulePose = new Pose2d();
@@ -93,8 +92,6 @@ public class SwerveModule {
         // // DriveConstants
         drivePIDController = new PIDController(PIDConstants.kPSwerveDriveDriveMotor,
                 PIDConstants.kISwerveDriveDriveMotor, PIDConstants.kDSwerveDriveDriveMotor);
-        steerPIDController = new PIDController(PIDConstants.kPSwerveDriveSteerMotor,
-                PIDConstants.kISwerveDriveSteerMotor, PIDConstants.kDSwerveDriveSteerMotor);
         // steerPIDController = new
         // PIDController(DriveConstants.kPSwerveDriveSteerMotor,
         // DriveConstants.kISwerveDriveSteerMotor,
@@ -109,7 +106,6 @@ public class SwerveModule {
         // Setting Integrator Range (I in PID) | (Makes sure we don't go over the
         // voltage limit)
         drivePIDController.setIntegratorRange(-ModuleConstants.kFalcon500Voltage, ModuleConstants.kFalcon500Voltage);
-        steerPIDController.setIntegratorRange(-ModuleConstants.kFalcon500Voltage, ModuleConstants.kFalcon500Voltage);
 
         this.driveMotorFeedForward = new SimpleMotorFeedforward(FeedForwardConstants.kSwerveDriveDriveMotorStaticGainConstant, FeedForwardConstants.kSwerveDriveDriveMotorVelocityGainConstant, FeedForwardConstants.kSwerveDriveDriveMotorAccelerationGainConstant);
     }
@@ -128,6 +124,7 @@ public class SwerveModule {
                         StandardCharsets.UTF_8);
                 turnEncoderOffsets = lines.stream().limit(4).mapToDouble(Double::parseDouble).toArray();
             } catch (IOException | NumberFormatException e) {
+                System.out.println(e.toString());
                 System.out.println(
                         "\u001b[31;1mFailed to read turn encoder offsets from file, please align wheels manually, then reset encoders.\u001b[0m");
                 turnEncoderOffsets = new double[4];
@@ -147,6 +144,7 @@ public class SwerveModule {
                 }
                 encoderOffsetModified = false;
             } catch (IOException e) {
+                System.out.println(e.toString());
                 System.out.println("\u001b[31;1mFailed to write turn encoder offsets to file.\u001b[0m");
             }
         }

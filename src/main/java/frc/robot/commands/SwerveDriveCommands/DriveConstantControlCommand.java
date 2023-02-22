@@ -39,10 +39,10 @@ public class DriveConstantControlCommand extends CommandBase {
         double leftRadius = Math.sqrt(Math.pow(leftX, 2) + Math.pow(leftY, 2));
         double rightRadius = Math.abs(rightX);
 
-        // add input curves
-        leftX = Math.pow(leftX, 3);
-        leftY = Math.pow(leftY, 3);
-        rightX = Math.pow(rightX, 3);
+//        // add input curves
+//        leftX = Math.pow(leftX, 3);
+//        leftY = Math.pow(leftY, 3);
+//        rightX = Math.pow(rightX, 3);
 
     // apply deadzones
     if (leftRadius < OIConstants.kDeadzoneCircle) {

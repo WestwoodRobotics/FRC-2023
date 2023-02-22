@@ -21,7 +21,7 @@ public final class Constants {
     // Gear ratio of the drive motor
     public static final double kDriveMotorGearRatio = 6.75;
     // Gear ratio of the steer motor
-    public static final double kSteerMotorGearRatio = (150 / 7);
+    public static final double kSteerMotorGearRatio = (150. / 7);
     // Conversion factor from drive encoder rotations to meters
     public static final double kDriveEncoderRot2Meter = kDriveMotorGearRatio * Math.PI * kWheelDiameterMeters;
     // Conversion factor from drive encoder RPM to meters per second
@@ -76,7 +76,7 @@ public final class Constants {
   public static final class OIConstants {
     // Deadband for the driver controller axes
     public static final double kDeadzoneCircle = 0.08;
-    public static final double kDeadzoneRectangle = 0.12;
+    public static final double kDeadzoneRectangle = 0.04;
   }
 
   public static final class IntakeConstants {
@@ -99,8 +99,8 @@ public final class Constants {
     // PWM ports for the steer motors
     public static final int kFrontLeftSteerMotorPort = 11;
     public static final int kFrontRightSteerMotorPort = 14;
-    public static final int kBackLeftSteerMotorPort = 15;
-    public static final int kBackRightSteerMotorPort = 18;
+    public static final int kBackLeftSteerMotorPort = 18;
+    public static final int kBackRightSteerMotorPort = 19;
 
     // USB port of the driver controller
     public static final int XboxController1 = 1;
@@ -116,22 +116,22 @@ public final class Constants {
   }
 
   public static final class PIDConstants {
-    public static final double kPSwerveDriveDriveMotor = 0.055; // TODO: Update with actual PID values
-    public static final double kISwerveDriveDriveMotor = 0.001; // TODO: Update with actual PID values
-    public static final double kDSwerveDriveDriveMotor = 0.001; // TODO: Update with actual PID values
+//    public static final double kPSwerveDriveDriveMotor = 0.055; // TODO: Update with actual PID values
+//    public static final double kISwerveDriveDriveMotor = 0.001; // TODO: Update with actual PID values
+//    public static final double kDSwerveDriveDriveMotor = 0.001; // TODO: Update with actual PID values
 
-    public static final double kPSwerveDriveSteerMotor = 0.055; // TODO: Update with actual PID values
-    public static final double kISwerveDriveSteerMotor = 0.001; // TODO: Update with actual PID values
-    public static final double kDSwerveDriveSteerMotor = 0.001; // TODO: Update with actual PID values
 
-    public static final double kPSwerveAngle = 0.055; // TODO: Update with actual PID values
-    public static final double kISwerveAngle = 0.001; // TODO: Update with actual PID values
-    public static final double kDSwerveAngle = 0.001; // TODO: Update with actual PID values
+    public static final double kPSwerveDriveDriveMotor = 0;
+    public static final double kISwerveDriveDriveMotor = 0;
+    public static final double kDSwerveDriveDriveMotor = 0;
 
+    public static final double kPSwerveAngle = 0.2;
+    public static final double kISwerveAngle = 0.0001;
+    public static final double kDSwerveAngle = 0.02;
 
   }
 
-  public static final class FeedForwardConstants{ 
+  public static final class FeedForwardConstants {
     public static final double kSwerveDriveDriveMotorStaticGainConstant = 0.0355919531; //TODO: Update with actual feedforward values
     public static final double kSwerveDriveDriveMotorVelocityGainConstant = 0.00004297063293;  //TODO: Update with actual feedforward values
     public static final double kSwerveDriveDriveMotorAccelerationGainConstant = 0.0000000000355919531; //TODO: Update with actual feedforward values
