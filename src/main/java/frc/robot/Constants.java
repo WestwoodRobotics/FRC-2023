@@ -118,6 +118,13 @@ public final class Constants {
     public static final int kCLOSED_INTAKE_CUBE = 160;
     public static final int kCLOSE_OPEN_DIFFERENCE = 30;
 
+    // ROLLER INTAKE CONSTANTS
+    public static final double PULL_UP_CONE = 0;
+    public static final double EJECT_CONE = -0;
+    public static final double PULL_UP_CUBE = 0;
+    public static final double EJECT_CUBE = -0;
+
+
   }
 
   public static final class PortConstants {

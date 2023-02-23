@@ -32,6 +32,12 @@ public class SetIntakePositionCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+
+  }
+
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {
     if(m_intake.getPosition() < wntPosition + m_intake.initialPosition){
       m_intake.setIntakePosition(Constants.IntakeConstants.kOPEN_INTAKE + m_intake.initialPosition);
 
@@ -41,16 +47,10 @@ public class SetIntakePositionCommand extends CommandBase {
     }
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-
-  }
-
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_intake.setIntakePower(0);
+    m_intake.setIntakePower(0); //would changing power to velocity make it instant stop?
   }
 
   // Returns true when the command should end.

@@ -19,6 +19,8 @@ public class Intake extends SubsystemBase {
         intakeMotor.setInverted(true);
         intakeMotor.config_kP(0, 0.2);
         intakeMotor.configAllowableClosedloopError(0, 50, 1000);
+        intakeMotor.configNeutralDeadband(0.05); //try removing this if the robot acts up.
+        
         initialPosition = getPosition();
         //intakeMotor.setSelectedSensorPosition(sensorPos)
     }
@@ -27,6 +29,7 @@ public class Intake extends SubsystemBase {
         intakeMotor.set(ControlMode.PercentOutput, power);
         SmartDashboard.putNumber("intake Motor Position", intakeMotor.getSelectedSensorPosition());
     }
+
 
     public void setIntakePosition(double sensorPosition){
         intakeMotor.set(ControlMode.Position, sensorPosition);
