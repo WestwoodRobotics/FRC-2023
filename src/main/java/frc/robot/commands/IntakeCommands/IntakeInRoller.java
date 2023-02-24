@@ -41,6 +41,7 @@ public class IntakeInRoller extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    Intake.currentPosition = m_intake.getPosition();
     m_intake.setIntakePower(0);
   }
 
