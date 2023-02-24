@@ -12,9 +12,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.PortConstants;
-import frc.robot.commands.IntakeCommands.SetIntakePositionCommand;
+import frc.robot.commands.IntakeCommands.*;
 import frc.robot.commands.SwerveDriveCommands.DriveConstantControlCommand;
-import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.*;
+import frc.robot.Constants.IntakeConstants.*;
 import frc.robot.subsystems.swerve.SwerveDrive;
 
 /**
@@ -31,10 +32,12 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final SwerveDrive SwerveDriveSystem = new SwerveDrive();
   private final Intake intakeSystem = new Intake();
+  private final Wrist wristSystem = new Wrist();
 
   //private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem); <--- This is an example "command" implementation
 
   // The buttons on the Primary Xbox Controller are being initialized here
+  private final JoystickButton lBumper = new JoystickButton(primaryController, XboxController.Button.kLeftBumper.value);
   private final JoystickButton rBumper = new JoystickButton(primaryController, XboxController.Button.kRightBumper.value);
   private final JoystickButton Bumper = new JoystickButton(primaryController, XboxController.Button.kLeftBumper.value);
   private final JoystickButton yButton = new JoystickButton(primaryController, XboxController.Button.kY.value);
@@ -58,13 +61,15 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
     setDefaultCommands();
-    intakeSystem.setDefaultCommand(Commands.run(() -> {System.out.println(intakeSystem.getPosition());}, intakeSystem));
+    intakeSystem.setDefaultCommand(new HoldIntakeRoller(intakeSystem));
+    wristSystem.setDefaultCommand(new HoldWrist(wristSystem));
     // -264 open
     // 155 closed
   }
 
   private void setDefaultCommands() {
     SwerveDriveSystem.setDefaultCommand(new DriveConstantControlCommand(SwerveDriveSystem, primaryController));
+
   }
 
   /**
@@ -74,10 +79,12 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    // lBumper.whileTrue(new IntakeOpenCommand(m_intake));
-    // rBumper.whileTrue(new IntakeCloseCommand(m_intake));
+    lBumper.whileTrue(new IntakeInRoller(intakeSystem));
+    rBumper.whileTrue(new IntakeOutRoller(intakeSystem));
     aButton.onTrue(new SetIntakePositionCommand(intakeSystem, (intakeSystem.initialPosition - 866/*Constants.IntakeConstants.kOPEN_INTAKE))*/)));
     bButton.onTrue(new SetIntakePositionCommand(intakeSystem, intakeSystem.initialPosition  /*+Constants.IntakeConstants.kCLOSED_INTAKE_CUBE)*/));
+    yButton.whileTrue(new RotateWrist(wristSystem, Constants.IntakeConstants.ONE_EIGHTY_DEGREE_ROTATION));
+   
   }
 
   /**

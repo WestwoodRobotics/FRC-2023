@@ -124,6 +124,9 @@ public final class Constants {
     public static final double PULL_UP_CUBE = 0;
     public static final double EJECT_CUBE = -0;
 
+    public static final int CANID_WRIST_MOTOR = 0; //placeholder
+    public static final int CANID_WRIST_MOTOR_TWO = 0; //placeholder
+    public static final double ONE_EIGHTY_DEGREE_ROTATION = 1024;
 
   }
 
