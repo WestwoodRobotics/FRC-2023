@@ -19,10 +19,10 @@ public final class Constants {
     public static final double kSteerMotorGearRatio = 1 / 18.0; //TODO: Update with actual Gear Ratio
     // Conversion factor from drive encoder rotations to meters
     public static final double kDriveEncoderRot2Meter = kDriveMotorGearRatio * Math.PI * kWheelDiameterMeters;
-    // Conversion factor from steer encoder rotations to radians
-    public static final double kSteerEncoderRot2Rad = kSteerMotorGearRatio * 2 * Math.PI;
     // Conversion factor from drive encoder RPM to meters per second
     public static final double kDriveEncoderRPM2MeterPerSec = kDriveEncoderRot2Meter / 60;
+    // Conversion factor from steer encoder rotations to radians
+    public static final double kSteerEncoderRot2Rad = kSteerMotorGearRatio * 2 * Math.PI;
     // Conversion factor from steer encoder RPM to radians per second
     public static final double kSteerEncoderRPM2RadPerSec = kSteerEncoderRot2Rad / 60;
     //Rated Voltage of Falcon 500's
@@ -113,6 +113,20 @@ public final class Constants {
   }
 
   public static final class IntakeConstants {
+    public static final int CANID_INTAKE = 21;
+    public static final int kOPEN_INTAKE = 1654;
+    public static final int kCLOSED_INTAKE_CUBE = 160;
+    public static final int kCLOSE_OPEN_DIFFERENCE = 30;
+
+    // ROLLER INTAKE CONSTANTS
+    public static final double PULL_UP_CONE = 0;
+    public static final double EJECT_CONE = -0;
+    public static final double PULL_UP_CUBE = 0;
+    public static final double EJECT_CUBE = -0;
+
+    public static final int CANID_WRIST_MOTOR = 0; //placeholder
+    public static final int CANID_WRIST_MOTOR_TWO = 0; //placeholder
+    public static final double ONE_EIGHTY_DEGREE_ROTATION = 1024;
 
   }
 
