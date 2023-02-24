@@ -25,7 +25,7 @@ public class Conversions {
    * @param gearRatio Gear Ratio between Falcon and Mechanism
    * @return Radians of Rotation of Mechanism
    */
-  public static double FalconToRadians(double counts, double gearRatio) {
+  public static double falconToRadians(double counts, double gearRatio) {
     return counts * (2 * Math.PI / (gearRatio * 2048.0));
   }
 
@@ -79,7 +79,7 @@ public class Conversions {
    * @param gearRatio     Gear Ratio between Falcon and Mechanism (set to 1 for Falcon RPM)
    * @return Meters traveled
    */
-  public static double FalconToMeters(double falconTicks, double circumference, double gearRatio) {
+  public static double falconToMeters(double falconTicks, double circumference, double gearRatio) {
     double wheelRevs = (falconTicks / 2048.0) / gearRatio;
     double meters = wheelRevs * circumference;
     return meters;

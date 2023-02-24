@@ -66,7 +66,6 @@ public class RobotContainer {
 
 
     Sendable resetMotorEncoderCommand = new InstantCommand(() -> {
-      System.out.println("Encoders reset!");
       SwerveDriveSystem.resetAllEncoders();
     });
 
@@ -78,7 +77,7 @@ public class RobotContainer {
     SmartDashboard.putData("Current Presumed Steer Motor Angles:", printAssumedCurrentWheelAngles); //Returns positive values if the wheel turned clockwise from it's starting position. (Starting position is the wheel's front facing the front of the robot)
   }
 
-    
+
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

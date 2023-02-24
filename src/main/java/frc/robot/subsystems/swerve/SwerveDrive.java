@@ -105,10 +105,12 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public void resetAllEncoders() {
-        frontLeftModule.resetEncoders();
-        frontRightModule.resetEncoders();
-        backLeftModule.resetEncoders();
-        backRightModule.resetEncoders();
+        System.out.println("Encoders reset!");
+//        frontLeftModule.resetEncoders();
+//        frontRightModule.resetEncoders();
+//        backLeftModule.resetEncoders();
+//        backRightModule.resetEncoders();
+      saveEncoderOffsets();
     }
 
     public double getFrontLeftModuleSteerMotorTicks() {
@@ -141,4 +143,7 @@ public class SwerveDrive extends SubsystemBase {
     public void resetPose(Pose2d pose) {
         odometry.resetOdometry(pose);
     }
+
+    @Override
+    public void periodic() {}
 }
