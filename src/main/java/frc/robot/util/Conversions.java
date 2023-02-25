@@ -84,4 +84,13 @@ public class Conversions {
     double meters = wheelRevs * circumference;
     return meters;
   }
+
+  public static double deadZoneSquare(double input, double deadband) {
+    if (Math.abs(input) < deadband) {
+      return 0;
+    }
+    else {
+      return Math.copySign(Math.pow(input, 2), input);
+    }
+  }
 }

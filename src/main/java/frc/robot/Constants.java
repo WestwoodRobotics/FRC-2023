@@ -124,6 +124,13 @@ public final class Constants {
     public static final int CANID_TRANSPORT = 15;
     public static final int CANID_TRANSPORT1 = 20;
     public static final int CANID_TRANSPORT2 = 22;
+    public static final int CANID_PIVOT_2 = 13;
+    public static final double MAX_PIVOT_1_TICKS = 360000;
+    public static final double MAX_PIVOT_2_TICKS = 420000;
+    public static final double MIN_PIVOT_1_TICKS = 0;
+    public static final double MIN_PIVOT_2_TICKS = 0;
+
+
   }
 
   public static final class PortConstants {

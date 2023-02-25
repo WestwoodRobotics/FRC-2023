@@ -3,6 +3,7 @@ package frc.robot.commands.TransportCommands;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.transport.Transport;
+import frc.robot.util.Conversions;
 
 public class UseArm extends CommandBase {
 
@@ -17,12 +18,10 @@ public class UseArm extends CommandBase {
 
     @Override
     public void execute() {
-        if (controller.getRightTriggerAxis() >= 0.05){
-            ourArm.setArmMotorPower(controller.getRightTriggerAxis());
-        } else if (controller.getLeftTriggerAxis() >= 0.05){
-            ourArm.setArmMotorPower(controller.getLeftTriggerAxis());
-        } else {
-            ourArm.setArmMotorPower(0);
-        }
+        ourArm.setArmMotorPower(
+            Conversions.deadZoneSquare(controller.getLeftY(), 0.1));
+            
+        ourArm.setPivot2MotorPower(
+            Conversions.deadZoneSquare(controller.getRightY(), 0.1));
     }
 }
