@@ -51,10 +51,10 @@ public class SwerveDrive extends SubsystemBase {
                         : new ChassisSpeeds(xSpeed, ySpeed, rot));
 
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, AutoConstants.kMaxSpeedMetersPerSecond);
-        frontRightModule.setDesiredState(swerveModuleStates[0]);
+        frontRightModule.setDesiredState(swerveModuleStates[3]);
         frontLeftModule.setDesiredState(swerveModuleStates[1]);
-        backLeftModule.setDesiredState(swerveModuleStates[2]);
-        backRightModule.setDesiredState(swerveModuleStates[3]);
+        backLeftModule.setDesiredState(swerveModuleStates[0]);
+        backRightModule.setDesiredState(swerveModuleStates[2]);
     }
 
     public void zeroDrive() {

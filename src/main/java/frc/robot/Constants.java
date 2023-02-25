@@ -45,7 +45,9 @@ public final class Constants {
     // Distance between front and back wheels
     public static final double kWheelBase = Units.inchesToMeters(25.5); // TODO: Update with actual wheel base
     // Kinematics of the swerve drive system
-    public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(new Translation2d(kWheelBase / 2, -kTrackWidth / 2), new Translation2d(kWheelBase / 2, kTrackWidth / 2), new Translation2d(-kWheelBase / 2, -kTrackWidth / 2), new Translation2d(-kWheelBase / 2, kTrackWidth / 2));
+    public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
+        new Translation2d(kWheelBase / 2, -kTrackWidth / 2), new Translation2d(kWheelBase / 2, kTrackWidth / 2),
+        new Translation2d(-kWheelBase / 2, -kTrackWidth / 2), new Translation2d(-kWheelBase / 2, kTrackWidth / 2));
   }
 
   public static final class AutoConstants {
@@ -70,7 +72,8 @@ public final class Constants {
 
     // Constraints for the Theta controller
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = //
-      new TrapezoidProfile.Constraints(kMaxAngularSpeedRadiansPerSecond, kMaxAngularAccelerationRadiansPerSecondSquared);
+        new TrapezoidProfile.Constraints(kMaxAngularSpeedRadiansPerSecond,
+            kMaxAngularAccelerationRadiansPerSecondSquared);
   }
 
   public static final class OIConstants {
@@ -111,15 +114,18 @@ public final class Constants {
   }
 
   public static final class FilePathConstants {
-    public static final String steerEncoderOffsetSavesPath = Filesystem.getOperatingDirectory().getPath() + "/steerEncoderOffsets.txt";
+    public static final String steerEncoderOffsetSavesPath = Filesystem.getOperatingDirectory().getPath()
+        + "/steerEncoderOffsets.txt";
 
   }
 
   public static final class PIDConstants {
-//    public static final double kPSwerveDriveDriveMotor = 0.055; // TODO: Update with actual PID values
-//    public static final double kISwerveDriveDriveMotor = 0.001; // TODO: Update with actual PID values
-//    public static final double kDSwerveDriveDriveMotor = 0.001; // TODO: Update with actual PID values
-
+    // public static final double kPSwerveDriveDriveMotor = 0.055; // TODO: Update
+    // with actual PID values
+    // public static final double kISwerveDriveDriveMotor = 0.001; // TODO: Update
+    // with actual PID values
+    // public static final double kDSwerveDriveDriveMotor = 0.001; // TODO: Update
+    // with actual PID values
 
     public static final double kPSwerveDriveDriveMotor = 0;
     public static final double kISwerveDriveDriveMotor = 0;
@@ -132,9 +138,15 @@ public final class Constants {
   }
 
   public static final class FeedForwardConstants {
-    public static final double kSwerveDriveDriveMotorStaticGainConstant = 0.0355919531; //TODO: Update with actual feedforward values
-    public static final double kSwerveDriveDriveMotorVelocityGainConstant = 0.00004297063293;  //TODO: Update with actual feedforward values
-    public static final double kSwerveDriveDriveMotorAccelerationGainConstant = 0.0000000000355919531; //TODO: Update with actual feedforward values
+    public static final double kSwerveDriveDriveMotorStaticGainConstant = 0.0355919531; // TODO: Update with actual
+                                                                                        // feedforward values
+    public static final double kSwerveDriveDriveMotorVelocityGainConstant = 0.00004297063293; // TODO: Update with
+                                                                                              // actual feedforward
+                                                                                              // values
+    public static final double kSwerveDriveDriveMotorAccelerationGainConstant = 0.0000000000355919531; // TODO: Update
+                                                                                                       // with actual
+                                                                                                       // feedforward
+                                                                                                       // values
   }
 
 }
