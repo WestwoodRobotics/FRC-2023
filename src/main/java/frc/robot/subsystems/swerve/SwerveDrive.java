@@ -1,6 +1,6 @@
 package frc.robot.subsystems.swerve;
 
-import com.ctre.phoenix.sensors.WPI_Pigeon2;
+// import com.ctre.phoenix.sensors.WPI_Pigeon2;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.*;
@@ -51,8 +51,9 @@ public class SwerveDrive extends SubsystemBase {
                         : new ChassisSpeeds(xSpeed, ySpeed, rot));
 
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, AutoConstants.kMaxSpeedMetersPerSecond);
-        frontRightModule.setDesiredState(swerveModuleStates[3]);
+
         frontLeftModule.setDesiredState(swerveModuleStates[1]);
+        frontRightModule.setDesiredState(swerveModuleStates[3]);
         backLeftModule.setDesiredState(swerveModuleStates[0]);
         backRightModule.setDesiredState(swerveModuleStates[2]);
     }
@@ -74,26 +75,26 @@ public class SwerveDrive extends SubsystemBase {
 
     public SwerveModulePosition[] getPositions() {
         SwerveModulePosition[] positions = new SwerveModulePosition[4];
-        positions[0] = frontLeftModule.getPosition();
-        positions[1] = frontRightModule.getPosition();
-        positions[2] = backLeftModule.getPosition();
-        positions[3] = backRightModule.getPosition();
+        positions[1] = frontLeftModule.getPosition();
+        positions[3] = frontRightModule.getPosition();
+        positions[0] = backLeftModule.getPosition();
+        positions[2] = backRightModule.getPosition();
         return positions;
     }
 
     public void setStates(SwerveModuleState[] states) {
-        frontLeftModule.setDesiredState(states[0]);
-        frontRightModule.setDesiredState(states[1]);
-        backLeftModule.setDesiredState(states[2]);
-        backRightModule.setDesiredState(states[3]);
+        frontLeftModule.setDesiredState(states[1]);
+        frontRightModule.setDesiredState(states[3]);
+        backLeftModule.setDesiredState(states[0]);
+        backRightModule.setDesiredState(states[2]);
     }
 
     public SwerveModuleState[] getStates() {
         SwerveModuleState[] states = new SwerveModuleState[4];
-        states[0] = frontLeftModule.getState();
-        states[1] = frontRightModule.getState();
-        states[2] = backLeftModule.getState();
-        states[3] = backRightModule.getState();
+        states[1] = frontLeftModule.getState();
+        states[3] = frontRightModule.getState();
+        states[0] = backLeftModule.getState();
+        states[2] = backRightModule.getState();
         return states;
     }
 

@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.swerve.DriveSpeed;
 import frc.robot.subsystems.swerve.SwerveDrive;
-import frc.robot.subsystems.swerve.SwerveModule;
+//import frc.robot.subsystems.swerve.SwerveModule;
 import frc.robot.Constants.*;
 
 public class DriveConstantControlCommand extends CommandBase {
@@ -36,9 +36,6 @@ public class DriveConstantControlCommand extends CommandBase {
     leftY = -controller.getLeftY();
     rightX = controller.getRightX();
 
-    if (rightX>0){
-      
-    }
 
         // Find radii for controller dead-zones (circular)
         double leftRadius = Math.sqrt(Math.pow(leftX, 2) + Math.pow(leftY, 2));

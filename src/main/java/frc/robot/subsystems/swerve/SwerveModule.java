@@ -7,8 +7,6 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
-import com.ctre.phoenix.sensors.SensorInitializationStrategy;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -43,8 +41,6 @@ public class SwerveModule {
     private final SimpleMotorFeedforward driveMotorFeedForward; // Feedforward for the drive motor
     private double driveMotorOutput; // Output for the drive motor
     private Pose2d swerveModulePose = new Pose2d();
-    private static final double DEGREES_TO_FALCON = Conversions.degreesToFalcon(1,
-            ModuleConstants.kSteerMotorGearRatio);
 
     /**
      * @param driveMotorCANId       The CAN ID of the drive motor
