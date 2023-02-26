@@ -21,7 +21,7 @@ public final class Constants {
     // Gear ratio of the drive motor
     public static final double kDriveMotorGearRatio = 6.75;
     // Gear ratio of the steer motor
-    public static final double kSteerMotorGearRatio = (150. / 7);
+    public static final double kSteerMotorGearRatio = (150.0 / 7.0);
     // Conversion factor from drive encoder rotations to meters
     public static final double kDriveEncoderRot2Meter = kDriveMotorGearRatio * Math.PI * kWheelDiameterMeters;
     // Conversion factor from drive encoder RPM to meters per second
@@ -44,10 +44,27 @@ public final class Constants {
     public static final double kTrackWidth = Units.inchesToMeters(21); // TODO: Update with actual track width
     // Distance between front and back wheels
     public static final double kWheelBase = Units.inchesToMeters(25.5); // TODO: Update with actual wheel base
+
+    //Coords of frontLeftSwerveModule (Robot Relative)
+    public static final double frontLeftModuleX = (-kTrackWidth / 2);
+    public static final double frontLeftModuleY = (kWheelBase / 2);
+    
+    //Coords of frontRightSwerveModule (Robot Relative)
+    public static final double frontRightModuleX = (kTrackWidth / 2);
+    public static final double frontRightModuleY = (kWheelBase / 2);
+
+    //Coords of backLeftSwerveModule (Robot Relative)
+    public static final double backLeftModuleX = (-kTrackWidth / 2);
+    public static final double backLeftModuleY = (-kWheelBase / 2);
+
+    //Coords of backRightSwerveModule (Robot Relative)
+    public static final double backRightModuleX = (kTrackWidth / 2);
+    public static final double backRightModuleY = (-kWheelBase / 2);
+
     // Kinematics of the swerve drive system
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
-        new Translation2d(kWheelBase / 2, -kTrackWidth / 2), new Translation2d(kWheelBase / 2, kTrackWidth / 2),
-        new Translation2d(-kWheelBase / 2, -kTrackWidth / 2), new Translation2d(-kWheelBase / 2, kTrackWidth / 2));
+        new Translation2d(frontLeftModuleY, frontLeftModuleX), new Translation2d(frontRightModuleY, frontRightModuleX),
+        new Translation2d(backLeftModuleY, backLeftModuleX), new Translation2d(backRightModuleY, backRightModuleX));
   }
 
   public static final class AutoConstants {
@@ -120,16 +137,9 @@ public final class Constants {
   }
 
   public static final class PIDConstants {
-    // public static final double kPSwerveDriveDriveMotor = 0.055; // TODO: Update
-    // with actual PID values
-    // public static final double kISwerveDriveDriveMotor = 0.001; // TODO: Update
-    // with actual PID values
-    // public static final double kDSwerveDriveDriveMotor = 0.001; // TODO: Update
-    // with actual PID values
-
-    public static final double kPSwerveDriveDriveMotor = 0;
-    public static final double kISwerveDriveDriveMotor = 0;
-    public static final double kDSwerveDriveDriveMotor = 0;
+    public static final double kPSwerveDriveDriveMotor = 0; // TODO: Update with actual PID values
+    public static final double kISwerveDriveDriveMotor = 0; // TODO: Update with actual PID values 
+    public static final double kDSwerveDriveDriveMotor = 0; // TODO: Update with actual PID values
 
     public static final double kPSwerveAngle = 0.2;
     public static final double kISwerveAngle = 0.0001;
@@ -138,15 +148,9 @@ public final class Constants {
   }
 
   public static final class FeedForwardConstants {
-    public static final double kSwerveDriveDriveMotorStaticGainConstant = 0.0355919531; // TODO: Update with actual
-                                                                                        // feedforward values
-    public static final double kSwerveDriveDriveMotorVelocityGainConstant = 0.00004297063293; // TODO: Update with
-                                                                                              // actual feedforward
-                                                                                              // values
-    public static final double kSwerveDriveDriveMotorAccelerationGainConstant = 0.0000000000355919531; // TODO: Update
-                                                                                                       // with actual
-                                                                                                       // feedforward
-                                                                                                       // values
+    public static final double kSwerveDriveDriveMotorStaticGainConstant = 0.0355919531; // TODO: Update with actual feedforward values
+    public static final double kSwerveDriveDriveMotorVelocityGainConstant = 0.00004297063293; // TODO: Update with actual feedforward values
+    public static final double kSwerveDriveDriveMotorAccelerationGainConstant = 0.0000000000355919531; // TODO: Update with actual feedforward values
   }
 
 }

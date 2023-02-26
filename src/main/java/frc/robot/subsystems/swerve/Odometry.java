@@ -29,13 +29,16 @@ public class Odometry {
         swerveOdometry.update(swerve.gyro.getYaw(), swerve.getPositions());
     }
 
+    public Pose2d getPoseMeters() {
+        return swerveOdometry.getPoseMeters();
+    }
+
+
     public void resetOdometry(Pose2d pose) {
         swerveOdometry.resetPosition(swerve.gyro.getYaw(), swerve.getPositions(), pose);
     }
 
-    public Pose2d getPoseMeters() {
-        return swerveOdometry.getPoseMeters();
-    }
+
 
     public Translation2d getTranslationMeters() {
         return swerveOdometry.getPoseMeters().getTranslation();

@@ -8,6 +8,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.PortConstants;
+//import odometry from wpi
+
+
 
 // This class represents the swerve drive system, which is composed of 4 swerve modules (one for each wheel)
 public class SwerveDrive extends SubsystemBase {
@@ -16,17 +19,14 @@ public class SwerveDrive extends SubsystemBase {
     private final SwerveModule backLeftModule;
     private final SwerveModule backRightModule;
 
-    // private final SwerveDriveKinematics m_kinematics = new
-    // SwerveDriveKinematics(DriveConstants.frontRight, DriveConstants.frontLeft,
-    // DriveConstants.backRight, DriveConstants.backLeft);
 
+
+    private Odometry odometry;
     protected Gyro gyro;
-    public Odometry odometry;
 
     public SwerveDrive() {
         setName("SwerveDrive");
-//        gyro = new Gyro();
-
+       gyro = new Gyro();
         // initialize swerve mods (possibly move into a list for conciseness eventually)
         frontLeftModule = new SwerveModule(PortConstants.kFrontLeftDriveMotorPort,
                 PortConstants.kFrontLeftSteerMotorPort,
@@ -40,7 +40,7 @@ public class SwerveDrive extends SubsystemBase {
                 false, false, PortConstants.kBackRightCANCoderPort, 0, 3);
 
         // initialize classes which require Swerve
-//        odometry = new Odometry(this);
+       odometry = new Odometry(this);
     }
 
     public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
@@ -107,11 +107,11 @@ public class SwerveDrive extends SubsystemBase {
 
     public void resetAllEncoders() {
         System.out.println("Encoders reset!");
-//        frontLeftModule.resetEncoders();
-//        frontRightModule.resetEncoders();
-//        backLeftModule.resetEncoders();
-//        backRightModule.resetEncoders();
-      saveEncoderOffsets();
+        frontLeftModule.resetEncoders();
+        frontRightModule.resetEncoders();
+        backLeftModule.resetEncoders();
+        backRightModule.resetEncoders();
+        saveEncoderOffsets();
     }
 
     public double getFrontLeftModuleSteerMotorTicks() {
@@ -146,5 +146,7 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     @Override
-    public void periodic() {}
+    public void periodic() {
+        odometry.update();
+    }
 }
