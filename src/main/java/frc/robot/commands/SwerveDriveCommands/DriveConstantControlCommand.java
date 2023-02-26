@@ -12,39 +12,35 @@ import frc.robot.Constants.*;
 
 public class DriveConstantControlCommand extends CommandBase {
 
-    private final SwerveDrive m_swerveDrive;
-    private XboxController controller;
-    private final DriveSpeed limJoystickLeft = new DriveSpeed(0.05);
-    private final DriveSpeed limJoystickRight = new DriveSpeed(0.05);
-    public DriveConstantControlCommand(SwerveDrive swerveDrive, XboxController controller) {
-        m_swerveDrive = swerveDrive;
-        this.controller = controller;
-        addRequirements(swerveDrive);
-    }
+  private final SwerveDrive m_swerveDrive;
+  private XboxController controller;
+  private final DriveSpeed limJoystickLeft = new DriveSpeed(0.05);
+  private final DriveSpeed limJoystickRight = new DriveSpeed(0.05);
+
+  public DriveConstantControlCommand(SwerveDrive swerveDrive, XboxController controller) {
+    m_swerveDrive = swerveDrive;
+    this.controller = controller;
+    addRequirements(swerveDrive);
+  }
 
 
 
-    @Override
-    public void initialize() {}
+  @Override
+  public void initialize() {}
 
-    // Called every time the scheduler runs while the command is scheduled.
-    @Override
-    public void execute() {
-        double leftX, leftY, rightX;
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {
+    double leftX, leftY, rightX;
 
     leftX = -controller.getLeftX();
     leftY = -controller.getLeftY();
     rightX = controller.getRightX();
 
 
-        // Find radii for controller dead-zones (circular)
-        double leftRadius = Math.sqrt(Math.pow(leftX, 2) + Math.pow(leftY, 2));
-        double rightRadius = Math.abs(rightX);
-
-//        // add input curves
-//        leftX = Math.pow(leftX, 3);
-//        leftY = Math.pow(leftY, 3);
-//        rightX = Math.pow(rightX, 3);
+    // Find radii for controller dead-zones (circular)
+    double leftRadius = Math.sqrt(Math.pow(leftX, 2) + Math.pow(leftY, 2));
+    double rightRadius = Math.abs(rightX);
 
     // apply deadzones
     if (leftRadius < OIConstants.kDeadzoneCircle) {
@@ -56,17 +52,17 @@ public class DriveConstantControlCommand extends CommandBase {
       rightX = 0;
     }
 
-        limJoystickLeft.compute(leftX, leftY);
-        limJoystickRight.compute(rightX, 0);
+    limJoystickLeft.compute(leftX, leftY);
+    limJoystickRight.compute(rightX, 0);
 
-        leftX = limJoystickLeft.xSpeed;
-        leftY = limJoystickLeft.ySpeed;
-        rightX = limJoystickRight.xSpeed;
+    leftX = limJoystickLeft.xSpeed;
+    leftY = limJoystickLeft.ySpeed;
+    rightX = limJoystickRight.xSpeed;
 
-        // apply max speeds
-        leftX *= maxSpeed;
-        leftY *= maxSpeed;
-        rightX *= maxAngularSpeed;
+    // apply max speeds
+    leftX *= maxSpeed;
+    leftY *= maxSpeed;
+    rightX *= maxAngularSpeed;
 
     // if left stick is active, drive in that direction
     if (leftRadius >= OIConstants.kDeadzoneRectangle) {
@@ -84,22 +80,14 @@ public class DriveConstantControlCommand extends CommandBase {
     }
   }
 
-  // private double checkDeadzone(double val) {
-  //   // zeros if within deadzone rectangle
-  //   if (Math.abs(val) < OIConstants.kDeadzoneRectangle) return 0;
-  //   // squares the value to decrease sensitivity
-  //   // else if (val < 0) return -Math.pow(val, 3);
-  //   return Math.pow(val, 3);
-  // }
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {}
 
-    // Called once the command ends or is interrupted.
-    @Override
-    public void end(boolean interrupted) {}
-
-    // Returns true when the command should end.
-    @Override
-    public boolean isFinished() {
-        // should never end in teleop
-        return false;
-    }
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
+    // should never end in teleop
+    return false;
+  }
 }

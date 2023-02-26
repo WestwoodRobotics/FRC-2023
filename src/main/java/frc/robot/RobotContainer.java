@@ -74,7 +74,9 @@ public class RobotContainer {
     });
 
     SmartDashboard.putData("Reset Motor Encoders:", resetMotorEncoderCommand);
-    SmartDashboard.putData("Current Presumed Steer Motor Angles:", printAssumedCurrentWheelAngles); //Returns positive values if the wheel turned clockwise from it's starting position. (Starting position is the wheel's front facing the front of the robot)
+
+    //Returns positive values if the wheel turned clockwise from it's starting position. (Starting position is the wheel's front facing the front of the robot)
+    SmartDashboard.putData("Current Presumed Steer Motor Angles:", printAssumedCurrentWheelAngles); 
   }
 
 
