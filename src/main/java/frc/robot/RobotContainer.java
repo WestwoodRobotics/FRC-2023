@@ -13,10 +13,8 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.PortConstants;
 import frc.robot.commands.TransportCommands.UseArm;
+import frc.robot.commands.Intake.UseIntake;
 import frc.robot.commands.SwerveDriveCommands.DriveConstantControlCommand;
-import frc.robot.commands.TransportCommands.ArmDownCommand;
-import frc.robot.commands.TransportCommands.ArmStopCommand;
-import frc.robot.commands.TransportCommands.ArmUpCommand;
 import frc.robot.subsystems.intake.IntakeModule;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import frc.robot.subsystems.transport.Transport;
@@ -35,6 +33,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   // private final SwerveDrive SwerveDriveSystem = new SwerveDrive();
   private final Transport transport = new Transport();
+  private final IntakeModule intake  = new IntakeModule();
 
   //private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem); <--- This is an example "command" implementation
 
@@ -66,6 +65,7 @@ public class RobotContainer {
   private void setDefaultCommands() {
     // SwerveDriveSystem.setDefaultCommand(new DriveConstantControlCommand(SwerveDriveSystem, primaryController));
     transport.setDefaultCommand(new UseArm(primaryController, transport));
+    intake.setDefaultCommand(new UseIntake(primaryController, intake));
   }
 
   /**
@@ -75,6 +75,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+
   }
 
   /**
@@ -86,6 +87,6 @@ public class RobotContainer {
     // An ExampleCommand will run in autonomous
   //  DriveConstantControlCommand x = new DriveConstantControlCommand(SwerveDriveSystem, primaryController);
     // SwerveDriveSystem.setDefaultCommand(x);
-    return new ArmStopCommand(transport);
+    return new UseArm(primaryController, transport);
   }
 }

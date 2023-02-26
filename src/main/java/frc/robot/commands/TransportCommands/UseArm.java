@@ -18,10 +18,19 @@ public class UseArm extends CommandBase {
 
     @Override
     public void execute() {
-        ourArm.setArmMotorPower(
-            Conversions.deadZoneSquare(controller.getLeftY(), 0.1));
+        if(controller.getAButton()) {
+            ourArm.setArmMotorPosition(20000);
+        } else if(controller.getBButton()) {
+            ourArm.setPivot2MotorPosition(20000);
+        } else {
+            ourArm.setArmMotorPower(
+                Conversions.deadZoneSquare(-1 * controller.getLeftY(), 0.1));
             
-        ourArm.setPivot2MotorPower(
-            Conversions.deadZoneSquare(controller.getRightY(), 0.1));
+            ourArm.setPivot2MotorPower(
+                Conversions.deadZoneSquare(controller.getRightY(), 0.1));
+                           
+            ourArm.setWristMotorPower(
+                Conversions.deadZoneSquare(controller.getRightX(), 0.1));
+        }
     }
 }
