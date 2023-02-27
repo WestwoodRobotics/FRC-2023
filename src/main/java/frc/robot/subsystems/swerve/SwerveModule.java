@@ -9,10 +9,10 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.FeedForwardConstants;
 import frc.robot.Constants.FilePathConstants;
 import frc.robot.Constants.ModuleConstants;
@@ -34,7 +34,7 @@ import java.util.concurrent.TimeUnit;
 // This class represents a swerve module, which consists of a drive motor and a steer motor
 // It also includes encoders and PID controllers for both the drive and steer motors, as well as an absolute encoder
 
-public class SwerveModule {
+public class SwerveModule extends SubsystemBase {
   private static double[] turnEncoderOffsets;
   private final int moduleNum;
   private final TalonFX driveMotor;
@@ -42,34 +42,22 @@ public class SwerveModule {
   private final CANCoder absoluteEncoder; // Absolute Encoder
   private final PIDController drivePIDController; // PID Controller for the drive motor
   private final SimpleMotorFeedforward driveMotorFeedForward; // Feedforward for the drive motor
-  private double driveMotorOutput; // Output for the drive motor
-  private Pose2d swerveModulePose = new Pose2d();
 
   /**
-   * @param driveMotorCANId       The CAN ID of the drive motor
-   * @param steerMotorCANId       The CAN ID of the steer motor
-   * @param isDriveMotorReversed  Boolean for determining if the drive motor is
-   * @param isSteerMotorReversed  Boolean for determining if the steer motor is
-   * @param absoluteEncoderCANId  The CAN ID of the absolute encoder
-   * @param absoluteEncoderOffset The offset for the absolute encoder
+   * @param driveMotorCANId      The CAN ID of the drive motor
+   * @param steerMotorCANId      The CAN ID of the steer motor
+   * @param absoluteEncoderCANId The CAN ID of the absolute encoder
+   * @param moduleNum            The module number
    */
-  public SwerveModule(int driveMotorCANId, int steerMotorCANId, boolean isDriveMotorReversed,
-                      boolean isSteerMotorReversed, int absoluteEncoderCANId, double absoluteEncoderOffset, int moduleNum) {
+  public SwerveModule(int driveMotorCANId, int steerMotorCANId, int absoluteEncoderCANId, int moduleNum) {
     this.moduleNum = moduleNum;
 
-    // Initialize the drive and steer motors using the provided CAN IDs
+    // Initialize the can devices using provided ids
     driveMotor = new WPI_TalonFX(driveMotorCANId);
     steerMotor = new WPI_TalonFX(steerMotorCANId);
 
-    // Initialize the absolute encoder using the provided CAN ID
     absoluteEncoder = new CANCoder(absoluteEncoderCANId);
 
-    // Set the inversion for the drive and steer motors based on the provided booleans
-
-    driveMotor.setInverted(isDriveMotorReversed);
-    steerMotor.setInverted(isSteerMotorReversed);
-
-    // Set the neutral mode for the drive and steer motors to brake
     driveMotor.setNeutralMode(NeutralMode.Brake);
     steerMotor.setNeutralMode(NeutralMode.Coast);
     driveMotor.clearStickyFaults();
@@ -80,22 +68,14 @@ public class SwerveModule {
     /* Swerve Angle Motor Configurations */
     SupplyCurrentLimitConfiguration angleSupplyLimit = new SupplyCurrentLimitConfiguration(true, 20, 30, 0.1);
 
-    // put in constants later
     swerveAngleFXConfig.slot0.kP = PIDConstants.kPSwerveAngle;
     swerveAngleFXConfig.slot0.kI = PIDConstants.kISwerveAngle;
     swerveAngleFXConfig.slot0.kD = PIDConstants.kDSwerveAngle;
     swerveAngleFXConfig.slot0.kF = 0.0;
     swerveAngleFXConfig.supplyCurrLimit = angleSupplyLimit;
 
-    // Initialize the drive and steer PID controllers using the constants from
-    // DriveConstants
     drivePIDController = new PIDController(PIDConstants.kPSwerveDriveDriveMotor,
       PIDConstants.kISwerveDriveDriveMotor, PIDConstants.kDSwerveDriveDriveMotor);
-    // steerPIDController = new
-    // PIDController(DriveConstants.kPSwerveDriveSteerMotor,
-    // DriveConstants.kISwerveDriveSteerMotor,
-    // DriveConstants.kDSwerveDriveSteerMotor);
-    // steerPIDController.enableContinuousInput(-Math.PI, Math.PI);
 
     steerMotor.configFactoryDefault();
     steerMotor.configAllSettings(swerveAngleFXConfig);
@@ -193,7 +173,8 @@ public class SwerveModule {
    */
 
   public void setDesiredState(SwerveModuleState state) {
-    state.speedMetersPerSecond = state.speedMetersPerSecond * 204800 / 6.12;
+//    state.speedMetersPerSecond = state.speedMetersPerSecond * 204800 / 6.12;
+
     double currentAngle = Conversions.falconToRadians(steerMotor.getSelectedSensorPosition(),
       ModuleConstants.kSteerMotorGearRatio);
 
@@ -202,13 +183,9 @@ public class SwerveModule {
     double angleDiff = currentAngle - outputState.angle.getRadians();
     double targetDriveSpeed = outputState.speedMetersPerSecond * Math.cos(angleDiff);
 
-//        System.out.printf("[%d] Trying to reach angle %f - %f%n", moduleNum, state.angle.getDegrees(), outputState.angle.getDegrees());
-//        System.out.printf("[%d] Current absolute angle: %f %n", moduleNum, absoluteEncoder.getAbsolutePosition());
-//      System.out.printf("[%d] Current encoder angle: %f %n", moduleNum, Conversions.falconToDegrees(steerMotor.getSelectedSensorPosition(),
-//        ModuleConstants.kSteerMotorGearRatio));
-
     double drive_vel = getVelocity();
-    driveMotorOutput = drivePIDController.calculate(drive_vel, targetDriveSpeed);
+    // Output for the drive motor (in falcon ticks)
+    double driveMotorOutput = drivePIDController.calculate(drive_vel, targetDriveSpeed * ModuleConstants.kDriveEncoderRot2Meter * 10);
 
     double driveFeedforward = driveMotorFeedForward.calculate(targetDriveSpeed);
 
@@ -239,16 +216,8 @@ public class SwerveModule {
     scheduler.schedule(this::resetToAbsolute, 300, TimeUnit.MILLISECONDS);
   }
 
-  public double getSteerMotorEncoderTicks() {
-    return steerMotor.getSelectedSensorPosition();
-  }
-
-  public Pose2d getPose() {
-    return swerveModulePose;
-  }
-
-  public void setPose(Pose2d pose) {
-    swerveModulePose = pose;
+  public double getAngle() {
+    return Conversions.falconToDegrees(steerMotor.getSelectedSensorPosition(), ModuleConstants.kSteerMotorGearRatio);
   }
 
   public SwerveModulePosition getPosition() {

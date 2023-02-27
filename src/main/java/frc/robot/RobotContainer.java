@@ -4,12 +4,12 @@
 
 package frc.robot;
 
-import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WrapperCommand;
 import frc.robot.Constants.PortConstants;
 import frc.robot.commands.SwerveDriveCommands.DriveConstantControlCommand;
 import frc.robot.subsystems.swerve.SwerveDrive;
@@ -57,20 +57,15 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-    //The following code is for the primary controller
+    // The following code is for the primary controller
+    WrapperCommand resetMotorEncoderCommand = new InstantCommand(SwerveDriveSystem::resetAllEncoders).ignoringDisable(true);
+    resetMotorEncoderCommand.setName("Recalibrate Motor Encoder positions");
 
-
-    Sendable resetMotorEncoderCommand = new InstantCommand(() -> {
-      SwerveDriveSystem.resetAllEncoders();
-    });
-
-    Sendable printAssumedCurrentWheelAngles = new InstantCommand(() -> {
-      SwerveDriveSystem.printDriveTrainSteerMotorDegrees();
-    });
+    WrapperCommand printAssumedCurrentWheelAngles = new InstantCommand(SwerveDriveSystem::printSteerAngles).ignoringDisable(true);
 
     SmartDashboard.putData("Reset Motor Encoders:", resetMotorEncoderCommand);
 
-    //Returns positive values if the wheel turned clockwise from it's starting position. (Starting position is the wheel's front facing the front of the robot)
+    // Returns positive values if the wheel turned clockwise from its starting position. (Starting position is the wheel's front facing the front of the robot)
     SmartDashboard.putData("Current Presumed Steer Motor Angles:", printAssumedCurrentWheelAngles);
   }
 

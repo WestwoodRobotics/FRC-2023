@@ -12,32 +12,40 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.PortConstants;
+
+import java.util.Arrays;
 //import odometry from wpi
 
 
 // This class represents the swerve drive system, which is composed of 4 swerve modules (one for each wheel)
 public class SwerveDrive extends SubsystemBase {
-  private final SwerveModule frontLeftModule;
-  private final SwerveModule frontRightModule;
-  private final SwerveModule backLeftModule;
-  private final SwerveModule backRightModule;
-  protected Gyro gyro;
-  private Odometry odometry;
+  final Gyro gyro;
+  /**
+   * Order of swerve modules:
+   * <ul>
+   *  <li>[0] Front Left</li>
+   *  <li>[1] Front Right</li>
+   *  <li>[2] Back Left</li>
+   *  <li>[3] Back Right</li>
+   * </ul>
+   */
+  private final SwerveModule[] modules = new SwerveModule[4];
+  private final Odometry odometry;
 
   public SwerveDrive() {
     setName("SwerveDrive");
     gyro = new Gyro();
-    // initialize swerve mods (possibly move into a list for conciseness eventually)
-    frontLeftModule = new SwerveModule(PortConstants.kFrontLeftDriveMotorPort,
-      PortConstants.kFrontLeftSteerMotorPort,
-      false, false, PortConstants.kFrontLeftCANCoderPort, 0, 0);
-    frontRightModule = new SwerveModule(PortConstants.kFrontRightDriveMotorPort,
-      PortConstants.kFrontRightSteerMotorPort, false, false, PortConstants.kFrontRightCANCoderPort, 0, 1);
-    backLeftModule = new SwerveModule(PortConstants.kBackLeftDriveMotorPort, PortConstants.kBackLeftSteerMotorPort,
-      false, false, PortConstants.kBackLeftCANCoderPort, 0, 2);
-    backRightModule = new SwerveModule(PortConstants.kBackRightDriveMotorPort,
-      PortConstants.kBackRightSteerMotorPort,
-      false, false, PortConstants.kBackRightCANCoderPort, 0, 3);
+    // Front Left
+    modules[0] = new SwerveModule(PortConstants.kFrontLeftDriveMotorPort,
+      PortConstants.kFrontLeftSteerMotorPort, PortConstants.kFrontLeftCANCoderPort, 0);
+    // Front Right
+    modules[1] = new SwerveModule(PortConstants.kFrontRightDriveMotorPort,
+      PortConstants.kFrontRightSteerMotorPort, PortConstants.kFrontRightCANCoderPort, 0, 1);
+    // Back Left
+    modules[2] = new SwerveModule(PortConstants.kBackLeftDriveMotorPort, PortConstants.kBackLeftSteerMotorPort, PortConstants.kBackLeftCANCoderPort, 0, 2);
+    // Back Right
+    modules[3] = new SwerveModule(PortConstants.kBackRightDriveMotorPort,
+      PortConstants.kBackRightSteerMotorPort, PortConstants.kBackRightCANCoderPort, 0, 3);
 
     // initialize classes which require Swerve
     odometry = new Odometry(this);
@@ -51,17 +59,17 @@ public class SwerveDrive extends SubsystemBase {
 
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, AutoConstants.kMaxSpeedMetersPerSecond);
 
-    frontLeftModule.setDesiredState(swerveModuleStates[1]);
-    frontRightModule.setDesiredState(swerveModuleStates[3]);
-    backLeftModule.setDesiredState(swerveModuleStates[0]);
-    backRightModule.setDesiredState(swerveModuleStates[2]);
+    for (int i = 0; i < swerveModuleStates.length; i++) {
+      SwerveModuleState swerveModuleState = swerveModuleStates[i];
+      SwerveModule module = modules[i];
+      module.setDesiredState(swerveModuleState);
+    }
   }
 
   public void zeroDrive() {
-    frontLeftModule.zeroDriveMotor();
-    frontRightModule.zeroDriveMotor();
-    backLeftModule.zeroDriveMotor();
-    backRightModule.zeroDriveMotor();
+    for (SwerveModule module : modules) {
+      module.zeroDriveMotor();
+    }
   }
 
   public Rotation2d getHeading() {
@@ -73,79 +81,32 @@ public class SwerveDrive extends SubsystemBase {
   }
 
   public SwerveModulePosition[] getPositions() {
-    SwerveModulePosition[] positions = new SwerveModulePosition[4];
-    positions[1] = frontLeftModule.getPosition();
-    positions[3] = frontRightModule.getPosition();
-    positions[0] = backLeftModule.getPosition();
-    positions[2] = backRightModule.getPosition();
-    return positions;
-  }
-
-  public SwerveModuleState[] getStates() {
-    SwerveModuleState[] states = new SwerveModuleState[4];
-    states[1] = frontLeftModule.getState();
-    states[3] = frontRightModule.getState();
-    states[0] = backLeftModule.getState();
-    states[2] = backRightModule.getState();
-    return states;
-  }
-
-  public void setStates(SwerveModuleState[] states) {
-    frontLeftModule.setDesiredState(states[1]);
-    frontRightModule.setDesiredState(states[3]);
-    backLeftModule.setDesiredState(states[0]);
-    backRightModule.setDesiredState(states[2]);
+    return Arrays.stream(modules).map(SwerveModule::getPosition).toArray(SwerveModulePosition[]::new);
   }
 
   public void saveEncoderOffsets() {
-    frontLeftModule.setEncoderOffset();
-    frontRightModule.setEncoderOffset();
-    backLeftModule.setEncoderOffset();
-    backRightModule.setEncoderOffset();
+    for (SwerveModule module : modules) {
+      module.setEncoderOffset();
+    }
   }
 
   public void resetAllEncoders() {
     System.out.println("Encoders reset!");
-    frontLeftModule.resetEncoders();
-    frontRightModule.resetEncoders();
-    backLeftModule.resetEncoders();
-    backRightModule.resetEncoders();
+    for (SwerveModule module : modules) {
+      module.resetEncoders();
+    }
+
     saveEncoderOffsets();
   }
 
-  public double getFrontLeftModuleSteerMotorTicks() {
-    return frontLeftModule.getSteerMotorEncoderTicks();
-  }
-
-  public double getFrontRightModuleSteerMotorTicks() {
-    return frontRightModule.getSteerMotorEncoderTicks();
-  }
-
-  public double getBackLeftModuleSteerMotorTicks() {
-    return backLeftModule.getSteerMotorEncoderTicks();
-  }
-
-  public double getBackRightModuleSteerMotorTicks() {
-    return backRightModule.getSteerMotorEncoderTicks();
-  }
-
-  public String printDriveTrainSteerMotorDegrees() {
-    double frontLeftSteerMotorEncoderTicksTODegrees = getFrontLeftModuleSteerMotorTicks() * 360 / 4096;
-    double frontRightSteerMotorEncoderTicksTODegrees = getFrontRightModuleSteerMotorTicks() * 360 / 4096;
-    double backLeftSteerMotorEncoderTicksTODegrees = getBackLeftModuleSteerMotorTicks() * 360 / 4096;
-    double backRightSteerMotorEncoderTicksTODegrees = getBackRightModuleSteerMotorTicks() * 360 / 4096;
-    return ("Front Left Steer Motor: " + frontLeftSteerMotorEncoderTicksTODegrees + " degrees" + "\n" +
-      "Front Right Steer Motor: " + frontRightSteerMotorEncoderTicksTODegrees + " degrees" + "\n" +
-      "Back Left Steer Motor: " + backLeftSteerMotorEncoderTicksTODegrees + " degrees" + "\n" +
-      "Back Right Steer Motor: " + backRightSteerMotorEncoderTicksTODegrees + " degrees");
+  public void printSteerAngles() {
+    System.out.println("Front Left Steer Motor: " + modules[0].getAngle() + " degrees" + "\n" +
+      "Front Right Steer Motor: " + modules[1].getAngle() + " degrees" + "\n" +
+      "Back Left Steer Motor: " + modules[2].getAngle() + " degrees" + "\n" +
+      "Back Right Steer Motor: " + modules[3].getAngle() + " degrees");
   }
 
   public void resetPose(Pose2d pose) {
     odometry.resetOdometry(pose);
-  }
-
-  @Override
-  public void periodic() {
-    odometry.update();
   }
 }
