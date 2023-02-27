@@ -1,28 +1,26 @@
 package frc.robot.commands.SwerveDriveCommands;
 
-import static frc.robot.Constants.DriveConstants.maxAngularSpeed;
-import static frc.robot.Constants.DriveConstants.maxSpeed;
-
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.swerve.DriveSpeed;
 import frc.robot.subsystems.swerve.SwerveDrive;
-//import frc.robot.subsystems.swerve.SwerveModule;
-import frc.robot.Constants.*;
+
+import static frc.robot.Constants.DriveConstants.maxAngularSpeed;
+import static frc.robot.Constants.DriveConstants.maxSpeed;
 
 public class DriveConstantControlCommand extends CommandBase {
 
   private final SwerveDrive m_swerveDrive;
-  private XboxController controller;
   private final DriveSpeed limJoystickLeft = new DriveSpeed(0.05);
   private final DriveSpeed limJoystickRight = new DriveSpeed(0.05);
+  private XboxController controller;
 
   public DriveConstantControlCommand(SwerveDrive swerveDrive, XboxController controller) {
     m_swerveDrive = swerveDrive;
     this.controller = controller;
     addRequirements(swerveDrive);
   }
-
 
 
   @Override
@@ -73,8 +71,7 @@ public class DriveConstantControlCommand extends CommandBase {
     } else if (controller.getAButton()) {
       // otherwise, if A is pressed, turn the wheels right slowly
       m_swerveDrive.drive(0, 0, 0.1, false);
-    }
-    else {
+    } else {
       // otherwise, stop drive motors
       m_swerveDrive.zeroDrive();
     }

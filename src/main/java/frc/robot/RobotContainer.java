@@ -9,10 +9,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-
-
 import frc.robot.Constants.PortConstants;
 import frc.robot.commands.SwerveDriveCommands.DriveConstantControlCommand;
 import frc.robot.subsystems.swerve.SwerveDrive;
@@ -25,19 +22,17 @@ import frc.robot.subsystems.swerve.SwerveDrive;
  */
 public class RobotContainer {
 
-  //THe XBox Controllers are being initialized here
+  // The XBox Controllers are being initialized here
   private final XboxController primaryController = new XboxController(PortConstants.XboxController1);
-  //private final XboxController secondaryController = new XboxController(PortConstants.XboxController2);
+  // private final XboxController secondaryController = new XboxController(PortConstants.XboxController2);
 
   // The robot's subsystems and commands are defined here...
   private final SwerveDrive SwerveDriveSystem = new SwerveDrive();
 
-  //Instantiating the timer
+  // Instantiating the timer
   private final Timer timer = new Timer();
 
-  //private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem); <--- This is an example "command" implementation
-
-
+  // private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem); <--- This is an example "command" implementation
 
 
   /**
@@ -76,15 +71,13 @@ public class RobotContainer {
     SmartDashboard.putData("Reset Motor Encoders:", resetMotorEncoderCommand);
 
     //Returns positive values if the wheel turned clockwise from it's starting position. (Starting position is the wheel's front facing the front of the robot)
-    SmartDashboard.putData("Current Presumed Steer Motor Angles:", printAssumedCurrentWheelAngles); 
+    SmartDashboard.putData("Current Presumed Steer Motor Angles:", printAssumedCurrentWheelAngles);
   }
-
 
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    */
-
   public void teleopTimer() {
     timer.reset();
     timer.start();
@@ -98,7 +91,4 @@ public class RobotContainer {
     System.out.println("Saving encoder offsets");
     SwerveDriveSystem.saveEncoderOffsets();
   }
-
-
-
 }

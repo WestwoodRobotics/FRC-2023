@@ -22,7 +22,7 @@ public class CTREModuleState {
     double targetAngle = placeInAppropriate0To360Scope(currentAngle.getDegrees(), desiredState.angle.getDegrees());
     double targetSpeed = desiredState.speedMetersPerSecond;
     double delta = targetAngle - currentAngle.getDegrees();
-    if (Math.abs(delta) > 90){
+    if (Math.abs(delta) > 90) {
       targetSpeed = -targetSpeed;
       if (delta > 90) {
         targetAngle -= 180;
@@ -35,7 +35,7 @@ public class CTREModuleState {
 
   /**
    * @param scopeReference Current Angle
-   * @param newAngle Target Angle
+   * @param newAngle       Target Angle
    * @return Closest angle within scope
    */
   private static double placeInAppropriate0To360Scope(double scopeReference, double newAngle) {
