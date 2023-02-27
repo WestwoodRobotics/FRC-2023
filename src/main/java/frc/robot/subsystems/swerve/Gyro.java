@@ -21,7 +21,9 @@ public class Gyro {
     zeroGyro();
   }
 
-  /** Zero the gyro */
+  /**
+   * Zero the gyro
+   */
   public void zeroGyro() {
     setGyroDegrees(0);
   }

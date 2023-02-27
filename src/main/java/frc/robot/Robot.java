@@ -28,6 +28,7 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     robotContainer = new RobotContainer();
+
   }
 
   /**
@@ -60,12 +61,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    autonomousCommand = robotContainer.getAutonomousCommand();
-
-    // schedule the autonomous command (example)
-    if (autonomousCommand != null) {
-      autonomousCommand.schedule();
-    }
   }
 
   /**
@@ -102,4 +97,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {}
+
+  public RobotContainer geContainer() {
+    return robotContainer;
+  }
 }

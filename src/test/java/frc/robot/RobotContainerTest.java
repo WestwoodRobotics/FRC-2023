@@ -1,7 +1,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.RobotBase;
 import org.junit.jupiter.api.Test;
 // import org.littletonrobotics.junction.inputs.LoggedDriverStation; (AdvantageKit)
 
