@@ -40,12 +40,12 @@ public class SwerveDrive extends SubsystemBase {
       PortConstants.kFrontLeftSteerMotorPort, PortConstants.kFrontLeftCANCoderPort, 0);
     // Front Right
     modules[1] = new SwerveModule(PortConstants.kFrontRightDriveMotorPort,
-      PortConstants.kFrontRightSteerMotorPort, PortConstants.kFrontRightCANCoderPort, 0, 1);
+      PortConstants.kFrontRightSteerMotorPort, PortConstants.kFrontRightCANCoderPort, 1);
     // Back Left
-    modules[2] = new SwerveModule(PortConstants.kBackLeftDriveMotorPort, PortConstants.kBackLeftSteerMotorPort, PortConstants.kBackLeftCANCoderPort, 0, 2);
+    modules[2] = new SwerveModule(PortConstants.kBackLeftDriveMotorPort, PortConstants.kBackLeftSteerMotorPort, PortConstants.kBackLeftCANCoderPort, 2);
     // Back Right
     modules[3] = new SwerveModule(PortConstants.kBackRightDriveMotorPort,
-      PortConstants.kBackRightSteerMotorPort, PortConstants.kBackRightCANCoderPort, 0, 3);
+      PortConstants.kBackRightSteerMotorPort, PortConstants.kBackRightCANCoderPort, 3);
 
     // initialize classes which require Swerve
     odometry = new Odometry(this);
