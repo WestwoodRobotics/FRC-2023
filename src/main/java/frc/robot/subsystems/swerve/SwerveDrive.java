@@ -43,9 +43,9 @@ public class SwerveDrive extends SubsystemBase {
     odometry = new Odometry(this);
   }
 
-  public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
+  public void drive(double xSpeed, double ySpeed, double rot, boolean isFieldRelative) {
     SwerveModuleState[] swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
-      fieldRelative
+      isFieldRelative
         ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, gyro.getYaw())
         : new ChassisSpeeds(xSpeed, ySpeed, rot));
 
