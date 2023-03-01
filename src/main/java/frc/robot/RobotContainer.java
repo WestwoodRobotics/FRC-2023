@@ -62,6 +62,7 @@ public class RobotContainer {
     resetMotorEncoderCommand.setName("Recalibrate Motor Encoder positions");
 
     WrapperCommand printAssumedCurrentWheelAngles = new InstantCommand(SwerveDriveSystem::printSteerAngles).ignoringDisable(true);
+    printAssumedCurrentWheelAngles.setName("Print Current Wheel Angles");
 
     SmartDashboard.putData("Reset Motor Encoders:", resetMotorEncoderCommand);
 

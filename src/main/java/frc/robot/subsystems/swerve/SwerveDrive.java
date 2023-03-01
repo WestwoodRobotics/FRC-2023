@@ -13,6 +13,7 @@ import frc.robot.Constants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.PortConstants;
+import frc.robot.util.Conversions;
 
 import java.util.Arrays;
 // import odometry from wpi
@@ -95,7 +96,7 @@ public class SwerveDrive extends SubsystemBase {
   }
 
   public void resetAllEncoders() {
-    System.out.println("Encoders reset!");
+    System.out.println("\u001B[32mEncoders reset!\u001B[0m");
     for (SwerveModule module : modules) {
       module.resetEncoders();
     }
@@ -104,10 +105,10 @@ public class SwerveDrive extends SubsystemBase {
   }
 
   public void printSteerAngles() {
-    System.out.println("Front Left Steer Motor: " + modules[0].getAngleRadians() + " degrees" + "\n" +
-      "Front Right Steer Motor: " + modules[1].getAngleRadians() + " degrees" + "\n" +
-      "Back Left Steer Motor: " + modules[2].getAngleRadians() + " degrees" + "\n" +
-      "Back Right Steer Motor: " + modules[3].getAngleRadians() + " degrees");
+    System.out.println("\n\u001B[32mFront Left Steer Motor: " + modules[0].getAngleDegrees() + " degrees" + "\n" +
+      "Front Right Steer Motor: " + modules[1].getAngleDegrees() + " degrees" + "\n" +
+      "Back Left Steer Motor: " + modules[2].getAngleDegrees() + " degrees" + "\n" +
+      "Back Right Steer Motor: " + modules[3].getAngleDegrees() + " degrees\u001B[0m");
   }
 
   public void resetPose(Pose2d pose) {

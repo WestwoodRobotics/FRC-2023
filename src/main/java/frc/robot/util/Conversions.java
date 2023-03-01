@@ -8,7 +8,7 @@ public class Conversions {
    * @return Degrees of Rotation of Mechanism
    */
   public static double falconToDegrees(double counts, double gearRatio) {
-    return counts * (360.0 / (gearRatio * 2048.0));
+    return counts * (360.0 / (2048));
   }
 
   /**
@@ -83,5 +83,9 @@ public class Conversions {
     double wheelRevs = (falconTicks / 2048.0) / gearRatio;
     double meters = wheelRevs * circumference;
     return meters;
+  }
+
+  public static double radiansToDegrees(double radians, double gearRatio){
+    return radians * (360.0 / (gearRatio * 2048.0));
   }
 }
