@@ -38,7 +38,7 @@ public final class Constants {
   // This class contains constants for the swerve drive system
   public static final class DriveConstants {
     public static final double maxSpeed = 1; // meters per second, controls mapped to this by direct
-    public static final double maxAngularSpeed = 1.3 * Math.PI;
+    public static final double maxAngularSpeed = 2 * Math.PI;
     public static final double C_kPXVision = 0.015;
     // Distance between right and left wheels
     public static final double kTrackWidth = Units.inchesToMeters(21); // TODO: Update with actual track width
@@ -48,7 +48,7 @@ public final class Constants {
     //Coords of frontLeftSwerveModule (Robot Relative)
     public static final double frontLeftModuleX = (-kTrackWidth / 2);
     public static final double frontLeftModuleY = (kWheelBase / 2);
-    
+
     //Coords of frontRightSwerveModule (Robot Relative)
     public static final double frontRightModuleX = (kTrackWidth / 2);
     public static final double frontRightModuleY = (kWheelBase / 2);
@@ -63,8 +63,10 @@ public final class Constants {
 
     // Kinematics of the swerve drive system
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
-        new Translation2d(frontLeftModuleY, frontLeftModuleX), new Translation2d(frontRightModuleY, frontRightModuleX),
-        new Translation2d(backLeftModuleY, backLeftModuleX), new Translation2d(backRightModuleY, backRightModuleX));
+      new Translation2d(frontLeftModuleX, frontLeftModuleY),
+      new Translation2d(frontRightModuleX, frontRightModuleY),
+      new Translation2d(backLeftModuleX, backLeftModuleY),
+      new Translation2d(backRightModuleX, backRightModuleY));
   }
 
   public static final class AutoConstants {
@@ -127,7 +129,7 @@ public final class Constants {
     public static final int XboxController2 = 2;
 
     // PWM Port for Pigeon (Gyroscope)
-    public static final int kPigeonPort = 0;// TODO: Update with actual PWM port
+    public static final int kPigeonPort = 5;
   }
 
   public static final class FilePathConstants {
@@ -137,11 +139,11 @@ public final class Constants {
   }
 
   public static final class PIDConstants {
-    public static final double kPSwerveDriveDriveMotor = 0; // TODO: Update with actual PID values
-    public static final double kISwerveDriveDriveMotor = 0; // TODO: Update with actual PID values 
-    public static final double kDSwerveDriveDriveMotor = 0; // TODO: Update with actual PID values
+    public static final double kPSwerveDriveDriveMotor = 0.15; // TODO: Update with actual PID values
+    public static final double kISwerveDriveDriveMotor = 0; // TODO: Update with actual PID values
+    public static final double kDSwerveDriveDriveMotor = 0.01; // TODO: Update with actual PID values
 
-    public static final double kPSwerveAngle = 0.2;
+    public static final double kPSwerveAngle = 0.19;
     public static final double kISwerveAngle = 0.0001;
     public static final double kDSwerveAngle = 0.02;
 

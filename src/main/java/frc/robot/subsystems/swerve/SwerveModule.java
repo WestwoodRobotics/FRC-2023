@@ -60,6 +60,8 @@ public class SwerveModule extends SubsystemBase {
 
     driveMotor.setNeutralMode(NeutralMode.Brake);
     steerMotor.setNeutralMode(NeutralMode.Coast);
+    steerMotor.setInverted(false);
+
     driveMotor.clearStickyFaults();
     steerMotor.clearStickyFaults();
 
@@ -156,8 +158,14 @@ public class SwerveModule extends SubsystemBase {
     resetToAbsolute();
   }
 
+  /**
+   * Get robot velocity
+   * @return return velocity in meters per second
+   */
+
+  // TODO: this is WRONG
   public double getVelocity() {
-    return driveMotor.getSelectedSensorVelocity() * ModuleConstants.kDriveEncoderRot2Meter * 10;
+    return Conversions.falconToRadians(driveMotor.getSelectedSensorVelocity(), ModuleConstants.kDriveMotorGearRatio) * Math.PI * ModuleConstants.kWheelDiameterMeters * 10;
   }
 
   public SwerveModuleState getState() {
@@ -181,14 +189,19 @@ public class SwerveModule extends SubsystemBase {
     SwerveModuleState outputState = CTREModuleState.optimize(state, new Rotation2d(currentAngle));
 
     double angleDiff = currentAngle - outputState.angle.getRadians();
+//    double targetDriveSpeed = outputState.speedMetersPerSecond * ModuleConstants.kDriveEncoderRot2Meter * 10 * Math.cos(angleDiff);
     double targetDriveSpeed = outputState.speedMetersPerSecond * Math.cos(angleDiff);
 
     double drive_vel = getVelocity();
     // Output for the drive motor (in falcon ticks)
-    double driveMotorOutput = drivePIDController.calculate(drive_vel, targetDriveSpeed * ModuleConstants.kDriveEncoderRot2Meter * 10);
-
+    double driveMotorOutput = drivePIDController.calculate(drive_vel, targetDriveSpeed);
+    // todo: this doesn't work at all (always returns 0)
     double driveFeedforward = driveMotorFeedForward.calculate(targetDriveSpeed);
 
+//    System.out.printf("[%d] Current angle: %f6, target angle: %f6\n", moduleNum, currentAngle, outputState.angle.getRadians());
+
+//    if (driveFeedforward != 0) System.out.printf("Drive velocity: %f -- Target speed: %f%n", drive_vel, targetDriveSpeed);
+//    if (driveFeedforward != 0) System.out.printf("Drive feed forward: %f -- Drive motor output: %f%n", driveFeedforward, driveMotorOutput);
     driveMotor.set(ControlMode.PercentOutput, driveFeedforward + driveMotorOutput);
     steerMotor.set(ControlMode.Position,
       Conversions.degreesToFalcon(outputState.angle.getDegrees(), ModuleConstants.kSteerMotorGearRatio));
@@ -216,7 +229,7 @@ public class SwerveModule extends SubsystemBase {
     scheduler.schedule(this::resetToAbsolute, 300, TimeUnit.MILLISECONDS);
   }
 
-  public double getAngle() {
+  public double getAngleRadians() {
     return Conversions.falconToDegrees(steerMotor.getSelectedSensorPosition(), ModuleConstants.kSteerMotorGearRatio);
   }
 

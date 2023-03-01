@@ -53,6 +53,8 @@ public class DriveConstantControlCommand extends CommandBase {
     limJoystickLeft.compute(leftX, leftY);
     limJoystickRight.compute(rightX, 0);
 
+//    System.out.printf("X: %f - Y: %f  -- Limited X: %f - Limited Y: %f%n", leftX, leftY, limJoystickLeft.xSpeed, limJoystickLeft.ySpeed);
+
     leftX = limJoystickLeft.xSpeed;
     leftY = limJoystickLeft.ySpeed;
     rightX = limJoystickRight.xSpeed;
@@ -62,19 +64,18 @@ public class DriveConstantControlCommand extends CommandBase {
     leftY *= maxSpeed;
     rightX *= maxAngularSpeed;
     // if left stick is active, drive in that direction
-    if ((leftRadius >= OIConstants.kDeadzoneRectangle) && (rightRadius >= OIConstants.kDeadzoneRectangle))  {
-      m_swerveDrive.drive(leftX, leftY, rightX, false);
+    if ((leftRadius >= OIConstants.kDeadzoneRectangle) && (rightRadius >= OIConstants.kDeadzoneRectangle)) {
+      m_swerveDrive.drive(leftX, leftY, rightX, true);
     } else if (rightRadius >= OIConstants.kDeadzoneRectangle) {
       // otherwise, if right stick is active, turn in that direction
-      m_swerveDrive.drive(0, 0, rightX, false);
+      m_swerveDrive.drive(0, 0, rightX, true);
     } else if (controller.getAButton()) {
       // otherwise, if A is pressed, turn the wheels right slowly
-      m_swerveDrive.drive(0, 0, 0.1, false);
+      m_swerveDrive.drive(0, 0, 0.1, true);
     } else if (leftRadius >= OIConstants.kDeadzoneRectangle) {
       // otherwise, stop drive motors
-      m_swerveDrive.drive(leftX, leftY, 0, false);
-
-    }else{
+      m_swerveDrive.drive(leftX, leftY, 0, true);
+    } else {
       m_swerveDrive.zeroDrive();
     }
   }

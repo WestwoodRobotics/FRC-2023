@@ -44,7 +44,7 @@ public class Gyro extends SubsystemBase {
    * @return the yaw of the robot in Rotation2d
    */
   public Rotation2d getYaw() {
-    return getRawYaw().minus(yawOffset);
+    return getRawYaw().minus(yawOffset).times(-1);
   }
 
   /**
