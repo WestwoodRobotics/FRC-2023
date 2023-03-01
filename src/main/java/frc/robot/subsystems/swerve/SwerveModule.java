@@ -229,7 +229,7 @@ public class SwerveModule extends SubsystemBase {
     scheduler.schedule(this::resetToAbsolute, 300, TimeUnit.MILLISECONDS);
   }
 
-  public double getAngleRadians() {
+  public double getAngleDegrees() {
     return Conversions.falconToDegrees(steerMotor.getSelectedSensorPosition(), ModuleConstants.kSteerMotorGearRatio);
   }
 
