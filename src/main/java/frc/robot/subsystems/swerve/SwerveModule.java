@@ -220,9 +220,15 @@ public class SwerveModule extends SubsystemBase {
   }
 
   public void resetEncoders() {
-    driveMotor.setSelectedSensorPosition(0);
-    steerMotor.setSelectedSensorPosition(0);
-    absoluteEncoder.setPosition(0);
+    while (driveMotor.getSelectedSensorPosition() != 0) {
+      driveMotor.setSelectedSensorPosition(0);
+    }
+    while (steerMotor.getSelectedSensorPosition() != 0) {
+      steerMotor.setSelectedSensorPosition(0);
+    }
+    while (absoluteEncoder.getPosition() != 0){
+      absoluteEncoder.setPosition(0);
+    }
 
     ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     scheduler.schedule(this::saveEncoderOffset, 100, TimeUnit.MILLISECONDS);
