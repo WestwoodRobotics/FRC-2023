@@ -1,14 +1,13 @@
 package frc.robot.subsystems.swerve;
 
-public class DetermineDriveSpeed {
-  private final double brakeSpeed;
+public class DriveSpeed {
   public double xSpeed;
   public double ySpeed;
-
+  private double brakeSpeed;
   private double lastDistance;
   private double lastAngle;
 
-  public DetermineDriveSpeed(double brakeSpeed) {
+  public DriveSpeed(double brakeSpeed) {
     this.brakeSpeed = brakeSpeed;
   }
 
