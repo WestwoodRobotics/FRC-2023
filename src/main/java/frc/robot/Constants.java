@@ -117,7 +117,7 @@ public final class Constants {
   }
 
   public static final class IntakeConstants {
-    public static final int CANID_INTAKE = 30;
+    public static final int CANID_INTAKE = 23;
   }
 
   public static final class TransportConstant {
