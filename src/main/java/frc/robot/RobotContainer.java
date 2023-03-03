@@ -32,7 +32,6 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final SwerveDrive SwerveDriveSystem = new SwerveDrive();
   private final Intake intakeSystem = new Intake();
-  private final Wrist wristSystem = new Wrist();
 
   //private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem); <--- This is an example "command" implementation
 
@@ -62,7 +61,6 @@ public class RobotContainer {
     configureButtonBindings();
     setDefaultCommands();
     intakeSystem.setDefaultCommand(new HoldIntakeRoller(intakeSystem));
-    wristSystem.setDefaultCommand(new HoldWrist(wristSystem));
     // -264 open
     // 155 closed
   }
@@ -83,8 +81,6 @@ public class RobotContainer {
     rBumper.whileTrue(new IntakeOutRoller(intakeSystem));
     aButton.onTrue(new SetIntakePositionCommand(intakeSystem, (intakeSystem.initialPosition - 866/*Constants.IntakeConstants.kOPEN_INTAKE))*/)));
     bButton.onTrue(new SetIntakePositionCommand(intakeSystem, intakeSystem.initialPosition  /*+Constants.IntakeConstants.kCLOSED_INTAKE_CUBE)*/));
-    yButton.whileTrue(new RotateWrist(wristSystem, Constants.IntakeConstants.ONE_EIGHTY_DEGREE_ROTATION));
-   
   }
 
   /**
