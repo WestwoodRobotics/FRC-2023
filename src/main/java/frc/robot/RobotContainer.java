@@ -77,8 +77,8 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    lBumper.whileTrue(new IntakeInRoller(intakeSystem));
-    rBumper.whileTrue(new IntakeOutRoller(intakeSystem));
+    rBumper.whileTrue(new IntakeInRoller(intakeSystem));
+    lBumper.whileTrue(new IntakeOutRoller(intakeSystem));
     aButton.onTrue(new SetIntakePositionCommand(intakeSystem, (intakeSystem.initialPosition - 866/*Constants.IntakeConstants.kOPEN_INTAKE))*/)));
     bButton.onTrue(new SetIntakePositionCommand(intakeSystem, intakeSystem.initialPosition  /*+Constants.IntakeConstants.kCLOSED_INTAKE_CUBE)*/));
   }
