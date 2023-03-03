@@ -13,6 +13,7 @@ public class Intake extends SubsystemBase {
 
     private final TalonFX intakeMotor = new TalonFX(IntakeConstants.CANID_INTAKE);
     public final double initialPosition;
+    public static double currentPosition;
 
     public Intake(){
         intakeMotor.setNeutralMode(NeutralMode.Brake);
