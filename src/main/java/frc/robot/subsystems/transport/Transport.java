@@ -27,8 +27,8 @@ public class Transport extends SubsystemBase {
 
         elbowMotor.setInverted(true);
 
-        shoulderMotorFollow1.follow(shoulderMotorLead, false); // Might need to change the false
-        shoulderMotorFollow2.follow(shoulderMotorLead, false); // Might need to change the false
+        shoulderMotorFollow1.follow(shoulderMotorLead); // Might need to change the false
+        shoulderMotorFollow2.follow(shoulderMotorLead); // Might need to change the false
 
         shoulderMotorLead.configForwardSoftLimitThreshold(Constants.TransportConstant.MAX_SHOULDER_TICKS);
         shoulderMotorLead.configReverseSoftLimitThreshold(Constants.TransportConstant.MIN_SHOULDER_TICKS);

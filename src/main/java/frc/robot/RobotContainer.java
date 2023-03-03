@@ -31,7 +31,7 @@ public class RobotContainer {
   private final XboxController primaryController = new XboxController(PortConstants.XboxController1);
   private final XboxController secondaryController = new XboxController(PortConstants.XboxController2);
   // The robot's subsystems and commands are defined here...
-  // private final SwerveDrive SwerveDriveSystem = new SwerveDrive();
+   private final SwerveDrive SwerveDriveSystem = new SwerveDrive();
   private final Transport transport = new Transport();
   private final IntakeModule intake  = new IntakeModule();
 
@@ -58,7 +58,7 @@ public class RobotContainer {
    */
   public RobotContainer() {
     // Configure the button bindings
-    configureButtonBindings();
+    //configureButtonBindings(); DON'T ACCEPT THIS DURING MERGE!!!!
     setDefaultCommands();
   }
 
@@ -84,7 +84,8 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-  //  DriveConstantControlCommand x = new DriveConstantControlCommand(SwerveDriveSystem, primaryController);
-    // SwerveDriveSystem.setDefaultCommand(x);
+    DriveConstantControlCommand x = new DriveConstantControlCommand(SwerveDriveSystem, primaryController);
+    //SwerveDriveSystem.setDefaultCommand(x);
+    return x;
   }
 }

@@ -27,10 +27,10 @@ public class SwerveDrive extends SubsystemBase {
     gyro = new Gyro();
 
     // initialize swerve mods (possibly move into a list for conciseness eventually)
-    frontLeftModule = new SwerveModule(PortConstants.kFrontLeftDriveMotorPort, PortConstants.kFrontLeftSteerMotorPort, false, false, PortConstants.kFrontLeftCANCoderPort, 0, false);
-    frontRightModule = new SwerveModule(PortConstants.kFrontRightDriveMotorPort, PortConstants.kFrontRightSteerMotorPort, false, false, PortConstants.kFrontRightCANCoderPort, 0, false);
-    backLeftModule = new SwerveModule(PortConstants.kBackLeftDriveMotorPort, PortConstants.kBackLeftSteerMotorPort, false, false, PortConstants.kBackLeftCANCoderPort, 0, false);
-    backRightModule = new SwerveModule(PortConstants.kBackRightDriveMotorPort, PortConstants.kBackRightSteerMotorPort, false, false, PortConstants.kBackRightCANCoderPort, 0, false);
+    frontLeftModule = new SwerveModule(PortConstants.kFrontLeftDriveMotorPort, PortConstants.kFrontLeftTurningMotorPort, false, false, PortConstants.kFrontLeftCANCoderPort, 0, false);
+    frontRightModule = new SwerveModule(PortConstants.kFrontRightDriveMotorPort, PortConstants.kFrontRightTurningMotorPort, false, false, PortConstants.kFrontRightCANCoderPort, 0, false);
+    backLeftModule = new SwerveModule(PortConstants.kBackLeftDriveMotorPort, PortConstants.kBackLeftTurningMotorPort, false, false, PortConstants.kBackLeftCANCoderPort, 0, false);
+    backRightModule = new SwerveModule(PortConstants.kBackRightDriveMotorPort, PortConstants.kBackRightTurningMotorPort, false, false, PortConstants.kBackRightCANCoderPort, 0, false);
 
     // initialize classes which require Swerve
     odometry = new Odometry(this);
