@@ -7,29 +7,34 @@ import frc.robot.util.Conversions;
 
 public class UseArm extends CommandBase {
 
-    Transport ourArm;
+    Transport m_transport;
     XboxController controller;
 
     public UseArm(XboxController controller, Transport arm){
         this.controller = controller;
-        ourArm = arm;
+        m_transport = arm;
         addRequirements(arm);
     }
 
     @Override
     public void execute() {
+        // This probably shouldn't be in a constant control command
+        // Also what do these do?
         if(controller.getAButton()) {
-            ourArm.setArmMotorPosition(20000);
-        } else if(controller.getBButton()) {
-            ourArm.setPivot2MotorPosition(20000);
-        } else {
-            ourArm.setArmMotorPower(
+            m_transport.setShoulderMotorPosition(20000);
+        } 
+        else if(controller.getBButton()) {
+            m_transport.setElbowMotorPosition(20000);
+        } 
+        // This is fine in constant control command
+        else {
+            m_transport.setShoulderMotorPower(
                 Conversions.deadZoneSquare(-1 * controller.getLeftY(), 0.1));
             
-            ourArm.setPivot2MotorPower(
+            m_transport.setElbowMotorPower(
                 Conversions.deadZoneSquare(controller.getRightY(), 0.1));
                            
-            ourArm.setWristMotorPower(
+            m_transport.setWristMotorPower(
                 Conversions.deadZoneSquare(controller.getRightX(), 0.1));
         }
     }

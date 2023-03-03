@@ -9,51 +9,56 @@ import frc.robot.Constants;
 import frc.robot.Constants.TransportConstant;
 
 public class Transport extends SubsystemBase {
-    private final TalonFX armMotor = new TalonFX(TransportConstant.CANID_TRANSPORT1);
-    private final TalonFX armMotor1 = new TalonFX(TransportConstant.CANID_TRANSPORT);
-    private final TalonFX armMotor2 = new TalonFX(TransportConstant.CANID_TRANSPORT2);
-    private final TalonFX pivot2Motor = new TalonFX(TransportConstant.CANID_PIVOT_2);
+    private final TalonFX shoulderMotorLead = new TalonFX(TransportConstant.CANID_SHOULDER_LEAD);
+    private final TalonFX shoulderMotorFollow1 = new TalonFX(TransportConstant.CANID_SHOULDER_FOLLOW_1);
+    private final TalonFX shoulderMotorFollow2 = new TalonFX(TransportConstant.CANID_SHOULDER_FOLLOW_2);
+    private final TalonFX elbowMotor = new TalonFX(TransportConstant.CANID_ELBOW);
     private final TalonFX wristMotor = new TalonFX(TransportConstant.CANID_WRIST);
 
 
     public Transport() {
-        armMotor.setNeutralMode(NeutralMode.Brake);
-        armMotor1.setNeutralMode(NeutralMode.Brake);
-        armMotor2.setNeutralMode(NeutralMode.Brake);
-        armMotor.setInverted(false);
-        armMotor1.setInverted(false);
-        armMotor2.setInverted(false);
-        pivot2Motor.setInverted(true);
-        armMotor1.follow(armMotor);
-        armMotor2.follow(armMotor);
-        armMotor.configForwardSoftLimitThreshold(Constants.TransportConstant.MAX_PIVOT_1_TICKS);
-        armMotor.configReverseSoftLimitThreshold(Constants.TransportConstant.MIN_PIVOT_1_TICKS);
-        armMotor.configReverseSoftLimitEnable(false, 0);
-        armMotor.configForwardSoftLimitEnable(false, 0);
-        pivot2Motor.configForwardSoftLimitThreshold(Constants.TransportConstant.MAX_PIVOT_2_TICKS);
-        pivot2Motor.configReverseSoftLimitThreshold(Constants.TransportConstant.MIN_PIVOT_2_TICKS);
-        pivot2Motor.configReverseSoftLimitEnable(true, 0);
-        pivot2Motor.configForwardSoftLimitEnable(true, 0);
+        shoulderMotorLead.setNeutralMode(NeutralMode.Brake);
+        shoulderMotorFollow1.setNeutralMode(NeutralMode.Brake);
+        shoulderMotorFollow2.setNeutralMode(NeutralMode.Brake);
+
+        shoulderMotorLead.setInverted(false);
+        //shoulderMotorFollow1.setInverted(false);
+        //shoulderMotorFollow2.setInverted(false);
+
+        elbowMotor.setInverted(true);
+
+        shoulderMotorFollow1.follow(shoulderMotorLead, false); // Might need to change the false
+        shoulderMotorFollow2.follow(shoulderMotorLead, false); // Might need to change the false
+
+        shoulderMotorLead.configForwardSoftLimitThreshold(Constants.TransportConstant.MAX_SHOULDER_TICKS);
+        shoulderMotorLead.configReverseSoftLimitThreshold(Constants.TransportConstant.MIN_SHOULDER_TICKS);
+        shoulderMotorLead.configReverseSoftLimitEnable(false, 0);
+        shoulderMotorLead.configForwardSoftLimitEnable(false, 0);
+
+        elbowMotor.configForwardSoftLimitThreshold(Constants.TransportConstant.MAX_ELBOW_TICKS);
+        elbowMotor.configReverseSoftLimitThreshold(Constants.TransportConstant.MIN_ELBOW_TICKS);
+        elbowMotor.configReverseSoftLimitEnable(true, 0);
+        elbowMotor.configForwardSoftLimitEnable(true, 0);
     }
 
-    public void setArmMotorPower(double power) {
-        armMotor.set(ControlMode.PercentOutput, power);
+    public void setShoulderMotorPower(double power) {
+        shoulderMotorLead.set(ControlMode.PercentOutput, power);
     }
 
 
-    public void setArmMotorPosition(double tick){
-        armMotor.set(ControlMode.Position, tick);
+    public void setShoulderMotorPosition(double tick){
+        shoulderMotorLead.set(ControlMode.Position, tick);
     }
 
-    public void setPivot2MotorPower(double power) {
-        pivot2Motor.set(ControlMode.PercentOutput, power);
+    public void setElbowMotorPower(double power) {
+        elbowMotor.set(ControlMode.PercentOutput, power);
     }
 
     public void setWristMotorPower(double power) {
         wristMotor.set(ControlMode.PercentOutput, power);
     }
 
-    public void setPivot2MotorPosition(double tick) {
-        pivot2Motor.set(ControlMode.Position, tick);
+    public void setElbowMotorPosition(double tick) {
+        elbowMotor.set(ControlMode.Position, tick);
     }
 }

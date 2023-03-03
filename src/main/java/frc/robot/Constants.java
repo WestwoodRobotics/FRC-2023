@@ -117,16 +117,16 @@ public final class Constants {
   }
 
   public static final class TransportConstant {
-    public static final int CANID_TRANSPORT = 20;
-    public static final int CANID_TRANSPORT1 = 15;
-    public static final int CANID_TRANSPORT2 = 22;
-    public static final int CANID_PIVOT_2 = 13;
+    public static final int CANID_SHOULDER_LEAD = 20;
+    public static final int CANID_SHOULDER_FOLLOW_1 = 15;
+    public static final int CANID_SHOULDER_FOLLOW_2 = 22;
+    public static final int CANID_ELBOW = 13;
     public static final int CANID_WRIST = 34;
 
-    public static final double MAX_PIVOT_1_TICKS = 360000;
-    public static final double MAX_PIVOT_2_TICKS = 420000;
-    public static final double MIN_PIVOT_1_TICKS = 0;
-    public static final double MIN_PIVOT_2_TICKS = 0;
+    public static final double MAX_SHOULDER_TICKS = 360000;
+    public static final double MAX_ELBOW_TICKS = 420000;
+    public static final double MIN_SHOULDER_TICKS = 0;
+    public static final double MIN_ELBOW_TICKS = 0;
 
 
   }
@@ -150,9 +150,12 @@ public final class Constants {
     public static final int kFrontRightTurningMotorPort = 18;//with main
     public static final int kBackRightTurningMotorPort = 19;//With main
 
-    // PWM ports for the intake motors
+    /*
+    No Intake Motors Yet
+
     public static final int kIntakeMotorPort = 0; //TODO: Update with actual PWM port
     public static final int kIntakeMotorEncoderPort = 0;//TODO: Update with actual PWM port
+    */
 
     // USB port of the driver controller
     public static final int XboxController1 = 1;//With main
