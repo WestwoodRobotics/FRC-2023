@@ -13,14 +13,15 @@ import frc.robot.subsystems.intake.Intake;
 public class IntakeInRoller extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final Intake m_intake;
+
   
   /*
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public IntakeInRoller(Intake m_intake) {
-    this.m_intake = m_intake;
+  public IntakeInRoller(Intake intake) {
+    this.m_intake = intake;
 
 
     // Use addRequirements() here to declare subsystem dependencies.
@@ -30,6 +31,7 @@ public class IntakeInRoller extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    m_intake.neutralMode();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
