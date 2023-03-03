@@ -10,12 +10,7 @@ import frc.robot.Constants;
 public class IntakeModule extends SubsystemBase {
   // Motor for the intake mechanism
   private final WPI_TalonFX intakeMotor;
-  // Encoder for measuring the position of the intake motor
-  //private double intakeEncoderPosition;
-
-  // Encoder for measuring the velocity of the intake motor
-  //private double intakeEncoderVelocity;
-
+  
   // Constructor for initializing the intake module
   public IntakeModule() {
     intakeMotor = new WPI_TalonFX(Constants.IntakeConstants.CANID_INTAKE);
