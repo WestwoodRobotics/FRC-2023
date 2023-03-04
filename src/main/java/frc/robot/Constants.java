@@ -102,10 +102,26 @@ public final class Constants {
   }
 
   public static final class IntakeConstants {
+    public static final int CANID_INTAKE = 23;
+  }
+
+  public static final class TransportConstant {
+    public static final int CANID_SHOULDER_LEAD = 20;
+    public static final int CANID_SHOULDER_FOLLOW_1 = 15;
+    public static final int CANID_SHOULDER_FOLLOW_2 = 22;
+    public static final int CANID_ELBOW = 13;
+    public static final int CANID_WRIST = 34;
+
+    public static final double MAX_SHOULDER_TICKS = 360000;
+    public static final double MAX_ELBOW_TICKS = 420000;
+    public static final double MIN_SHOULDER_TICKS = 0;
+    public static final double MIN_ELBOW_TICKS = 0;
+
 
   }
 
   public static final class PortConstants {
+
     // CAN Coder Ports
     public static final int kFrontLeftCANCoderPort = 2;
     public static final int kFrontRightCANCoderPort = 4;
@@ -119,6 +135,14 @@ public final class Constants {
     public static final int kBackRightDriveMotorPort = 17;
 
     // PWM ports for the steer motors
+
+    /*
+    No Intake Motors Yet
+
+    public static final int kIntakeMotorPort = 0; //TODO: Update with actual PWM port
+    public static final int kIntakeMotorEncoderPort = 0;//TODO: Update with actual PWM port
+    */
+    
     public static final int kFrontLeftSteerMotorPort = 11;
     public static final int kFrontRightSteerMotorPort = 14;
     public static final int kBackLeftSteerMotorPort = 18;

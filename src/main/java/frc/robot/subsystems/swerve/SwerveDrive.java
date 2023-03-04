@@ -37,6 +37,7 @@ public class SwerveDrive extends SubsystemBase {
   public SwerveDrive() {
     setName("SwerveDrive");
     gyro = new Gyro();
+
     // Front Left TODO: WHYYYYY ARE THESE SO BAD???
     modules[1] = new SwerveModule(PortConstants.kFrontLeftDriveMotorPort,
       PortConstants.kFrontLeftSteerMotorPort, PortConstants.kFrontLeftCANCoderPort, 0);
