@@ -63,18 +63,10 @@ public class DriveConstantControlCommand extends CommandBase {
     leftX *= maxSpeed;
     leftY *= maxSpeed;
     rightX *= maxAngularSpeed;
-    // if left stick is active, drive in that direction
-    if ((leftRadius >= OIConstants.kDeadzoneRectangle) && (rightRadius >= OIConstants.kDeadzoneRectangle)) {
+    
+    // if left stick is active and right stick is active, drive in that direction
+    if ((leftRadius >= OIConstants.kDeadzoneRectangle) || (rightRadius >= OIConstants.kDeadzoneRectangle)) {
       m_swerveDrive.drive(leftX, leftY, rightX, true);
-    } else if (rightRadius >= OIConstants.kDeadzoneRectangle) {
-      // otherwise, if right stick is active, turn in that direction
-      m_swerveDrive.drive(0, 0, rightX, true);
-    } else if (controller.getAButton()) {
-      // otherwise, if A is pressed, turn the wheels right slowly
-      m_swerveDrive.drive(0, 0, 0.1, true);
-    } else if (leftRadius >= OIConstants.kDeadzoneRectangle) {
-      // otherwise, stop drive motors
-      m_swerveDrive.drive(leftX, leftY, 0, true);
     } else {
       m_swerveDrive.zeroDrive();
     }
