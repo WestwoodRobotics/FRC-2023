@@ -1,230 +1,210 @@
 package frc.robot.subsystems.swerve;
 
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import frc.robot.Constants.DriveConstants;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.FeedForwardConstants;
 import frc.robot.Constants.FilePathConstants;
 import frc.robot.Constants.ModuleConstants;
+import frc.robot.Constants.PIDConstants;
 import frc.robot.util.Conversions;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 // This class represents a swerve module, which consists of a drive motor and a steer motor
 // It also includes encoders and PID controllers for both the drive and steer motors, as well as an absolute encoder
 
-public class SwerveModule {
-  private final WPI_TalonSRX driveMotor; // Motor for driving
-  private final WPI_TalonSRX steerMotor; // Motor for steering
-  private final double driveEncoderPosition; // Encoder for measuring drive motor position
-  private final double driveEncoderVelocity; // Encoder for measuring drive motor velocity
-  private double steerEncoderPosition; // Encoder for measuring drive motor position
-  private final double steerEncoderVelocity; // Encoder for measuring drive motor velocity
-  private PIDController drivePIDController; // PID Controller for the drive motor
-  private final PIDController steerPIDController; // PID Controller for the steer motor
+public class SwerveModule extends SubsystemBase {
+  private static double[] turnEncoderOffsets;
+  private final int moduleNum;
+  private final TalonFX driveMotor;
+  private final TalonFX steerMotor;
   private final CANCoder absoluteEncoder; // Absolute Encoder
-  private final boolean absoluteEncoderReversed; // Boolean for determining if the absolute encoder is reversed
-  private double absoluteEncoderOffsetRad; // Offset for the absolute encoder
-  private double driveMotorOutput; // Output for the drive motor
-  private double turningMotorOutput; // Output for the turning motor
-  private SimpleMotorFeedforward driveMotorFeedForward; // Feedforward for the drive motor
-  private final boolean isDriveMotorReversed; // Boolean for determining if the drive motor is reversed
-  private final boolean isSteerMotorReversed; // Boolean for determining if the steer motor is reversed
-  private Pose2d swerveModulePose = new Pose2d();
+  private final PIDController drivePIDController; // PID Controller for the drive motor
+  private final SimpleMotorFeedforward driveMotorFeedForward; // Feedforward for the drive motor
 
-
-  // The constructor
-  /*
-   * @param driveMotorId The CAN ID of the drive motor
-   * @param steerMotorId The CAN ID of the steer motor
-   * @param driveMotorReversed Boolean for determining if the drive motor is reversed
-   * @param steerMotorReversed Boolean for determining if the steer motor is reversed
-   * @param absoluteEncoderId The CAN ID of the absolute encoder
-   * @param absoluteEncoderOffset The offset for the absolute encoder
-   * @param absoluteEncoderReversed Boolean for determining if the absolute encoder is reversed
-   * @param ModuleNum The module number (1-4)
+  /**
+   * @param driveMotorCANId      The CAN ID of the drive motor
+   * @param steerMotorCANId      The CAN ID of the steer motor
+   * @param absoluteEncoderCANId The CAN ID of the absolute encoder
+   * @param moduleNum            The module number
    */
-  public SwerveModule(int driveMotorCANId,
-                      int steerMotorCANId,
-                      boolean isDriveMotorReversed,
-                      boolean isSteerMotorReversed,
-                      int absoluteEncoderCANId,
-                      double absoluteEncoderOffset,
-                      boolean absoluteEncoderReversed
-  ) {
+  public SwerveModule(int driveMotorCANId, int steerMotorCANId, int absoluteEncoderCANId, int moduleNum) {
+    this.moduleNum = moduleNum;
 
+    // Initialize the can devices using provided ids
+    driveMotor = new WPI_TalonFX(driveMotorCANId);
+    steerMotor = new WPI_TalonFX(steerMotorCANId);
 
-    // Initialize the drive and steer motors using the provided CAN IDs
-    driveMotor = new WPI_TalonSRX(driveMotorCANId);
-    steerMotor = new WPI_TalonSRX(steerMotorCANId);
-
-
-    // Initialize the absolute encoder using the provided CAN ID
-    this.absoluteEncoderOffsetRad = absoluteEncoderOffset;
-    this.absoluteEncoderReversed = absoluteEncoderReversed;
     absoluteEncoder = new CANCoder(absoluteEncoderCANId);
 
-    this.isDriveMotorReversed = isDriveMotorReversed;
-    this.isSteerMotorReversed = isSteerMotorReversed;
-
-    // Set the inversion for the drive and steer motors based on the provided booleans
-    driveMotor.setInverted(isDriveMotorReversed);
-    steerMotor.setInverted(isSteerMotorReversed);
-
-    // Set the neutral mode for the drive and steer motors to brake
     driveMotor.setNeutralMode(NeutralMode.Brake);
     steerMotor.setNeutralMode(NeutralMode.Coast);
+    steerMotor.setInverted(false);
+
     driveMotor.clearStickyFaults();
     steerMotor.clearStickyFaults();
 
-    // Get the initial position and velocity of the encoders
-    driveEncoderPosition = driveMotor.getSelectedSensorPosition();
-    steerEncoderPosition = steerMotor.getSelectedSensorPosition();
-    driveEncoderVelocity = driveMotor.getSelectedSensorVelocity();
-    steerEncoderVelocity = steerMotor.getSelectedSensorVelocity();
+    TalonFXConfiguration swerveAngleFXConfig = new TalonFXConfiguration();
 
+    /* Swerve Angle Motor Configurations */
+    SupplyCurrentLimitConfiguration angleSupplyLimit = new SupplyCurrentLimitConfiguration(true, 20, 30, 0.1);
 
-    // Set the encoder coefficients for the drive and steer motors
-    driveMotor.configSelectedFeedbackCoefficient(ModuleConstants.kDriveEncoderRot2Meter);
-    driveMotor.configSelectedFeedbackCoefficient(ModuleConstants.kDriveEncoderRPM2MeterPerSec);
-    steerMotor.configSelectedFeedbackCoefficient(ModuleConstants.kSteerEncoderRot2Rad);
-    steerMotor.configSelectedFeedbackCoefficient(ModuleConstants.kSteerEncoderRPM2RadPerSec);
+    swerveAngleFXConfig.slot0.kP = PIDConstants.kPSwerveAngle;
+    swerveAngleFXConfig.slot0.kI = PIDConstants.kISwerveAngle;
+    swerveAngleFXConfig.slot0.kD = PIDConstants.kDSwerveAngle;
+    swerveAngleFXConfig.slot0.kF = 0.0;
+    swerveAngleFXConfig.supplyCurrLimit = angleSupplyLimit;
 
-    // Initialize the drive and steer PID controllers using the constants from DriveConstants
-    drivePIDController = new PIDController(DriveConstants.kPSwerveDriveDriveMotor, DriveConstants.kISwerveDriveDriveMotor, DriveConstants.kDSwerveDriveDriveMotor);
-    steerPIDController = new PIDController(DriveConstants.kPSwerveDriveSteerMotor, DriveConstants.kISwerveDriveSteerMotor, DriveConstants.kDSwerveDriveSteerMotor);
-    steerPIDController.enableContinuousInput(-Math.PI, Math.PI);
+    drivePIDController = new PIDController(PIDConstants.kPSwerveDriveDriveMotor,
+      PIDConstants.kISwerveDriveDriveMotor, PIDConstants.kDSwerveDriveDriveMotor);
 
-    // Reset the encoder positions to zero
-    driveMotor.setSelectedSensorPosition(0); // Resets the  Drive Motor Encoder
-    steerMotor.setSelectedSensorPosition(0); // Resets the Steer Motor Encoder
+    steerMotor.configFactoryDefault();
+    steerMotor.configAllSettings(swerveAngleFXConfig);
+
+    resetToAbsolute();
 
     // Setting Integrator Range (I in PID) | (Makes sure we don't go over the voltage limit)
     drivePIDController.setIntegratorRange(-ModuleConstants.kFalcon500Voltage, ModuleConstants.kFalcon500Voltage);
+
+    this.driveMotorFeedForward = new SimpleMotorFeedforward(FeedForwardConstants.kSwerveDriveDriveMotorStaticGainConstant, FeedForwardConstants.kSwerveDriveDriveMotorVelocityGainConstant, FeedForwardConstants.kSwerveDriveDriveMotorAccelerationGainConstant);
   }
 
-  //Accessor Methods for private instance variables
-  public double getDriveEncoderPosition() {
-    return driveEncoderPosition;
-  }
+  /*
+   * Gets the persisted encoder offset from the previous robot session.
+   *
+   * @return Absolute encoder's offset (in degrees) from 0 (forward).
+   */
 
-  public double getSteerEncoderPosition() {
-    return steerEncoderPosition;
-  }
+  private double getEncoderOffset() {
+    if (turnEncoderOffsets == null) {
+      try {
+        // Reads all the lines of the file, and ignores any data beyond the Standard
+        // Character Set
+        List<String> lines = Files.readAllLines(Paths.get(FilePathConstants.steerEncoderOffsetSavesPath),
+          StandardCharsets.UTF_8);
+        turnEncoderOffsets = lines.stream().limit(4).mapToDouble(Double::parseDouble).toArray();
+      } catch (IOException | NumberFormatException e) {
+        System.out.println(e.toString());
+        System.out.println(
+          "\u001b[31;1mFailed to read turn encoder offsets from file, please align wheels manually, then reset encoders.\u001b[0m");
 
-  public double getDriveEncoderVelocity() {
-    return driveEncoderVelocity;
+        turnEncoderOffsets = new double[4];
+        Arrays.fill(turnEncoderOffsets, 0);
+      }
+    }
+    return turnEncoderOffsets[moduleNum];
   }
-
-  public double getSteerEncoderVelocity() {
-    return steerEncoderVelocity;
-  }
-
-  public boolean getAbsoluteEncoderReversed() {
-    return absoluteEncoderReversed;
-  }
-
-  public double getTurningMotorOutput() {
-    return turningMotorOutput;
-  }
-
-  public boolean getIsDriveMotorReversed() {
-    return isDriveMotorReversed;
-  }
-
-  public boolean getIsSteerMotorReversed() {
-    return isSteerMotorReversed;
-  }
-
 
   private void saveEncoderOffset() {
-    try {
-      BufferedWriter writer = new BufferedWriter(new FileWriter(FilePathConstants.steerEncoderOffsetSavesPath));
-      for (int i = 0; i < 4; i++) {
-        writer.write(Double.toString(this.absoluteEncoderOffsetRad));
+    try (BufferedWriter writer = new BufferedWriter(
+      new FileWriter(FilePathConstants.steerEncoderOffsetSavesPath))) {
+      for (double encoderOffset : turnEncoderOffsets) {
+        writer.write(Double.toString(encoderOffset));
         writer.newLine();
       }
-      writer.close();
     } catch (IOException e) {
+      System.out.println(e.toString());
       System.out.println("\u001b[31;1mFailed to write turn encoder offsets to file.\u001b[0m");
     }
   }
 
-  private void loadEncoderOffset() {
-    if (absoluteEncoderOffsetRad == 0.0) {
-      System.out.println("\u001b[31;1mAbsolute encoder offset is zero. Loading from file.\u001b[0m");
-      try {
-        BufferedReader reader = new BufferedReader(new FileReader(FilePathConstants.steerEncoderOffsetSavesPath));
-        for (int i = 0; i < 4; i++) {
-          this.absoluteEncoderOffsetRad = Double.parseDouble(reader.readLine());
-        }
-        reader.close();
-      } catch (IOException e) {
-        System.out.println("\u001b[31;1mFailed to read turn encoder offsets from file.\u001b[0m");
-      }
-    }
-  }
-
   public void setEncoderOffset() {
-    if (absoluteEncoderOffsetRad == 0.0) {
-      getEncoderOffset(); //Loads the offset
+    if (turnEncoderOffsets == null) {
+      getEncoderOffset();
     }
 
-    double currentAngle = (steerMotor.getSelectedSensorPosition() / (360.0 / (ModuleConstants.kSteerMotorGearRatio * 2048.0))); //Converts the encoder ticks to angle
-    double offset = absoluteEncoder.getAbsolutePosition() - currentAngle; // Gets the offset
-    steerEncoderPosition = offset; //Sets the offset to the encoder position
-    saveEncoderOffset(); //Saves the offset
+    double currentAngle = Conversions.falconToDegrees(steerMotor.getSelectedSensorPosition(), ModuleConstants.kSteerMotorGearRatio);
+    double offset = absoluteEncoder.getAbsolutePosition() - currentAngle;
+    turnEncoderOffsets[moduleNum] = offset;
+
+    saveEncoderOffset();
+    resetToAbsolute();
   }
 
-  private double getEncoderOffset() {
-    if (absoluteEncoderOffsetRad == 0.0) {
-      loadEncoderOffset();
-    }
-    return absoluteEncoderOffsetRad;
-  }
-
-  public void setAbsoluteEncoderAsBaseline() {
+  private void resetToAbsolute() {
     double offset = getEncoderOffset();
     double currentAngle = (absoluteEncoder.getAbsolutePosition() + 360 - offset) % 360;
-    double absolutePosition = currentAngle * (360.0 / (ModuleConstants.kSteerMotorGearRatio * 2048.0)); //Converts the angle to encoder ticks
+    double absolutePosition = Conversions.degreesToFalcon(currentAngle, ModuleConstants.kSteerMotorGearRatio);
     steerMotor.setSelectedSensorPosition(absolutePosition);
+    System.out.printf("\u001b[35m====Current angle: %f, offset: %f\u001b%n  Steer motor angle: %f[0m%n", currentAngle, offset, Conversions.falconToDegrees(steerMotor.getSelectedSensorPosition(), ModuleConstants.kSteerMotorGearRatio));
+    System.out.println(currentAngle - Conversions.falconToDegrees(Conversions.degreesToFalcon(currentAngle, ModuleConstants.kSteerMotorGearRatio), ModuleConstants.kSteerMotorGearRatio));
   }
 
+  public void resetEncoderOffset() {
+    for (int i = 0; i < 4; i++) {
+      turnEncoderOffsets[i] = 0;
+    }
+    resetToAbsolute();
+  }
+
+  /**
+   * Get robot velocity
+   * @return return velocity in meters per second
+   */
+
+  // TODO: this is WRONG
   public double getVelocity() {
-    return driveMotor.getSelectedSensorVelocity() * ModuleConstants.kDriveEncoderRot2Meter * 10;
+    return Conversions.falconToRadians(driveMotor.getSelectedSensorVelocity(), ModuleConstants.kDriveMotorGearRatio) * Math.PI * ModuleConstants.kWheelDiameterMeters * 10;
   }
 
   public SwerveModuleState getState() {
-    return new SwerveModuleState(
-      getVelocity(),
-      Rotation2d.fromDegrees(steerMotor.getSelectedSensorPosition() * (360.0 / (ModuleConstants.kSteerMotorGearRatio * 2048.0)))); //Converts the encoder ticks to angle
+    return new SwerveModuleState(getVelocity(), Rotation2d.fromDegrees(
+      steerMotor.getSelectedSensorPosition() * (360.0 / (ModuleConstants.kSteerMotorGearRatio * 2048.0)))); // COnverts the encoder ticks to angle
   }
 
+  /**
+   * Sets the desired state of the swerve module, using the PID controllers to
+   * calculate the necessary motor outputs.
+   *
+   * @param state The desired state.
+   */
+
   public void setDesiredState(SwerveModuleState state) {
-    state.speedMetersPerSecond = state.speedMetersPerSecond * 204800 / 6.12;
+//    state.speedMetersPerSecond = state.speedMetersPerSecond * 204800 / 6.12;
 
-    double currentAngle = steerMotor.getSelectedSensorPosition() * (360.0 / (ModuleConstants.kSteerMotorGearRatio * 2048.0));
+    double currentAngle = Conversions.falconToRadians(steerMotor.getSelectedSensorPosition(),
+      ModuleConstants.kSteerMotorGearRatio);
 
-    SwerveModuleState outputState = SwerveModuleState.optimize(state, new Rotation2d(currentAngle));
+    SwerveModuleState outputState = CTREModuleState.optimize(state, new Rotation2d(currentAngle));
 
     double angleDiff = currentAngle - outputState.angle.getRadians();
+//    double targetDriveSpeed = outputState.speedMetersPerSecond * ModuleConstants.kDriveEncoderRot2Meter * 10 * Math.cos(angleDiff);
     double targetDriveSpeed = outputState.speedMetersPerSecond * Math.cos(angleDiff);
 
     double drive_vel = getVelocity();
-    driveMotorOutput = drivePIDController.calculate(drive_vel, targetDriveSpeed);
-
+    // Output for the drive motor (in falcon ticks)
+    double driveMotorOutput = drivePIDController.calculate(drive_vel, targetDriveSpeed);
+    // todo: this doesn't work at all (always returns 0)
     double driveFeedforward = driveMotorFeedForward.calculate(targetDriveSpeed);
 
-    driveMotor.set(ControlMode.PercentOutput, (isDriveMotorReversed ? -1 : 1) * (driveFeedforward + driveMotorOutput));
-    steerMotor.set(ControlMode.Position, outputState.angle.getDegrees() / (360.0 / (ModuleConstants.kSteerMotorGearRatio * 2048.0))); //Converts the angle to encoder ticks
+//    System.out.printf("[%d] Current angle: %f6, target angle: %f6\n", moduleNum, currentAngle, outputState.angle.getRadians());
+
+//    if (driveFeedforward != 0) System.out.printf("Drive velocity: %f -- Target speed: %f%n", drive_vel, targetDriveSpeed);
+//    if (driveFeedforward != 0) System.out.printf("Drive feed forward: %f -- Drive motor output: %f%n", driveFeedforward, driveMotorOutput);
+    driveMotor.set(ControlMode.PercentOutput, driveFeedforward + driveMotorOutput);
+    steerMotor.set(ControlMode.Position,
+      Conversions.degreesToFalcon(outputState.angle.getDegrees(), ModuleConstants.kSteerMotorGearRatio));
   }
 
   /**
@@ -239,29 +219,32 @@ public class SwerveModule {
     steerMotor.setNeutralMode(NeutralMode.Brake);
   }
 
-  public Pose2d getPose() {
-    return swerveModulePose;
+  public void resetEncoders() {
+    while (driveMotor.getSelectedSensorPosition() != 0) {
+      driveMotor.setSelectedSensorPosition(0);
+    }
+    while (steerMotor.getSelectedSensorPosition() != 0) {
+      steerMotor.setSelectedSensorPosition(0);
+    }
+    while (absoluteEncoder.getPosition() != 0){
+      absoluteEncoder.setPosition(0);
+    }
+
+    ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+    scheduler.schedule(this::saveEncoderOffset, 100, TimeUnit.MILLISECONDS);
+    scheduler.schedule(this::resetToAbsolute, 300, TimeUnit.MILLISECONDS);
   }
 
-  public void setPose(Pose2d pose) {
-    swerveModulePose = pose;
-  }
-
-  public void periodic() {
-    // This method will be called once per scheduler run
+  public double getAngleDegrees() {
+    return Conversions.falconToDegrees(steerMotor.getSelectedSensorPosition(), ModuleConstants.kSteerMotorGearRatio);
   }
 
   public SwerveModulePosition getPosition() {
-    double position =
-      Conversions.FalconToMeters(
-        driveMotor.getSelectedSensorPosition(),
-        ModuleConstants.kWheelDiameterMeters,
-        ModuleConstants.kDriveMotorGearRatio);
-    Rotation2d angle =
-      Rotation2d.fromDegrees(
-        Conversions.falconToDegrees(
-          steerMotor.getSelectedSensorPosition(),
-          ModuleConstants.kSteerMotorGearRatio));
+    double position = Conversions.falconToMeters(driveMotor.getSelectedSensorPosition(),
+      ModuleConstants.kWheelDiameterMeters, ModuleConstants.kDriveMotorGearRatio);
+    Rotation2d angle = Rotation2d.fromDegrees(Conversions.falconToDegrees(steerMotor.getSelectedSensorPosition(),
+      ModuleConstants.kSteerMotorGearRatio));
     return new SwerveModulePosition(position, angle);
   }
+
 }

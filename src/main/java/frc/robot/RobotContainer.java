@@ -5,12 +5,19 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
+
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WrapperCommand;
+
 import frc.robot.Constants.PortConstants;
 import frc.robot.commands.TransportCommands.UseArm;
 import frc.robot.commands.Intake.UseIntake;
@@ -27,13 +34,15 @@ import frc.robot.subsystems.transport.Transport;
  */
 public class RobotContainer {
 
-  //THe XBox Controllers are being initialized here
+  // The XBox Controllers are being initialized here
   private final XboxController primaryController = new XboxController(PortConstants.XboxController1);
-  private final XboxController secondaryController = new XboxController(PortConstants.XboxController2);
+  // private final XboxController secondaryController = new XboxController(PortConstants.XboxController2);
+
   // The robot's subsystems and commands are defined here...
    private final SwerveDrive SwerveDriveSystem = new SwerveDrive();
   private final Transport transport = new Transport();
   private final IntakeModule intake  = new IntakeModule();
+
 
   //private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem); <--- This is an example "command" implementation
 
@@ -45,12 +54,11 @@ public class RobotContainer {
   private final JoystickButton bButton = new JoystickButton(primaryController, XboxController.Button.kB.value);
   private final JoystickButton aButton = new JoystickButton(primaryController, XboxController.Button.kA.value);
 
-  //The buttons on the Secondary Xbox Controller are being initialized here
-  private final JoystickButton startButton = new JoystickButton(primaryController, XboxController.Button.kStart.value);
-  private final JoystickButton hangarYButton = new JoystickButton(secondaryController, XboxController.Button.kY.value);
-  private final JoystickButton hangarXButton = new JoystickButton(secondaryController, XboxController.Button.kX.value);
-  private final JoystickButton hangarBButton = new JoystickButton(secondaryController, XboxController.Button.kB.value);
-  private final JoystickButton hangarAButton = new JoystickButton(secondaryController, XboxController.Button.kA.value);
+  // Instantiating the timer
+  private final Timer timer = new Timer();
+
+
+  // private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem); <--- This is an example "command" implementation
 
 
   /**
@@ -74,18 +82,45 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
- 
+   
+  private void configureButtonBindings() {
+
+    // The following code is for the primary controller
+    WrapperCommand resetMotorEncoderCommand = new InstantCommand(SwerveDriveSystem::resetAllEncoders).ignoringDisable(true);
+    resetMotorEncoderCommand.setName("Recalibrate Motor Encoder positions");
+
+    WrapperCommand printAssumedCurrentWheelAngles = new InstantCommand(SwerveDriveSystem::printSteerAngles).ignoringDisable(true);
+    printAssumedCurrentWheelAngles.setName("Print Current Wheel Angles");
+
+    SmartDashboard.putData("Reset Motor Encoders:", resetMotorEncoderCommand);
+
+    // Returns positive values if the wheel turned clockwise from its starting position. (Starting position is the wheel's front facing the front of the robot)
+    SmartDashboard.putData("Current Presumed Steer Motor Angles:", printAssumedCurrentWheelAngles);
+  }
 
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
    */
+
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     DriveConstantControlCommand x = new DriveConstantControlCommand(SwerveDriveSystem, primaryController);
     //SwerveDriveSystem.setDefaultCommand(x);
     return x;
+
+  public void teleopTimer() {
+    timer.reset();
+    timer.start();
+  }
+
+  public void periodic() {
+    SmartDashboard.putNumber("Timer:", 135 - timer.get());
+  }
+
+  public void disabledInit() {
+    System.out.println("Saving encoder offsets");
+    SwerveDriveSystem.saveEncoderOffsets();
+
   }
 }

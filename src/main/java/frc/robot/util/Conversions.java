@@ -8,7 +8,7 @@ public class Conversions {
    * @return Degrees of Rotation of Mechanism
    */
   public static double falconToDegrees(double counts, double gearRatio) {
-    return counts * (360.0 / (gearRatio * 2048.0));
+    return counts * (360.0 / (2048));
   }
 
   /**
@@ -25,7 +25,7 @@ public class Conversions {
    * @param gearRatio Gear Ratio between Falcon and Mechanism
    * @return Radians of Rotation of Mechanism
    */
-  public static double FalconToRadians(double counts, double gearRatio) {
+  public static double falconToRadians(double counts, double gearRatio) {
     return counts * (2 * Math.PI / (gearRatio * 2048.0));
   }
 
@@ -79,11 +79,12 @@ public class Conversions {
    * @param gearRatio     Gear Ratio between Falcon and Mechanism (set to 1 for Falcon RPM)
    * @return Meters traveled
    */
-  public static double FalconToMeters(double falconTicks, double circumference, double gearRatio) {
+  public static double falconToMeters(double falconTicks, double circumference, double gearRatio) {
     double wheelRevs = (falconTicks / 2048.0) / gearRatio;
     double meters = wheelRevs * circumference;
     return meters;
   }
+
 
   public static double deadZoneSquare(double input, double deadband) {
     if (Math.abs(input) < deadband) {
@@ -92,5 +93,8 @@ public class Conversions {
     else {
       return Math.copySign(Math.pow(input, 2), input);
     }
+
+  public static double radiansToDegrees(double radians, double gearRatio){
+    return radians * (360.0 / (gearRatio * 2048.0));
   }
 }
