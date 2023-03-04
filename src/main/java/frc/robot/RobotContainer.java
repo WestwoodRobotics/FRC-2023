@@ -108,6 +108,7 @@ public class RobotContainer {
     DriveConstantControlCommand x = new DriveConstantControlCommand(SwerveDriveSystem, primaryController);
     //SwerveDriveSystem.setDefaultCommand(x);
     return x;
+  }
 
   public void teleopTimer() {
     timer.reset();
