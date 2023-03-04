@@ -9,11 +9,11 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.*;
+import frc.robot.util.Conversions.*;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.PortConstants;
-import frc.robot.util.Conversions;
+
 
 import java.util.Arrays;
 // import odometry from wpi

@@ -36,6 +36,7 @@ public class RobotContainer {
 
   // The XBox Controllers are being initialized here
   private final XboxController primaryController = new XboxController(PortConstants.XboxController1);
+  private final XboxController secondaryController = new XboxController(PortConstants.XboxController2);
   // private final XboxController secondaryController = new XboxController(PortConstants.XboxController2);
 
   // The robot's subsystems and commands are defined here...
@@ -46,13 +47,6 @@ public class RobotContainer {
 
   //private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem); <--- This is an example "command" implementation
 
-  // The buttons on the Primary Xbox Controller are being initialized here
-  private final JoystickButton rBumper = new JoystickButton(primaryController, XboxController.Button.kRightBumper.value);
-  private final JoystickButton lBumper = new JoystickButton(primaryController, XboxController.Button.kLeftBumper.value);
-  private final JoystickButton yButton = new JoystickButton(primaryController, XboxController.Button.kY.value);
-  private final JoystickButton xButton = new JoystickButton(primaryController, XboxController.Button.kX.value);
-  private final JoystickButton bButton = new JoystickButton(primaryController, XboxController.Button.kB.value);
-  private final JoystickButton aButton = new JoystickButton(primaryController, XboxController.Button.kA.value);
 
   // Instantiating the timer
   private final Timer timer = new Timer();
@@ -72,8 +66,8 @@ public class RobotContainer {
 
   private void setDefaultCommands() {
     SwerveDriveSystem.setDefaultCommand(new DriveConstantControlCommand(SwerveDriveSystem, primaryController));
-    transport.setDefaultCommand(new UseArm(primaryController, transport));
-    intake.setDefaultCommand(new UseIntake(primaryController, intake));
+    transport.setDefaultCommand(new UseArm(secondaryController, transport));
+    intake.setDefaultCommand(new UseIntake(secondaryController, intake));
   }
 
   /**
@@ -83,7 +77,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
    
-  private void configureButtonBindings() {
+  private void smartDashboardConfig() {
 
     // The following code is for the primary controller
     WrapperCommand resetMotorEncoderCommand = new InstantCommand(SwerveDriveSystem::resetAllEncoders).ignoringDisable(true);
