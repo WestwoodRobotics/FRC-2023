@@ -12,6 +12,7 @@ import frc.robot.util.Conversions;
 import frc.robot.Constants.*;
 
 public class Transport extends SubsystemBase {
+
     private final TalonFX shoulderMotorLead = new TalonFX(PortConstants.kShoulderLeadMotorPort);
     private final TalonFX shoulderMotorFollow1 = new TalonFX(PortConstants.kShoulderFollow1MotorPort);
     private final TalonFX shoulderMotorFollow2 = new TalonFX(PortConstants.kShoulderFollow2MotorPort);
@@ -107,11 +108,13 @@ public class Transport extends SubsystemBase {
     
 
     public void printAllMotorCalculatedAngles(){
-        System.out.println("\n Shoulder Motor Lead Angle: " + getAngleDegrees(shoulderMotorLead)
-                         + "\n Shoulder Motor Follow 1 Angle: " + getAngleDegrees(shoulderMotorFollow1)
-                         + "\n Shoulder Motor Follow 2 Angle: " + getAngleDegrees(shoulderMotorFollow2)
-                         + "\n Elbow Motor Angle: " + getAngleDegrees(elbowMotor)
-                         + "\n Wrist Motor Angle: " + getAngleDegrees(wristMotor));
+        System.out.println("\n Shoulder Motor Lead Angle (Degrees): " + getAngleDegrees(shoulderMotorLead)
+                         + "\n Shoulder Motor Follow 1 Angle (Degrees): " + getAngleDegrees(shoulderMotorFollow1)
+                         + "\n Shoulder Motor Follow 2 Angle (Degrees): " + getAngleDegrees(shoulderMotorFollow2)
+
+                         //Value will be negative because we have set the "setInverted" value for Elbow Motor earlier in the file
+                         + "\n Elbow Motor Angle (Degrees): " + getAngleDegrees(elbowMotor) 
+                         + "\n Wrist Motor Angle (Degrees): " + getAngleDegrees(wristMotor));
     }
 
 

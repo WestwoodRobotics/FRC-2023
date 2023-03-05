@@ -138,12 +138,7 @@ public final class Constants {
 
     // PWM ports for the steer motors
 
-    /*
-    No Intake Motors Yet
 
-    public static final int kIntakeMotorPort = 0; //TODO: Update with actual PWM port
-    public static final int kIntakeMotorEncoderPort = 0;//TODO: Update with actual PWM port
-    */
     
     public static final int kFrontLeftSteerMotorPort = 11;
     public static final int kFrontRightSteerMotorPort = 14;
@@ -164,6 +159,13 @@ public final class Constants {
     public static final int kElbowMotorPort = 13;
     public static final int kWristMotorPort = 34;
     
+
+    /*
+    No Intake Motors Yet
+
+    public static final int kIntakeMotorPort = 0; //TODO: Update with actual PWM port
+    public static final int kIntakeMotorEncoderPort = 0;//TODO: Update with actual PWM port
+    */
   }
 
   public static final class FilePathConstants {
