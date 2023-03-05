@@ -15,7 +15,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.FeedForwardConstants;
 import frc.robot.Constants.FilePathConstants;
-import frc.robot.Constants.ModuleConstants;
+import frc.robot.Constants.SwerveModuleConstants;
 import frc.robot.Constants.PIDConstants;
 import frc.robot.util.Conversions;
 
@@ -85,7 +85,7 @@ public class SwerveModule extends SubsystemBase {
     resetToAbsolute();
 
     // Setting Integrator Range (I in PID) | (Makes sure we don't go over the voltage limit)
-    drivePIDController.setIntegratorRange(-ModuleConstants.kFalcon500Voltage, ModuleConstants.kFalcon500Voltage);
+    drivePIDController.setIntegratorRange(-SwerveModuleConstants.kFalcon500Voltage, SwerveModuleConstants.kFalcon500Voltage);
 
     this.driveMotorFeedForward = new SimpleMotorFeedforward(FeedForwardConstants.kSwerveDriveDriveMotorStaticGainConstant, FeedForwardConstants.kSwerveDriveDriveMotorVelocityGainConstant, FeedForwardConstants.kSwerveDriveDriveMotorAccelerationGainConstant);
   }
@@ -134,7 +134,7 @@ public class SwerveModule extends SubsystemBase {
       getEncoderOffset();
     }
 
-    double currentAngle = Conversions.falconToDegrees(steerMotor.getSelectedSensorPosition(), ModuleConstants.kSteerMotorGearRatio);
+    double currentAngle = Conversions.falconToDegrees(steerMotor.getSelectedSensorPosition(), SwerveModuleConstants.kSteerMotorGearRatio);
     double offset = absoluteEncoder.getAbsolutePosition() - currentAngle;
     turnEncoderOffsets[moduleNum] = offset;
 
@@ -145,10 +145,10 @@ public class SwerveModule extends SubsystemBase {
   private void resetToAbsolute() {
     double offset = getEncoderOffset();
     double currentAngle = (absoluteEncoder.getAbsolutePosition() + 360 - offset) % 360;
-    double absolutePosition = Conversions.degreesToFalcon(currentAngle, ModuleConstants.kSteerMotorGearRatio);
+    double absolutePosition = Conversions.degreesToFalcon(currentAngle, SwerveModuleConstants.kSteerMotorGearRatio);
     steerMotor.setSelectedSensorPosition(absolutePosition);
-    System.out.printf("\u001b[35m====Current angle: %f, offset: %f\u001b%n  Steer motor angle: %f[0m%n", currentAngle, offset, Conversions.falconToDegrees(steerMotor.getSelectedSensorPosition(), ModuleConstants.kSteerMotorGearRatio));
-    System.out.println(currentAngle - Conversions.falconToDegrees(Conversions.degreesToFalcon(currentAngle, ModuleConstants.kSteerMotorGearRatio), ModuleConstants.kSteerMotorGearRatio));
+    System.out.printf("\u001b[35m====Current angle: %f, offset: %f\u001b%n  Steer motor angle: %f[0m%n", currentAngle, offset, Conversions.falconToDegrees(steerMotor.getSelectedSensorPosition(), SwerveModuleConstants.kSteerMotorGearRatio));
+    System.out.println(currentAngle - Conversions.falconToDegrees(Conversions.degreesToFalcon(currentAngle, SwerveModuleConstants.kSteerMotorGearRatio), SwerveModuleConstants.kSteerMotorGearRatio));
   }
 
   public void resetEncoderOffset() {
@@ -165,12 +165,12 @@ public class SwerveModule extends SubsystemBase {
 
   // TODO: this is WRONG
   public double getVelocity() {
-    return Conversions.falconToRadians(driveMotor.getSelectedSensorVelocity(), ModuleConstants.kDriveMotorGearRatio) * Math.PI * ModuleConstants.kWheelDiameterMeters * 10;
+    return Conversions.falconToRadians(driveMotor.getSelectedSensorVelocity(), SwerveModuleConstants.kDriveMotorGearRatio) * Math.PI * SwerveModuleConstants.kWheelDiameterMeters * 10;
   }
 
   public SwerveModuleState getState() {
     return new SwerveModuleState(getVelocity(), Rotation2d.fromDegrees(
-      steerMotor.getSelectedSensorPosition() * (360.0 / (ModuleConstants.kSteerMotorGearRatio * 2048.0)))); // COnverts the encoder ticks to angle
+      steerMotor.getSelectedSensorPosition() * (360.0 / (SwerveModuleConstants.kSteerMotorGearRatio * 2048.0)))); // COnverts the encoder ticks to angle
   }
 
   /**
@@ -184,7 +184,7 @@ public class SwerveModule extends SubsystemBase {
 //    state.speedMetersPerSecond = state.speedMetersPerSecond * 204800 / 6.12;
 
     double currentAngle = Conversions.falconToRadians(steerMotor.getSelectedSensorPosition(),
-      ModuleConstants.kSteerMotorGearRatio);
+      SwerveModuleConstants.kSteerMotorGearRatio);
 
     SwerveModuleState outputState = CTREModuleState.optimize(state, new Rotation2d(currentAngle));
 
@@ -204,7 +204,7 @@ public class SwerveModule extends SubsystemBase {
 //    if (driveFeedforward != 0) System.out.printf("Drive feed forward: %f -- Drive motor output: %f%n", driveFeedforward, driveMotorOutput);
     driveMotor.set(ControlMode.PercentOutput, driveFeedforward + driveMotorOutput);
     steerMotor.set(ControlMode.Position,
-      Conversions.degreesToFalcon(outputState.angle.getDegrees(), ModuleConstants.kSteerMotorGearRatio));
+      Conversions.degreesToFalcon(outputState.angle.getDegrees(), SwerveModuleConstants.kSteerMotorGearRatio));
   }
 
   /**
@@ -236,14 +236,14 @@ public class SwerveModule extends SubsystemBase {
   }
 
   public double getAngleDegrees() {
-    return Conversions.falconToDegrees(steerMotor.getSelectedSensorPosition(), ModuleConstants.kSteerMotorGearRatio);
+    return Conversions.falconToDegrees(steerMotor.getSelectedSensorPosition(), SwerveModuleConstants.kSteerMotorGearRatio);
   }
 
   public SwerveModulePosition getPosition() {
     double position = Conversions.falconToMeters(driveMotor.getSelectedSensorPosition(),
-      ModuleConstants.kWheelDiameterMeters, ModuleConstants.kDriveMotorGearRatio);
+      SwerveModuleConstants.kWheelDiameterMeters, SwerveModuleConstants.kDriveMotorGearRatio);
     Rotation2d angle = Rotation2d.fromDegrees(Conversions.falconToDegrees(steerMotor.getSelectedSensorPosition(),
-      ModuleConstants.kSteerMotorGearRatio));
+      SwerveModuleConstants.kSteerMotorGearRatio));
     return new SwerveModulePosition(position, angle);
   }
 

@@ -14,7 +14,7 @@ public final class Constants {
    **/
 
   // This class contains constants for the swerve modules
-  public static final class ModuleConstants {
+  public static final class SwerveModuleConstants {
 
     // Drivetrain Dimensions
     public static final double kWheelDiameterMeters = Units.inchesToMeters(3);
@@ -105,15 +105,17 @@ public final class Constants {
     public static final int CANID_INTAKE = 23;
   }
 
-  public static final class TransportConstant {
-    public static final int CANID_SHOULDER_LEAD = 20;
-    public static final int CANID_SHOULDER_FOLLOW_1 = 15;
-    public static final int CANID_SHOULDER_FOLLOW_2 = 22;
-    public static final int CANID_ELBOW = 13;
-    public static final int CANID_WRIST = 34;
+  public static final class TransportConstants {
+    
+    public static final double kShoulderLeadMotorGearRatio = 1; //TODO: Update with actual gear ratio
+    public static final double kShoulderFollow1MotorGearRatio = 1; //TODO: Update with actual gear ratio
+    public static final double kShoulderFollow2MotorGearRatio = 1; //TODO: Update with actual gear ratio
+    public static final double kElbowMotorGearRatio = 1;  //TODO: Update with actual gear ratio
+    public static final double kWristMotorGearRatio = 1; //TODO: Update with actual gear ratio
 
     public static final double MAX_SHOULDER_TICKS = 360000;
     public static final double MAX_ELBOW_TICKS = 420000;
+
     public static final double MIN_SHOULDER_TICKS = 0;
     public static final double MIN_ELBOW_TICKS = 0;
 
@@ -154,12 +156,19 @@ public final class Constants {
 
     // PWM Port for Pigeon (Gyroscope)
     public static final int kPigeonPort = 5;
+
+    // PWM Port for the Transport
+    public static final int kShoulderLeadMotorPort = 20;
+    public static final int kShoulderFollow1MotorPort = 15;
+    public static final int kShoulderFollow2MotorPort = 22;
+    public static final int kElbowMotorPort = 13;
+    public static final int kWristMotorPort = 34;
+    
   }
 
   public static final class FilePathConstants {
     public static final String steerEncoderOffsetSavesPath = Filesystem.getOperatingDirectory().getPath()
         + "/steerEncoderOffsets.txt";
-
   }
 
   public static final class PIDConstants {

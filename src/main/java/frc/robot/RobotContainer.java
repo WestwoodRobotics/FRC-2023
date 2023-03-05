@@ -81,15 +81,25 @@ public class RobotContainer {
 
     // The following code is for the primary controller
     WrapperCommand resetMotorEncoderCommand = new InstantCommand(SwerveDriveSystem::resetAllEncoders).ignoringDisable(true);
-    resetMotorEncoderCommand.setName("Recalibrate Motor Encoder positions");
+    resetMotorEncoderCommand.setName("Recalibrate SwerveDrive Motor Encoder positions");
 
     WrapperCommand printAssumedCurrentWheelAngles = new InstantCommand(SwerveDriveSystem::printSteerAngles).ignoringDisable(true);
-    printAssumedCurrentWheelAngles.setName("Print Current Wheel Angles");
+    printAssumedCurrentWheelAngles.setName("Print SwerveDrive Steer Motor Wheel Angles");
+
+    WrapperCommand printAllAssumedTransportMotorRawEncoderTicks = new InstantCommand(transport::printAllMotorRawEncoderTicks).ignoringDisable(true);
+    printAllAssumedTransportMotorRawEncoderTicks.setName("Print Trnsport Motor Raw Encoder Ticks");
+
+    WrapperCommand printAllAssumedTransportMotorAngles = new InstantCommand(transport::printAllMotorCalculatedAngles).ignoringDisable(true);
+    printAllAssumedTransportMotorAngles.setName("Print Transport Motor Computed Angles");
 
     SmartDashboard.putData("Reset Motor Encoders:", resetMotorEncoderCommand);
 
     // Returns positive values if the wheel turned clockwise from its starting position. (Starting position is the wheel's front facing the front of the robot)
     SmartDashboard.putData("Current Presumed Steer Motor Angles:", printAssumedCurrentWheelAngles);
+
+    SmartDashboard.putData("Current Transport Motor Raw Encoder Ticks:", printAllAssumedTransportMotorRawEncoderTicks);
+
+    SmartDashboard.putData("Current Transport Motor Computed Angles:", printAllAssumedTransportMotorAngles);
   }
 
 
