@@ -91,8 +91,10 @@ public class Conversions {
       return 0;
     }
     else {
-      return Math.copySign(Math.pow(input, 2), input);
+      return input;
+      //return Math.copySign(Math.pow(input, 2), input);
     }
+  }
 
   public static double radiansToDegrees(double radians, double gearRatio){
     return radians * (360.0 / (gearRatio * 2048.0));

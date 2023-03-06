@@ -45,6 +45,13 @@ public class Transport extends SubsystemBase {
         shoulderMotorLead.set(ControlMode.PercentOutput, power);
     }
 
+    public double getShoulderMotorPosition(){
+        return shoulderMotorLead.getSelectedSensorPosition();
+    }
+
+    public double getElbowMotorPosition(){
+        return elbowMotor.getSelectedSensorPosition();
+    }
 
     public void setShoulderMotorPosition(double tick){
         shoulderMotorLead.set(ControlMode.Position, tick);

@@ -37,8 +37,8 @@ public final class Constants {
 
   // This class contains constants for the swerve drive system
   public static final class DriveConstants {
-    public static final double maxSpeed = 1; // meters per second, controls mapped to this by direct
-    public static final double maxAngularSpeed = 2 * Math.PI;
+    public static final double maxSpeed = 3; // meters per second, controls mapped to this by direct
+    public static final double maxAngularSpeed = 3 * Math.PI;
     public static final double C_kPXVision = 0.015;
     // Distance between right and left wheels
     public static final double kTrackWidth = Units.inchesToMeters(21); // TODO: Update with actual track width
@@ -107,9 +107,9 @@ public final class Constants {
 
   public static final class TransportConstant {
     public static final int CANID_SHOULDER_LEAD = 20;
-    public static final int CANID_SHOULDER_FOLLOW_1 = 15;
+    public static final int CANID_SHOULDER_FOLLOW_1 = 21;
     public static final int CANID_SHOULDER_FOLLOW_2 = 22;
-    public static final int CANID_ELBOW = 13;
+    public static final int CANID_ELBOW = 29;
     public static final int CANID_WRIST = 34;
 
     public static final double MAX_SHOULDER_TICKS = 360000;
@@ -117,22 +117,35 @@ public final class Constants {
     public static final double MIN_SHOULDER_TICKS = 0;
     public static final double MIN_ELBOW_TICKS = 0;
 
-
+    public static final double HIGH_SHOULDER_TICKS = 247000;
+    public static final double HIGH_ELBOW_TICKS = 160000;
+    public static final double MID_SHOULDER_TICKS = 272000;
+    public static final double MID_ELBOW_TICKS = 186000;
+    public static final double START_SHOULDER_TICKS = 0;
+    public static final double START_ELBOW_TICKS = 0;
+    public static final double GROUND_SHOULDER_TICKS = 0;
+    public static final double GROUND_ELBOW_TICKS = 125000;
+    public static final double VERTICAL_SHOULDER_TICKS = 170000;
+    public static final double VERTICAL_ELBOW_TICKS = 0;
+    public static final double SHELF_SHOULDER_TICKS = 66000;
+    public static final double SHELF_ELBOW_TICKS = 193000;
+    //public static final int FALCON500_OGTICKS = 2048;
+    //public static final int FALCON500_544TICKS = 491520;
   }
 
   public static final class PortConstants {
 
     // CAN Coder Ports
-    public static final int kFrontLeftCANCoderPort = 2;
-    public static final int kFrontRightCANCoderPort = 4;
-    public static final int kBackLeftCANCoderPort = 3;
-    public static final int kBackRightCANCoderPort = 1;
+    public static final int kFrontLeftCANCoderPort = 1;
+    public static final int kFrontRightCANCoderPort = 3;
+    public static final int kBackLeftCANCoderPort = 4;
+    public static final int kBackRightCANCoderPort = 2;
 
     // PWM ports for the drive motors
-    public static final int kFrontLeftDriveMotorPort = 12;
-    public static final int kBackLeftDriveMotorPort = 16;
-    public static final int kFrontRightDriveMotorPort = 13;
-    public static final int kBackRightDriveMotorPort = 17;
+    public static final int kFrontLeftDriveMotorPort = 17;
+    public static final int kBackLeftDriveMotorPort = 13;
+    public static final int kFrontRightDriveMotorPort = 16;
+    public static final int kBackRightDriveMotorPort = 12;
 
     // PWM ports for the steer motors
 
@@ -143,14 +156,14 @@ public final class Constants {
     public static final int kIntakeMotorEncoderPort = 0;//TODO: Update with actual PWM port
     */
     
-    public static final int kFrontLeftSteerMotorPort = 11;
-    public static final int kFrontRightSteerMotorPort = 14;
-    public static final int kBackLeftSteerMotorPort = 18;
-    public static final int kBackRightSteerMotorPort = 19;
+    public static final int kFrontLeftSteerMotorPort = 19;
+    public static final int kBackLeftSteerMotorPort = 14;
+    public static final int kFrontRightSteerMotorPort = 18;
+    public static final int kBackRightSteerMotorPort = 11;
 
     // USB port of the driver controller
-    public static final int XboxController1 = 1;
-    public static final int XboxController2 = 2;
+    public static final int XboxController1 = 0;
+    public static final int XboxController2 = 1;
 
     // PWM Port for Pigeon (Gyroscope)
     public static final int kPigeonPort = 5;

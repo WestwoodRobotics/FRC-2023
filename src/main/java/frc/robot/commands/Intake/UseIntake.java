@@ -8,10 +8,11 @@ import frc.robot.util.Conversions;
 public class UseIntake extends CommandBase {
 
     IntakeModule intake;
-    XboxController controller;
+    XboxController controller1, controller2;
 
-    public UseIntake(XboxController controller, IntakeModule i){
-        this.controller = controller;
+    public UseIntake(XboxController controller1, XboxController controller2, IntakeModule i){
+        this.controller1 = controller1;
+        this.controller2 = controller2;
         intake = i;
         addRequirements(i);
     }
@@ -19,8 +20,15 @@ public class UseIntake extends CommandBase {
     @Override
     public void execute() {
 
-        intake.setIntakePower(
-            Conversions.deadZoneSquare(controller.getRightTriggerAxis()-controller.getLeftTriggerAxis(), 0.1));
+        if ((controller1.getRightTriggerAxis() != 0) || (controller1.getLeftTriggerAxis() !=0)){
+            intake.setIntakePower(
+                Conversions.deadZoneSquare(controller1.getRightTriggerAxis()-controller1.getLeftTriggerAxis(), 0.1));
+        } else {
+            intake.setIntakePower(
+                Conversions.deadZoneSquare(controller2.getRightTriggerAxis()-controller2.getLeftTriggerAxis(), 0.1));
+        }
+        //intake.setIntakePower(
+        //    Conversions.deadZoneSquare(controller1.getRightTriggerAxis()-controller1.getLeftTriggerAxis(), 0.1));
             
     }
 }

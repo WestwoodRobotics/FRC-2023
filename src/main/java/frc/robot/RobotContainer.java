@@ -19,12 +19,21 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WrapperCommand;
 
 import frc.robot.Constants.PortConstants;
-import frc.robot.commands.TransportCommands.UseArm;
+
+
+
+
+
+import frc.robot.commands.TransportCommands.ArmPositions;
+import frc.robot.commands.TransportCommands.ManualArm;
 import frc.robot.commands.Intake.UseIntake;
 import frc.robot.commands.SwerveDriveCommands.DriveConstantControlCommand;
+
 import frc.robot.subsystems.intake.IntakeModule;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import frc.robot.subsystems.transport.Transport;
+import frc.robot.Constants.TransportConstant;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -36,6 +45,7 @@ public class RobotContainer {
 
   // The XBox Controllers are being initialized here
   private final XboxController primaryController = new XboxController(PortConstants.XboxController1);
+  private final XboxController secondaryController = new XboxController(PortConstants.XboxController2);
   // private final XboxController secondaryController = new XboxController(PortConstants.XboxController2);
 
   // The robot's subsystems and commands are defined here...
@@ -66,14 +76,15 @@ public class RobotContainer {
    */
   public RobotContainer() {
     // Configure the button bindings
-    //configureButtonBindings(); DON'T ACCEPT THIS DURING MERGE!!!!
+    configureButtonBindings(); //DON'T ACCEPT THIS DURING MERGE!!!!
     setDefaultCommands();
   }
 
   private void setDefaultCommands() {
     SwerveDriveSystem.setDefaultCommand(new DriveConstantControlCommand(SwerveDriveSystem, primaryController));
-    transport.setDefaultCommand(new UseArm(primaryController, transport));
-    intake.setDefaultCommand(new UseIntake(primaryController, intake));
+    transport.setDefaultCommand(new ManualArm(secondaryController,  transport));
+
+    intake.setDefaultCommand(new UseIntake(primaryController, secondaryController, intake));
   }
 
   /**
@@ -84,6 +95,13 @@ public class RobotContainer {
    */
    
   private void configureButtonBindings() {
+
+    //yButton.onTrue(new ArmPositions(TransportConstant.VERTICAL_SHOULDER_TICKS, TransportConstant.VERTICAL_ELBOW_TICKS, transport).andThen(new ArmPositions(TransportConstant.HIGH_SHOULDER_TICKS, TransportConstant.HIGH_ELBOW_TICKS, transport)));
+    //bButton.onTrue(new ArmPositions(TransportConstant.VERTICAL_SHOULDER_TICKS, TransportConstant.VERTICAL_ELBOW_TICKS, transport).andThen(new ArmPositions(TransportConstant.MID_SHOULDER_TICKS, TransportConstant.MID_ELBOW_TICKS, transport)));
+    //xButton.onTrue(new ArmPositions(TransportConstant.SHELF_SHOULDER_TICKS, TransportConstant.SHELF_ELBOW_TICKS, transport));
+    //aButton.onTrue(new ArmPositions(TransportConstant.GROUND_SHOULDER_TICKS, TransportConstant.GROUND_ELBOW_TICKS, transport));
+    //rBumper.onTrue(new ArmPositions(TransportConstant.START_SHOULDER_TICKS, TransportConstant.START_ELBOW_TICKS, transport));
+
 
     // The following code is for the primary controller
     WrapperCommand resetMotorEncoderCommand = new InstantCommand(SwerveDriveSystem::resetAllEncoders).ignoringDisable(true);
@@ -108,6 +126,7 @@ public class RobotContainer {
     DriveConstantControlCommand x = new DriveConstantControlCommand(SwerveDriveSystem, primaryController);
     //SwerveDriveSystem.setDefaultCommand(x);
     return x;
+  }
 
   public void teleopTimer() {
     timer.reset();

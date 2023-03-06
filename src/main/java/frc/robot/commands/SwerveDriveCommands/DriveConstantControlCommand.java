@@ -31,9 +31,9 @@ public class DriveConstantControlCommand extends CommandBase {
   public void execute() {
     double leftX, leftY, rightX;
 
-    leftX = -controller.getLeftX();
-    leftY = -controller.getLeftY();
-    rightX = controller.getRightX();
+    leftX = controller.getLeftX();
+    leftY = controller.getLeftY();
+    rightX = -controller.getRightX();
 
 
     // Find radii for controller dead-zones (circular)
