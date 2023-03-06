@@ -19,12 +19,21 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WrapperCommand;
 
 import frc.robot.Constants.PortConstants;
-import frc.robot.commands.TransportCommands.UseArm;
+
+
+
+
+
+import frc.robot.commands.TransportCommands.ArmPositions;
+import frc.robot.commands.TransportCommands.ManualArm;
 import frc.robot.commands.Intake.UseIntake;
 import frc.robot.commands.SwerveDriveCommands.DriveConstantControlCommand;
+
 import frc.robot.subsystems.intake.IntakeModule;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import frc.robot.subsystems.transport.Transport;
+import frc.robot.Constants.TransportConstants;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -66,7 +75,7 @@ public class RobotContainer {
 
   private void setDefaultCommands() {
     SwerveDriveSystem.setDefaultCommand(new DriveConstantControlCommand(SwerveDriveSystem, primaryController));
-    transport.setDefaultCommand(new UseArm(secondaryController, transport));
+    transport.setDefaultCommand(new ManualArm(secondaryController,  transport));
     intake.setDefaultCommand(new UseIntake(secondaryController, intake));
   }
 
@@ -79,6 +88,13 @@ public class RobotContainer {
    
   private void configureButtonBindings() {
 
+    //yButton.onTrue(new ArmPositions(TransportConstants.VERTICAL_SHOULDER_TICKS, TransportConstant.VERTICAL_ELBOW_TICKS, transport).andThen(new ArmPositions(TransportConstant.HIGH_SHOULDER_TICKS, TransportConstant.HIGH_ELBOW_TICKS, transport)));
+    //bButton.onTrue(new ArmPositions(TransportConstants.VERTICAL_SHOULDER_TICKS, TransportConstant.VERTICAL_ELBOW_TICKS, transport).andThen(new ArmPositions(TransportConstant.MID_SHOULDER_TICKS, TransportConstant.MID_ELBOW_TICKS, transport)));
+    //xButton.onTrue(new ArmPositions(TransportConstants.SHELF_SHOULDER_TICKS, TransportConstant.SHELF_ELBOW_TICKS, transport));
+    //aButton.onTrue(new ArmPositions(TransportConstants.GROUND_SHOULDER_TICKS, TransportConstant.GROUND_ELBOW_TICKS, transport));
+    //rBumper.onTrue(new ArmPositions(TransportConstants.START_SHOULDER_TICKS, TransportConstant.START_ELBOW_TICKS, transport));
+
+
     // The following code is for the primary controller
     WrapperCommand resetMotorEncoderCommand = new InstantCommand(SwerveDriveSystem::resetAllEncoders).ignoringDisable(true);
     resetMotorEncoderCommand.setName("Recalibrate SwerveDrive Motor Encoder Positions");
@@ -86,8 +102,9 @@ public class RobotContainer {
     WrapperCommand printAssumedCurrentWheelAngles = new InstantCommand(SwerveDriveSystem::printSteerAngles).ignoringDisable(true);
     printAssumedCurrentWheelAngles.setName("Print SwerveDrive Steer Motor Wheel Angles");
 
-    WrapperCommand printAllAssumedTransportMotorRawEncoderTicks = new InstantCommand(transport::printAllMotorRawEncoderTicks).ignoringDisable(true);
-    printAllAssumedTransportMotorRawEncoderTicks.setName("Print Trnsport Motor Raw Encoder Ticks");
+
+    SmartDashboard.putData("Reset Motor Encoders:", resetMotorEncoderCommand);
+    
 
     WrapperCommand printAllAssumedTransportMotorAngles = new InstantCommand(transport::printAllMotorCalculatedAngles).ignoringDisable(true);
     printAllAssumedTransportMotorAngles.setName("Print Transport Motor Computed Angles");
@@ -121,6 +138,7 @@ public class RobotContainer {
 
   public void periodic() {
     SmartDashboard.putNumber("Timer:", 135 - timer.get());
+    SmartDashboard.putNumber("Shoulder Ticks", transport.getShoulderMotorPosition());
   }
 
   public void disabledInit() {

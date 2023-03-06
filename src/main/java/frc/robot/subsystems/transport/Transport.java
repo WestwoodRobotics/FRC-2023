@@ -8,10 +8,13 @@ import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.TransportConstants;
-import frc.robot.util.Conversions;
-import frc.robot.Constants.*;
 
 public class Transport extends SubsystemBase {
+    private final TalonFX shoulderMotorLead = new TalonFX(TransportConstants.CANID_SHOULDER_LEAD);
+    private final TalonFX shoulderMotorFollow1 = new TalonFX(TransportConstants.CANID_SHOULDER_FOLLOW_1);
+    private final TalonFX shoulderMotorFollow2 = new TalonFX(TransportConstants.CANID_SHOULDER_FOLLOW_2);
+    private final TalonFX elbowMotor = new TalonFX(TransportConstants.CANID_ELBOW);
+    private final TalonFX wristMotor = new TalonFX(TransportConstants.CANID_WRIST);
 
     private final TalonFX shoulderMotorLead = new TalonFX(PortConstants.kShoulderLeadMotorPort);
     private final TalonFX shoulderMotorFollow1 = new TalonFX(PortConstants.kShoulderFollow1MotorPort);
@@ -48,6 +51,15 @@ public class Transport extends SubsystemBase {
     public void setShoulderMotorPower(double power) {
         shoulderMotorLead.set(ControlMode.PercentOutput, power);
     }
+
+    public double getShoulderMotorPosition(){
+        return shoulderMotorLead.getSelectedSensorPosition();
+    }
+
+    public double getElbowMotorPosition(){
+        return elbowMotor.getSelectedSensorPosition();
+    }
+
     public void setShoulderMotorPosition(double tick){
         shoulderMotorLead.set(ControlMode.Position, tick);
     }

@@ -91,7 +91,8 @@ public class Conversions {
       return 0;
     }
     else {
-      return Math.copySign(Math.pow(input, 2), input);
+      return input;
+      //return Math.copySign(Math.pow(input, 2), input);
     }
   }
 
