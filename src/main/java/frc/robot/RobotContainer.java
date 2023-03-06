@@ -5,34 +5,19 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
-
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WrapperCommand;
-
 import frc.robot.Constants.PortConstants;
-
-
-
-
-
-import frc.robot.commands.TransportCommands.ArmPositions;
-import frc.robot.commands.TransportCommands.ManualArm;
-import frc.robot.commands.Intake.UseIntake;
-import frc.robot.commands.SwerveDriveCommands.DriveConstantControlCommand;
-
+import frc.robot.commands.intake.UseIntake;
+import frc.robot.commands.swerve.DriveConstantControlCommand;
+import frc.robot.commands.transport.ManualArm;
 import frc.robot.subsystems.intake.IntakeModule;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import frc.robot.subsystems.transport.Transport;
-import frc.robot.Constants.TransportConstants;
 
 
 /**
@@ -49,9 +34,9 @@ public class RobotContainer {
   // private final XboxController secondaryController = new XboxController(PortConstants.XboxController2);
 
   // The robot's subsystems and commands are defined here...
-   private final SwerveDrive SwerveDriveSystem = new SwerveDrive();
+  private final SwerveDrive SwerveDriveSystem = new SwerveDrive();
   private final Transport transport = new Transport();
-  private final IntakeModule intake  = new IntakeModule();
+  private final IntakeModule intake = new IntakeModule();
 
 
   //private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem); <--- This is an example "command" implementation
@@ -75,8 +60,8 @@ public class RobotContainer {
 
   private void setDefaultCommands() {
     SwerveDriveSystem.setDefaultCommand(new DriveConstantControlCommand(SwerveDriveSystem, primaryController));
-    transport.setDefaultCommand(new ManualArm(secondaryController,  transport));
-    intake.setDefaultCommand(new UseIntake(secondaryController, intake));
+    transport.setDefaultCommand(new ManualArm(secondaryController, transport));
+    intake.setDefaultCommand(new UseIntake(primaryController, secondaryController, intake));
   }
 
   /**
@@ -85,7 +70,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-   
+
   private void configureButtonBindings() {
 
     //yButton.onTrue(new ArmPositions(TransportConstants.VERTICAL_SHOULDER_TICKS, TransportConstant.VERTICAL_ELBOW_TICKS, transport).andThen(new ArmPositions(TransportConstant.HIGH_SHOULDER_TICKS, TransportConstant.HIGH_ELBOW_TICKS, transport)));
@@ -104,19 +89,11 @@ public class RobotContainer {
 
 
     SmartDashboard.putData("Reset Motor Encoders:", resetMotorEncoderCommand);
-    
-
-    WrapperCommand printAllAssumedTransportMotorAngles = new InstantCommand(transport::printAllMotorCalculatedAngles).ignoringDisable(true);
-    printAllAssumedTransportMotorAngles.setName("Print Transport Motor Computed Angles");
 
     SmartDashboard.putData("Reset SwerveDrive Motor Encoders:", resetMotorEncoderCommand);
 
     // Returns positive values if the wheel turned clockwise from its starting position. (Starting position is the wheel's front facing the front of the robot)
     SmartDashboard.putData("Current Presumed SwerveDrive Steer Motor Angles:", printAssumedCurrentWheelAngles);
-
-    SmartDashboard.putData("Current Transport Motor Raw Encoder Ticks:", printAllAssumedTransportMotorRawEncoderTicks);
-
-    SmartDashboard.putData("Current Transport Motor Computed Angles:", printAllAssumedTransportMotorAngles);
   }
 
 
