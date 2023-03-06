@@ -105,7 +105,7 @@ public final class Constants {
     public static final int CANID_INTAKE = 23;
   }
 
-  public static final class TransportConstant {
+  public static final class TransportConstants {
     public static final int CANID_SHOULDER_LEAD = 20;
     public static final int CANID_SHOULDER_FOLLOW_1 = 21;
     public static final int CANID_SHOULDER_FOLLOW_2 = 22;

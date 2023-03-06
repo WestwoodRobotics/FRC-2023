@@ -32,7 +32,7 @@ import frc.robot.commands.SwerveDriveCommands.DriveConstantControlCommand;
 import frc.robot.subsystems.intake.IntakeModule;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import frc.robot.subsystems.transport.Transport;
-import frc.robot.Constants.TransportConstant;
+import frc.robot.Constants.TransportConstants;
 
 
 /**
@@ -76,7 +76,7 @@ public class RobotContainer {
    */
   public RobotContainer() {
     // Configure the button bindings
-    configureButtonBindings(); //DON'T ACCEPT THIS DURING MERGE!!!!
+    configureButtonBindings();
     setDefaultCommands();
   }
 
@@ -96,11 +96,11 @@ public class RobotContainer {
    
   private void configureButtonBindings() {
 
-    //yButton.onTrue(new ArmPositions(TransportConstant.VERTICAL_SHOULDER_TICKS, TransportConstant.VERTICAL_ELBOW_TICKS, transport).andThen(new ArmPositions(TransportConstant.HIGH_SHOULDER_TICKS, TransportConstant.HIGH_ELBOW_TICKS, transport)));
-    //bButton.onTrue(new ArmPositions(TransportConstant.VERTICAL_SHOULDER_TICKS, TransportConstant.VERTICAL_ELBOW_TICKS, transport).andThen(new ArmPositions(TransportConstant.MID_SHOULDER_TICKS, TransportConstant.MID_ELBOW_TICKS, transport)));
-    //xButton.onTrue(new ArmPositions(TransportConstant.SHELF_SHOULDER_TICKS, TransportConstant.SHELF_ELBOW_TICKS, transport));
-    //aButton.onTrue(new ArmPositions(TransportConstant.GROUND_SHOULDER_TICKS, TransportConstant.GROUND_ELBOW_TICKS, transport));
-    //rBumper.onTrue(new ArmPositions(TransportConstant.START_SHOULDER_TICKS, TransportConstant.START_ELBOW_TICKS, transport));
+    //yButton.onTrue(new ArmPositions(TransportConstants.VERTICAL_SHOULDER_TICKS, TransportConstant.VERTICAL_ELBOW_TICKS, transport).andThen(new ArmPositions(TransportConstant.HIGH_SHOULDER_TICKS, TransportConstant.HIGH_ELBOW_TICKS, transport)));
+    //bButton.onTrue(new ArmPositions(TransportConstants.VERTICAL_SHOULDER_TICKS, TransportConstant.VERTICAL_ELBOW_TICKS, transport).andThen(new ArmPositions(TransportConstant.MID_SHOULDER_TICKS, TransportConstant.MID_ELBOW_TICKS, transport)));
+    //xButton.onTrue(new ArmPositions(TransportConstants.SHELF_SHOULDER_TICKS, TransportConstant.SHELF_ELBOW_TICKS, transport));
+    //aButton.onTrue(new ArmPositions(TransportConstants.GROUND_SHOULDER_TICKS, TransportConstant.GROUND_ELBOW_TICKS, transport));
+    //rBumper.onTrue(new ArmPositions(TransportConstants.START_SHOULDER_TICKS, TransportConstant.START_ELBOW_TICKS, transport));
 
 
     // The following code is for the primary controller
@@ -110,7 +110,9 @@ public class RobotContainer {
     WrapperCommand printAssumedCurrentWheelAngles = new InstantCommand(SwerveDriveSystem::printSteerAngles).ignoringDisable(true);
     printAssumedCurrentWheelAngles.setName("Print Current Wheel Angles");
 
+
     SmartDashboard.putData("Reset Motor Encoders:", resetMotorEncoderCommand);
+    
 
     // Returns positive values if the wheel turned clockwise from its starting position. (Starting position is the wheel's front facing the front of the robot)
     SmartDashboard.putData("Current Presumed Steer Motor Angles:", printAssumedCurrentWheelAngles);
@@ -135,6 +137,7 @@ public class RobotContainer {
 
   public void periodic() {
     SmartDashboard.putNumber("Timer:", 135 - timer.get());
+    SmartDashboard.putNumber("Shoulder Ticks", transport.getShoulderMotorPosition());
   }
 
   public void disabledInit() {

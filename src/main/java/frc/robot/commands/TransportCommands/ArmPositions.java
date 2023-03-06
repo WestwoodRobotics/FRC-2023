@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.transport.Transport;
 import frc.robot.util.Conversions;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ArmPositions extends CommandBase {
 
@@ -25,7 +26,7 @@ public class ArmPositions extends CommandBase {
         // This probably shouldn't be in a constant control command
         // Also what do these do?
         m_transport.setShoulderMotorPosition(shoulderPos);
-        m_transport.setElbowMotorPosition(elbowPos);
+        m_transport.setElbowMotorPosition(elbowPos);        
     }
 
     @Override
