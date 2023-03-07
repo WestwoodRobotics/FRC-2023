@@ -5,7 +5,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -13,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WrapperCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.Constants.PortConstants;
+import frc.robot.constants.PortConstants;
 import frc.robot.commands.intake.UseIntake;
 import frc.robot.commands.swerve.DriveConstantControlCommand;
 import frc.robot.commands.transport.ArmPositions;
@@ -21,7 +20,7 @@ import frc.robot.commands.transport.ManualArm;
 import frc.robot.subsystems.intake.IntakeModule;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import frc.robot.subsystems.transport.Transport;
-import frc.robot.Constants.TransportConstants;
+import frc.robot.constants.TransportConstants;
 
 
 /**
@@ -33,8 +32,8 @@ import frc.robot.Constants.TransportConstants;
 public class RobotContainer {
 
   // The XBox Controllers are being initialized here
-  private final XboxController primaryController = new XboxController(PortConstants.XboxController1);
-  private final XboxController secondaryController = new XboxController(PortConstants.XboxController2);
+  private final XboxController primaryController = new XboxController(PortConstants.primaryControllerPort);
+  private final XboxController secondaryController = new XboxController(PortConstants.secondaryControllerPort);
 
   // The
 

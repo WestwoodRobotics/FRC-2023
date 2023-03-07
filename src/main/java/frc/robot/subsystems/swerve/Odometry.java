@@ -9,7 +9,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import static frc.robot.Constants.DriveConstants;
+import frc.robot.constants.SwerveConstants;
 
 public class Odometry extends SubsystemBase {
 
@@ -19,7 +19,7 @@ public class Odometry extends SubsystemBase {
   public Odometry(SwerveDrive s) {
     swerve = s;
     swerveOdometry = new SwerveDrivePoseEstimator(
-      DriveConstants.kDriveKinematics, swerve.gyro.getYaw(), swerve.getPositions(), new Pose2d());
+      SwerveConstants.swerveDriveKinematics, swerve.gyro.getYaw(), swerve.getPositions(), new Pose2d());
   }
 
   public void update() {
