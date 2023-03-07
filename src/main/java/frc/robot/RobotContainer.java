@@ -5,19 +5,23 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WrapperCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.PortConstants;
 import frc.robot.commands.intake.UseIntake;
 import frc.robot.commands.swerve.DriveConstantControlCommand;
+import frc.robot.commands.transport.ArmPositions;
 import frc.robot.commands.transport.ManualArm;
 import frc.robot.subsystems.intake.IntakeModule;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import frc.robot.subsystems.transport.Transport;
+import frc.robot.Constants.TransportConstants;
 
 
 /**
@@ -31,7 +35,17 @@ public class RobotContainer {
   // The XBox Controllers are being initialized here
   private final XboxController primaryController = new XboxController(PortConstants.XboxController1);
   private final XboxController secondaryController = new XboxController(PortConstants.XboxController2);
-  // private final XboxController secondaryController = new XboxController(PortConstants.XboxController2);
+
+  // The
+
+  private final JoystickButton yButton = new JoystickButton(primaryController, 4);
+  private final JoystickButton aButton = new JoystickButton(primaryController, 1);
+  private final JoystickButton bButton = new JoystickButton(primaryController, 2);
+  private final JoystickButton xButton = new JoystickButton(primaryController, 3);
+  private final JoystickButton leftBumper = new JoystickButton(primaryController, 5);
+  private final JoystickButton rightBumper = new JoystickButton(primaryController, 6);
+  private final JoystickButton leftTrigger = new JoystickButton(primaryController, 7);
+  private final JoystickButton rightTrigger = new JoystickButton(primaryController, 8);
 
   // The robot's subsystems and commands are defined here...
   private final SwerveDrive SwerveDriveSystem = new SwerveDrive();
@@ -73,11 +87,11 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
 
-    //yButton.onTrue(new ArmPositions(TransportConstants.VERTICAL_SHOULDER_TICKS, TransportConstant.VERTICAL_ELBOW_TICKS, transport).andThen(new ArmPositions(TransportConstant.HIGH_SHOULDER_TICKS, TransportConstant.HIGH_ELBOW_TICKS, transport)));
-    //bButton.onTrue(new ArmPositions(TransportConstants.VERTICAL_SHOULDER_TICKS, TransportConstant.VERTICAL_ELBOW_TICKS, transport).andThen(new ArmPositions(TransportConstant.MID_SHOULDER_TICKS, TransportConstant.MID_ELBOW_TICKS, transport)));
-    //xButton.onTrue(new ArmPositions(TransportConstants.SHELF_SHOULDER_TICKS, TransportConstant.SHELF_ELBOW_TICKS, transport));
-    //aButton.onTrue(new ArmPositions(TransportConstants.GROUND_SHOULDER_TICKS, TransportConstant.GROUND_ELBOW_TICKS, transport));
-    //rBumper.onTrue(new ArmPositions(TransportConstants.START_SHOULDER_TICKS, TransportConstant.START_ELBOW_TICKS, transport));
+    yButton.onTrue(new ArmPositions(TransportConstants.VERTICAL_SHOULDER_TICKS, TransportConstants.VERTICAL_ELBOW_TICKS, transport).andThen(new ArmPositions(TransportConstants.HIGH_SHOULDER_TICKS, TransportConstants.HIGH_ELBOW_TICKS, transport)));
+    bButton.onTrue(new ArmPositions(TransportConstants.VERTICAL_SHOULDER_TICKS, TransportConstants.VERTICAL_ELBOW_TICKS, transport).andThen(new ArmPositions(TransportConstants.MID_SHOULDER_TICKS, TransportConstants.MID_ELBOW_TICKS, transport)));
+    xButton.onTrue(new ArmPositions(TransportConstants.SHELF_SHOULDER_TICKS, TransportConstants.SHELF_ELBOW_TICKS, transport));
+    aButton.onTrue(new ArmPositions(TransportConstants.GROUND_SHOULDER_TICKS, TransportConstants.GROUND_ELBOW_TICKS, transport));
+    rightBumper.onTrue(new ArmPositions(TransportConstants.START_SHOULDER_TICKS, TransportConstants.START_ELBOW_TICKS, transport));
 
 
     // The following code is for the primary controller

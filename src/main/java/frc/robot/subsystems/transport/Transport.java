@@ -31,13 +31,18 @@ public class Transport extends SubsystemBase {
 
     shoulderMotorLead.configForwardSoftLimitThreshold(Constants.TransportConstants.MAX_SHOULDER_TICKS);
     shoulderMotorLead.configReverseSoftLimitThreshold(Constants.TransportConstants.MIN_SHOULDER_TICKS);
-    shoulderMotorLead.configReverseSoftLimitEnable(false, 0);
-    shoulderMotorLead.configForwardSoftLimitEnable(false, 0);
+    shoulderMotorLead.configReverseSoftLimitEnable(true, 0);
+    shoulderMotorLead.configForwardSoftLimitEnable(true, 0);
 
     elbowMotor.configForwardSoftLimitThreshold(Constants.TransportConstants.MAX_ELBOW_TICKS);
     elbowMotor.configReverseSoftLimitThreshold(Constants.TransportConstants.MIN_ELBOW_TICKS);
     elbowMotor.configReverseSoftLimitEnable(true, 0);
     elbowMotor.configForwardSoftLimitEnable(true, 0);
+
+    wristMotor.configForwardSoftLimitThreshold(Constants.TransportConstants.MAX_WRIST_TICKS);
+    wristMotor.configReverseSoftLimitThreshold(Constants.TransportConstants.MIN_WRIST_TICKS);
+    wristMotor.configReverseSoftLimitEnable(true, 0);
+    wristMotor.configForwardSoftLimitEnable(true, 0);
   }
 
   public void setShoulderMotorPower(double power) {
