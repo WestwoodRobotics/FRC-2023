@@ -106,12 +106,6 @@ public final class Constants {
   }
 
   public static final class TransportConstants {
-    public static final int CANID_SHOULDER_LEAD = 20;
-    public static final int CANID_SHOULDER_FOLLOW_1 = 21;
-    public static final int CANID_SHOULDER_FOLLOW_2 = 22;
-    public static final int CANID_ELBOW = 29;
-    public static final int CANID_WRIST = 34;
-
     public static final double MAX_SHOULDER_TICKS = 360000;
     public static final double MAX_ELBOW_TICKS = 420000,
                                MAX_WRIST_TICKS = (.5 / 50) * 2048;
@@ -120,6 +114,7 @@ public final class Constants {
     public static final double MIN_ELBOW_TICKS = 0,
                                MIN_WRIST_TICKS = 0;
 
+    public static final double kTransportMotorGearRatio = 5.0; //TODO: Verify if this is correct
 
     public static final double HIGH_SHOULDER_TICKS = 247000;
     public static final double HIGH_ELBOW_TICKS = 160000;
@@ -152,9 +147,6 @@ public final class Constants {
     public static final int kBackRightDriveMotorPort = 12;
 
     // PWM ports for the steer motors
-
-
-
     public static final int kFrontLeftSteerMotorPort = 19;
     public static final int kBackLeftSteerMotorPort = 14;
     public static final int kFrontRightSteerMotorPort = 18;
@@ -169,9 +161,9 @@ public final class Constants {
 
     // PWM Port for the Transport
     public static final int kShoulderLeadMotorPort = 20;
-    public static final int kShoulderFollow1MotorPort = 15;
+    public static final int kShoulderFollow1MotorPort = 21;
     public static final int kShoulderFollow2MotorPort = 22;
-    public static final int kElbowMotorPort = 13;
+    public static final int kElbowMotorPort = 29;
     public static final int kWristMotorPort = 34;
 
 

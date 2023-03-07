@@ -5,14 +5,16 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.PortConstants;
 import frc.robot.Constants.TransportConstants;
+import frc.robot.util.Conversions;
 
 public class Transport extends SubsystemBase {
-  private final TalonFX shoulderMotorLead = new TalonFX(TransportConstants.CANID_SHOULDER_LEAD);
-  private final TalonFX shoulderMotorFollow1 = new TalonFX(TransportConstants.CANID_SHOULDER_FOLLOW_1);
-  private final TalonFX shoulderMotorFollow2 = new TalonFX(TransportConstants.CANID_SHOULDER_FOLLOW_2);
-  private final TalonFX elbowMotor = new TalonFX(TransportConstants.CANID_ELBOW);
-  private final TalonFX wristMotor = new TalonFX(TransportConstants.CANID_WRIST);
+  private final TalonFX shoulderMotorLead = new TalonFX(PortConstants.kShoulderLeadMotorPort);
+  private final TalonFX shoulderMotorFollow1 = new TalonFX(PortConstants.kShoulderFollow1MotorPort);
+  private final TalonFX shoulderMotorFollow2 = new TalonFX(PortConstants.kShoulderFollow2MotorPort);
+  private final TalonFX elbowMotor = new TalonFX(PortConstants.kElbowMotorPort);
+  private final TalonFX wristMotor = new TalonFX(PortConstants.kWristMotorPort);
 
 
   public Transport() {
@@ -93,5 +95,43 @@ public class Transport extends SubsystemBase {
     return wristMotor.getSelectedSensorPosition();
   }
 
+  public double getAngleDegrees(TalonFX selectedMotor) {
+    if (selectedMotor == shoulderMotorLead) {
+        return Conversions.falconToDegrees(selectedMotor.getSelectedSensorPosition(), TransportConstants.kTransportMotorGearRatio);
+    } 
+    else if (selectedMotor == shoulderMotorFollow1) {
+        return Conversions.falconToDegrees(selectedMotor.getSelectedSensorPosition(), TransportConstants.kTransportMotorGearRatio);
+    } 
+    else if (selectedMotor == shoulderMotorFollow2) {
+        return Conversions.falconToDegrees(selectedMotor.getSelectedSensorPosition(), TransportConstants.kTransportMotorGearRatio);
+    }
+    else if (selectedMotor == elbowMotor) {
+        return Conversions.falconToDegrees(selectedMotor.getSelectedSensorPosition(), TransportConstants.kTransportMotorGearRatio);
+    } 
+    else if (selectedMotor == wristMotor) {
+        return Conversions.falconToDegrees(selectedMotor.getSelectedSensorPosition(), TransportConstants.kTransportMotorGearRatio);
+    } 
+    else {
+        return -1;
+    }
+
+  }
+
+public void printAllMotorRawEncoderTicks(){
+    System.out.println("\n Shoulder Motor Lead Encoder Ticks: " + getShoulderMotorLeadEncoderTicks()
+                     + "\n Shoulder Motor Follow 1 Encoder Ticks: " + getShoulderMotorFollow1EncoderTicks()
+                     + "\n Shoulder Motor Follow 2 Encoder Ticks: " + getShoulderMotorFollow2EncoderTicks()
+                     + "\n Elbow Motor Encoder Ticks: " + getElbowMotorEncoderTicks()
+                     + "\n Wrist Motor Encoder Ticks: " + getWristMotorEncoderTicks());
+}
+
+
+public void printAllMotorCalculatedAngles(){
+    System.out.println("\n Shoulder Motor Lead Angle: " + getAngleDegrees(shoulderMotorLead)
+                     + "\n Shoulder Motor Follow 1 Angle: " + getAngleDegrees(shoulderMotorFollow1)
+                     + "\n Shoulder Motor Follow 2 Angle: " + getAngleDegrees(shoulderMotorFollow2)
+                     + "\n Elbow Motor Angle: " + getAngleDegrees(elbowMotor)
+                     + "\n Wrist Motor Angle: " + getAngleDegrees(wristMotor));
+}
 
 }
