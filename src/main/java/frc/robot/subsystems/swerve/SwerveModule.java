@@ -165,7 +165,13 @@ public class SwerveModule extends SubsystemBase {
 
   // TODO: this is WRONG
   public double getVelocity() {
-    return Conversions.falconToRadians(driveMotor.getSelectedSensorVelocity(), SwerveModuleConstants.kDriveMotorGearRatio) * Math.PI * SwerveModuleConstants.kWheelDiameterMeters * 10;
+    //return Conversions.falconToRadians(driveMotor.getSelectedSensorVelocity(), SwerveModuleConstants.kDriveMotorGearRatio) * Math.PI * SwerveModuleConstants.kWheelDiameterMeters * 10;
+    return Conversions.falconToMPS(driveMotor.getSelectedSensorVelocity(), SwerveModuleConstants.kWheelDiameterMeters * Math.PI, SwerveModuleConstants.kDriveMotorGearRatio);
+  }
+
+  public double getVelocity(int pididx) {
+    //return Conversions.falconToRadians(driveMotor.getSelectedSensorVelocity(), SwerveModuleConstants.kDriveMotorGearRatio) * Math.PI * SwerveModuleConstants.kWheelDiameterMeters * 10;
+    return Conversions.falconToMPS(driveMotor.getSelectedSensorVelocity(pididx), SwerveModuleConstants.kWheelDiameterMeters *Math.PI, SwerveModuleConstants.kDriveMotorGearRatio);
   }
 
   public SwerveModuleState getState() {
@@ -245,6 +251,12 @@ public class SwerveModule extends SubsystemBase {
     Rotation2d angle = Rotation2d.fromDegrees(Conversions.falconToDegrees(steerMotor.getSelectedSensorPosition(),
       SwerveModuleConstants.kSteerMotorGearRatio));
     return new SwerveModulePosition(position, angle);
+  }
+
+  public double setPercentVoltage(double percent)
+  {
+    driveMotor.set(ControlMode.PercentOutput, percent);
+    return driveMotor.getMotorOutputPercent();
   }
 
 }

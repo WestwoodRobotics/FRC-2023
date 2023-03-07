@@ -27,6 +27,7 @@ public class Conversions {
    */
   public static double falconToRadians(double counts, double gearRatio) {
     return counts * (2 * Math.PI / (gearRatio * 2048.0));
+    //return counts * (1 / 2048) * (gearRatio)
   }
 
   /**
