@@ -93,7 +93,7 @@ public class SwerveModule extends SubsystemBase {
    * @return Absolute encoder's offset (in degrees) from 0 (forward).
    */
 
-  private double getEncoderOffset() {
+  private double getEncoderOffset() { 
     if (turnEncoderOffsets == null) {
       try {
         // Reads all the lines of the file, and ignores any data beyond the Standard

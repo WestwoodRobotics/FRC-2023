@@ -106,8 +106,7 @@ public class Transport extends SubsystemBase {
 
 public void printAllMotorRawEncoderTicks(){
     System.out.println("\n Shoulder Motor Lead Encoder Ticks: " + getShoulderMotorLeadEncoderTicks()
-                     + "\n Shoulder Motor Follow 1 Encoder Ticks: " + getShoulderMotorFollow1EncoderTicks()
-                     + "\n Elbow Motor Encoder Ticks: " + getElbowMotorEncoderTicks()
+                     + "\n Shoulder Motor Follow 1 Encoder Ticks: " + "\n Elbow Motor Encoder Ticks: " + getElbowMotorEncoderTicks()
                      + "\n Wrist Motor Encoder Ticks: " + getWristMotorEncoderTicks());
 }
 

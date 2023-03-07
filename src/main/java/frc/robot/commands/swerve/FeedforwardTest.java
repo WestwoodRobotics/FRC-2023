@@ -4,13 +4,12 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.swerve.DriveSpeed;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import frc.robot.subsystems.swerve.SwerveModule;
 
-import static frc.robot.Constants.DriveConstants.maxAngularSpeed;
-import static frc.robot.Constants.DriveConstants.maxSpeed;
+import static frc.robot.constants.DriveConstants.maxAngularSpeed;
+import static frc.robot.constants.DriveConstants.maxSpeed;
 
 
 public class FeedforwardTest extends CommandBase

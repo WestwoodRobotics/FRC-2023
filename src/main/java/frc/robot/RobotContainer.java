@@ -70,8 +70,8 @@ public class RobotContainer {
   }
 
   private void setDefaultCommands() {
-    swerveMod.setDefaultCommand(new FeedforwardTest(swerveMod, 1));
-    //SwerveDriveSystem.setDefaultCommand(new DriveConstantControlCommand(SwerveDriveSystem, primaryController));
+    //swerveMod.setDefaultCommand(new FeedforwardTest(swerveMod, 1));
+    SwerveDriveSystem.setDefaultCommand(new DriveConstantControlCommand(SwerveDriveSystem, primaryController));
     transport.setDefaultCommand(new ManualArm(secondaryController, transport));
     intake.setDefaultCommand(new UseIntake(primaryController, secondaryController, intake));
   }
