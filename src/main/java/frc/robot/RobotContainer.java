@@ -5,7 +5,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -14,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WrapperCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.Constants.PortConstants;
+import frc.robot.constants.PortConstants;
 import frc.robot.commands.intake.UseIntake;
 import frc.robot.commands.swerve.DriveConstantControlCommand;
 import frc.robot.commands.swerve.FeedforwardTest;
@@ -24,7 +23,7 @@ import frc.robot.subsystems.intake.IntakeModule;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import frc.robot.subsystems.swerve.SwerveModule;
 import frc.robot.subsystems.transport.Transport;
-import frc.robot.Constants.TransportConstants;
+import frc.robot.constants.TransportConstants;
 
 
 /**
@@ -36,8 +35,8 @@ import frc.robot.Constants.TransportConstants;
 public class RobotContainer {
 
   // The XBox Controllers are being initialized here
-  private final XboxController primaryController = new XboxController(PortConstants.XboxController1);
-  private final XboxController secondaryController = new XboxController(PortConstants.XboxController2);
+  private final XboxController primaryController = new XboxController(PortConstants.primaryControllerPort);
+  private final XboxController secondaryController = new XboxController(PortConstants.secondaryControllerPort);
 
   private final JoystickButton yButton = new JoystickButton(primaryController, XboxController.Button.kY.value);
   private final JoystickButton aButton = new JoystickButton(primaryController, XboxController.Button.kA.value);
@@ -99,6 +98,12 @@ public class RobotContainer {
     WrapperCommand printAssumedCurrentWheelAngles = new InstantCommand(SwerveDriveSystem::printSteerAngles).ignoringDisable(true);
     printAssumedCurrentWheelAngles.setName("Print SwerveDrive Steer Motor Wheel Angles");
 
+    WrapperCommand printAllAssumedTransportMotorRawEncoderTicks = new InstantCommand(transport::printAllMotorRawEncoderTicks).ignoringDisable(true);
+    printAllAssumedTransportMotorRawEncoderTicks.setName("Print Trnsport Motor Raw Encoder Ticks");
+
+    WrapperCommand printAllAssumedTransportMotorAngles = new InstantCommand(transport::printAllMotorCalculatedAngles).ignoringDisable(true);
+    printAllAssumedTransportMotorAngles.setName("Print Transport Motor Computed Angles");
+
 
     SmartDashboard.putData("Reset Motor Encoders:", resetMotorEncoderCommand);
 
@@ -106,6 +111,11 @@ public class RobotContainer {
 
     // Returns positive values if the wheel turned clockwise from its starting position. (Starting position is the wheel's front facing the front of the robot)
     SmartDashboard.putData("Current Presumed SwerveDrive Steer Motor Angles:", printAssumedCurrentWheelAngles);
+
+    SmartDashboard.putData("Current Transport Motor Raw Encoder Ticks:", printAllAssumedTransportMotorRawEncoderTicks);
+
+    SmartDashboard.putData("Current Transport Motor Computed Angles:", printAllAssumedTransportMotorAngles);
+
   }
 
 

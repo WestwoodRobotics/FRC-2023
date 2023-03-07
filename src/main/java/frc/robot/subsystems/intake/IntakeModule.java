@@ -4,15 +4,15 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.constants.PortConstants;
 
 public class IntakeModule extends SubsystemBase {
   // Motor for the intake mechanism
   private final WPI_TalonFX intakeMotor;
-  
+
   // Constructor for initializing the intake module
   public IntakeModule() {
-    intakeMotor = new WPI_TalonFX(Constants.IntakeConstants.CANID_INTAKE);
+    intakeMotor = new WPI_TalonFX(PortConstants.intakeRollerPort);
     intakeMotor.setInverted(true);
   }
 

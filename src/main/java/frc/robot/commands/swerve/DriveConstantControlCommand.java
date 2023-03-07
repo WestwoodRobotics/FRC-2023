@@ -2,12 +2,12 @@ package frc.robot.commands.swerve;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.OIConstants;
+import frc.robot.constants.ControllerConstants;
 import frc.robot.subsystems.swerve.DriveSpeed;
 import frc.robot.subsystems.swerve.SwerveDrive;
 
-import static frc.robot.Constants.DriveConstants.maxAngularSpeed;
-import static frc.robot.Constants.DriveConstants.maxSpeed;
+import static frc.robot.constants.DriveConstants.maxAngularSpeed;
+import static frc.robot.constants.DriveConstants.maxSpeed;
 
 public class DriveConstantControlCommand extends CommandBase {
 
@@ -41,12 +41,12 @@ public class DriveConstantControlCommand extends CommandBase {
     double rightRadius = Math.abs(rightX);
 
     // apply deadzones
-    if (leftRadius < OIConstants.kDeadzoneCircle) {
+    if (leftRadius < ControllerConstants.deadzoneCircle) {
       leftX = 0;
       leftY = 0;
     }
 
-    if (rightRadius < OIConstants.kDeadzoneCircle) {
+    if (rightRadius < ControllerConstants.deadzoneCircle) {
       rightX = 0;
     }
 
@@ -64,15 +64,15 @@ public class DriveConstantControlCommand extends CommandBase {
     leftY *= maxSpeed;
     rightX *= maxAngularSpeed;
     // if left stick is active, drive in that direction
-    if ((leftRadius >= OIConstants.kDeadzoneRectangle) && (rightRadius >= OIConstants.kDeadzoneRectangle)) {
+    if ((leftRadius >= ControllerConstants.deadzoneRectangle) && (rightRadius >= ControllerConstants.deadzoneRectangle)) {
       m_swerveDrive.drive(leftX, leftY, rightX, true);
-    } else if (rightRadius >= OIConstants.kDeadzoneRectangle) {
+    } else if (rightRadius >= ControllerConstants.deadzoneRectangle) {
       // otherwise, if right stick is active, turn in that direction
       m_swerveDrive.drive(0, 0, rightX, true);
     } else if (controller.getAButton()) {
       // otherwise, if A is pressed, turn the wheels right slowly
       m_swerveDrive.drive(0, 0, 0.1, true);
-    } else if (leftRadius >= OIConstants.kDeadzoneRectangle) {
+    } else if (leftRadius >= ControllerConstants.deadzoneRectangle) {
       // otherwise, stop drive motors
       m_swerveDrive.drive(leftX, leftY, 0, true);
     } else {

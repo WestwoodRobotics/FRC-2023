@@ -6,7 +6,7 @@ package frc.robot.subsystems.swerve;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.PortConstants;
+import frc.robot.constants.PortConstants;
 
 public class Gyro extends SubsystemBase {
   public WPI_Pigeon2 pigeon;
@@ -17,7 +17,7 @@ public class Gyro extends SubsystemBase {
    * have to directly zero the gyro
    */
   public Gyro() {
-    pigeon = new WPI_Pigeon2(PortConstants.kPigeonPort);
+    pigeon = new WPI_Pigeon2(PortConstants.pigeonPort);
     pigeon.configFactoryDefault();
     zeroGyro();
   }
