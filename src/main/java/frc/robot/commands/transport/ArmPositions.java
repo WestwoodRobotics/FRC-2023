@@ -20,15 +20,14 @@ public class ArmPositions extends CommandBase {
 
   @Override
   public void execute() {
-    // This probably shouldn't be in a constant control command
-    // Also what do these do?
+    System.out.println(m_transport.getShoulderMotorPosition());
     m_transport.setShoulderMotorPosition(shoulderPos);
     m_transport.setElbowMotorPosition(elbowPos);
   }
 
   @Override
   public boolean isFinished() {
-    return (Math.abs(m_transport.getShoulderMotorPosition() - shoulderPos) < 20) && (Math.abs(m_transport.getElbowMotorPosition() - elbowPos) < 20);
+    return (Math.abs(m_transport.getShoulderMotorPosition() - shoulderPos) < 1000) && (Math.abs(m_transport.getElbowMotorPosition() - elbowPos) < 1000);
   }
 }
 

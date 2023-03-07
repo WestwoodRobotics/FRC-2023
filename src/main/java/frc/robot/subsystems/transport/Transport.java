@@ -9,7 +9,7 @@ import frc.robot.Constants.TransportConstants;
 
 public class Transport extends SubsystemBase {
   private final TalonFX shoulderMotorLead = new TalonFX(TransportConstants.CANID_SHOULDER_LEAD);
-  private final TalonFX shoulderMotorFollow1 = new TalonFX(TransportConstants.CANID_SHOULDER_FOLLOW_1);
+  //private final TalonFX shoulderMotorFollow1 = new TalonFX(TransportConstants.CANID_SHOULDER_FOLLOW_1);
   private final TalonFX shoulderMotorFollow2 = new TalonFX(TransportConstants.CANID_SHOULDER_FOLLOW_2);
   private final TalonFX elbowMotor = new TalonFX(TransportConstants.CANID_ELBOW);
   private final TalonFX wristMotor = new TalonFX(TransportConstants.CANID_WRIST);
@@ -17,7 +17,7 @@ public class Transport extends SubsystemBase {
 
   public Transport() {
     shoulderMotorLead.setNeutralMode(NeutralMode.Brake);
-    shoulderMotorFollow1.setNeutralMode(NeutralMode.Brake);
+    //shoulderMotorFollow1.setNeutralMode(NeutralMode.Brake);
     shoulderMotorFollow2.setNeutralMode(NeutralMode.Brake);
 
     shoulderMotorLead.setInverted(false);
@@ -26,7 +26,7 @@ public class Transport extends SubsystemBase {
 
     elbowMotor.setInverted(true);
 
-    shoulderMotorFollow1.follow(shoulderMotorLead); // Might need to change the false
+    //shoulderMotorFollow1.follow(shoulderMotorLead); // Might need to change the false
     shoulderMotorFollow2.follow(shoulderMotorLead); // Might need to change the false
 
     shoulderMotorLead.configForwardSoftLimitThreshold(Constants.TransportConstants.MAX_SHOULDER_TICKS);
@@ -77,9 +77,9 @@ public class Transport extends SubsystemBase {
     return shoulderMotorLead.getSelectedSensorPosition();
   }
 
-  public double getShoulderMotorFollow1EncoderTicks() {
+  /*public double getShoulderMotorFollow1EncoderTicks() {
     return shoulderMotorFollow1.getSelectedSensorPosition();
-  }
+  }*/
 
   public double getShoulderMotorFollow2EncoderTicks() {
     return shoulderMotorFollow2.getSelectedSensorPosition();
