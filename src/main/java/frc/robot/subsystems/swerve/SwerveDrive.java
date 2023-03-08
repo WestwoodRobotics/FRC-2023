@@ -77,6 +77,11 @@ public class SwerveDrive extends SubsystemBase {
     }
   }
 
+  public boolean resetGyro(){
+    gyro.zeroGyro();
+    return true;
+  }
+
   public Rotation2d getHeading() {
     return odometry.getHeading();
   }

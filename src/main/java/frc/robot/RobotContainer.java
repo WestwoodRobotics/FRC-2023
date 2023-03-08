@@ -43,11 +43,13 @@ public class RobotContainer {
   private final JoystickButton bButton = new JoystickButton(primaryController, XboxController.Button.kB.value);
   private final JoystickButton xButton = new JoystickButton(primaryController, XboxController.Button.kX.value);
   private final JoystickButton rightBumper = new JoystickButton(primaryController, XboxController.Button.kRightBumper.value);
+  private final JoystickButton leftStickButton = new JoystickButton(primaryController, XboxController.Button.kLeftStick.value);
   // The robot's subsystems and commands are defined here...
   private final SwerveDrive SwerveDriveSystem = new SwerveDrive();
   //private final SwerveModule swerveMod = SwerveDriveSystem.getModule(0);
   private final Transport transport = new Transport();
   private final IntakeModule intake = new IntakeModule();
+  
 
 
   //private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem); <--- This is an example "command" implementation
@@ -89,7 +91,8 @@ public class RobotContainer {
     xButton.onTrue(new ArmPositions(TransportConstants.SHELF_SHOULDER_TICKS, TransportConstants.SHELF_ELBOW_TICKS, transport));
     aButton.onTrue(new ArmPositions(TransportConstants.GROUND_SHOULDER_TICKS, TransportConstants.GROUND_ELBOW_TICKS, transport));
     rightBumper.onTrue(new ArmPositions(TransportConstants.START_SHOULDER_TICKS, TransportConstants.START_ELBOW_TICKS, transport));
-
+    leftStickButton.onTrue(new InstantCommand(SwerveDriveSystem::resetGyro));
+    
 
     // The following code is for the primary controller
     WrapperCommand resetMotorEncoderCommand = new InstantCommand(SwerveDriveSystem::resetAllEncoders).ignoringDisable(true);
@@ -116,6 +119,7 @@ public class RobotContainer {
 
     SmartDashboard.putData("Current Transport Motor Computed Angles:", printAllAssumedTransportMotorAngles);
 
+    
   }
 
 
@@ -138,6 +142,10 @@ public class RobotContainer {
   public void periodic() {
     SmartDashboard.putNumber("Timer:", 135 - timer.get());
     SmartDashboard.putNumber("Shoulder Ticks", transport.getShoulderMotorPosition());
+    double shoulderPos = transport.getShoulderMotorPosition();
+    double elbowPos = transport.getElbowMotorPosition();
+    SmartDashboard.putNumber("shoulder ticks", shoulderPos);
+    SmartDashboard.putNumber("elbow ticks", elbowPos);
   }
 
   public void disabledInit() {

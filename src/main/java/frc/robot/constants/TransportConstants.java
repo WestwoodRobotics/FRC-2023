@@ -3,7 +3,7 @@ package frc.robot.constants;
 public final class TransportConstants {
   public static final double MAX_SHOULDER_TICKS = 360000;
   public static final double MAX_ELBOW_TICKS = 420000,
-    MAX_WRIST_TICKS = (.5 / 50) * 2048;
+    MAX_WRIST_TICKS = (.5 * 50) * 2048;
 
   public static final double MIN_SHOULDER_TICKS = 0;
   public static final double MIN_ELBOW_TICKS = 0,
