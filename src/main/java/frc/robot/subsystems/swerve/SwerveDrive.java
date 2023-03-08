@@ -8,6 +8,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.DriveConstants;
 import frc.robot.constants.PortConstants;
@@ -68,6 +69,8 @@ public class SwerveDrive extends SubsystemBase {
       SwerveModule module = modules[i];
 //      System.out.printf("[%d] %s\n", i, swerveModuleState);
       module.setDesiredState(swerveModuleState);
+      SmartDashboard.putNumber("mod thinky", modules[3].getVelocity(0));
+      SmartDashboard.putNumber("other thinky", modules[0].getVelocity(0));
     }
   }
 

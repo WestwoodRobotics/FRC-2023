@@ -108,7 +108,7 @@ public class RobotContainer {
     printAllAssumedTransportMotorAngles.setName("Print Transport Motor Computed Angles");
 
 
-    SmartDashboard.putData("Reset Motor Encoders:", resetMotorEncoderCommand);
+    //SmartDashboard.putData("Reset Motor Encoders:", resetMotorEncoderCommand);
 
     SmartDashboard.putData("Reset SwerveDrive Motor Encoders:", resetMotorEncoderCommand);
 

@@ -37,7 +37,7 @@ public final class SwerveConstants {
     public static final double driveFeedS = -0.00287211; // TODO: Update with actual feedforward values
     public static final double driveFeedV = 0.251512; // TODO: Update with actual feedforward values
     public static final double driveFeedA = 0.000147139; // TODO: Update with actual feedforward values
-    public static final double driveP = 0.0; // TODO: Update with actual PID values
+    public static final double driveP = 0; // TODO: Update with actual PID values
     public static final double driveI = 0; // TODO: Update with actual PID values
     public static final double driveD = 0.0; // TODO: Update with actual PID values
 

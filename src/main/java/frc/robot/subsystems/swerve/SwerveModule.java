@@ -169,7 +169,7 @@ public class SwerveModule extends SubsystemBase {
 
   public double getVelocity(int pididx) {
     //return Conversions.falconToRadians(driveMotor.getSelectedSensorVelocity(), SwerveModuleConstants.kDriveMotorGearRatio) * Math.PI * SwerveModuleConstants.kWheelDiameterMeters * 10;
-    return Conversions.falconToMPS(driveMotor.getSelectedSensorVelocity(pididx), 1, 1);
+    return Conversions.falconToMPS(driveMotor.getSelectedSensorVelocity(pididx), SwerveConstants.wheelDiameter * Math.PI, SwerveConstants.driveMotorGearRatio);
   }
 
   public SwerveModuleState getState() {
@@ -196,7 +196,7 @@ public class SwerveModule extends SubsystemBase {
 //    double targetDriveSpeed = outputState.speedMetersPerSecond * ModuleConstants.kDriveEncoderRot2Meter * 10 * Math.cos(angleDiff);
     double targetDriveSpeed = outputState.speedMetersPerSecond * Math.cos(angleDiff);
 
-    double drive_vel = getVelocity(0);
+    double drive_vel = getVelocity();
     // Output for the drive motor (in falcon ticks)
     double driveMotorOutput = drivePIDController.calculate(drive_vel, targetDriveSpeed);
     // todo: this doesn't work at all (always returns 0)
