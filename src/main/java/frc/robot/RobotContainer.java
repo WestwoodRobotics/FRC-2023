@@ -45,7 +45,7 @@ public class RobotContainer {
   private final JoystickButton rightBumper = new JoystickButton(primaryController, XboxController.Button.kRightBumper.value);
   // The robot's subsystems and commands are defined here...
   private final SwerveDrive SwerveDriveSystem = new SwerveDrive();
-  private final SwerveModule swerveMod = SwerveDriveSystem.getModule(0);
+  //private final SwerveModule swerveMod = SwerveDriveSystem.getModule(0);
   private final Transport transport = new Transport();
   private final IntakeModule intake = new IntakeModule();
 

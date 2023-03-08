@@ -12,6 +12,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.*;
 import frc.robot.util.Conversions;
@@ -168,7 +169,7 @@ public class SwerveModule extends SubsystemBase {
 
   public double getVelocity(int pididx) {
     //return Conversions.falconToRadians(driveMotor.getSelectedSensorVelocity(), SwerveModuleConstants.kDriveMotorGearRatio) * Math.PI * SwerveModuleConstants.kWheelDiameterMeters * 10;
-    return Conversions.falconToMPS(driveMotor.getSelectedSensorVelocity(pididx), SwerveConstants.wheelDiameter *Math.PI, SwerveConstants.driveMotorGearRatio);
+    return Conversions.falconToMPS(driveMotor.getSelectedSensorVelocity(pididx), 1, 1);
   }
 
   public SwerveModuleState getState() {
@@ -195,16 +196,18 @@ public class SwerveModule extends SubsystemBase {
 //    double targetDriveSpeed = outputState.speedMetersPerSecond * ModuleConstants.kDriveEncoderRot2Meter * 10 * Math.cos(angleDiff);
     double targetDriveSpeed = outputState.speedMetersPerSecond * Math.cos(angleDiff);
 
-    double drive_vel = getVelocity();
+    double drive_vel = getVelocity(0);
     // Output for the drive motor (in falcon ticks)
     double driveMotorOutput = drivePIDController.calculate(drive_vel, targetDriveSpeed);
     // todo: this doesn't work at all (always returns 0)
     double driveFeedforward = driveMotorFeedForward.calculate(targetDriveSpeed);
+    SmartDashboard.putNumber("Target drive speed", targetDriveSpeed);
+    SmartDashboard.putNumber("Actual drive Speed", drive_vel);
 
 //    System.out.printf("[%d] Current angle: %f6, target angle: %f6\n", moduleNum, currentAngle, outputState.angle.getRadians());
 
 //    if (driveFeedforward != 0) System.out.printf("Drive velocity: %f -- Target speed: %f%n", drive_vel, targetDriveSpeed);
-//    if (driveFeedforward != 0) System.out.printf("Drive feed forward: %f -- Drive motor output: %f%n", driveFeedforward, driveMotorOutput);
+   if (driveFeedforward != 0) System.out.printf("Drive feed forward: %f -- Drive motor output: %f%n", driveFeedforward, driveMotorOutput);
     driveMotor.set(ControlMode.PercentOutput, driveFeedforward + driveMotorOutput);
     steerMotor.set(ControlMode.Position,
       Conversions.degreesToFalcon(outputState.angle.getDegrees(), SwerveConstants.steerMotorGearRatio));
