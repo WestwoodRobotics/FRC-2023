@@ -23,7 +23,7 @@ public class ManualArm extends CommandBase {
   public void execute() {
     // todo: check to make sure these are all accurate, and perhaps move values to constants
     m_transport.setShoulderMotorPower(
-      Conversions.deadZoneSquare(-0.7 * controller.getLeftY(), 0.1));
+      Conversions.deadZoneSquare(-0.5 * controller.getLeftY(), 0.1));
 
     m_transport.setElbowMotorPower(
       Conversions.deadZoneSquare(0.5 * controller.getRightY(), 0.1));
@@ -31,8 +31,8 @@ public class ManualArm extends CommandBase {
     m_transport.setWristMotorPower(
       Conversions.deadZoneSquare(-0.5 * controller.getRightX(), 0.1));
 
-    SmartDashboard.putNumber("shoulder ticks", m_transport.getShoulderMotorLeadEncoderTicks());
-    SmartDashboard.putNumber("elbow ticks", m_transport.getElbowMotorEncoderTicks());
+    SmartDashboard.putNumber("shoulder ticks", m_transport.getShoulderMotorPosition());
+    SmartDashboard.putNumber("elbow ticks", m_transport.getElbowMotorPosition());
   }
 }
 
