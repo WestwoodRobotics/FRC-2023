@@ -43,7 +43,10 @@ public class RobotContainer {
   private final JoystickButton bButton = new JoystickButton(primaryController, XboxController.Button.kB.value);
   private final JoystickButton xButton = new JoystickButton(primaryController, XboxController.Button.kX.value);
   private final JoystickButton rightBumper = new JoystickButton(primaryController, XboxController.Button.kRightBumper.value);
+  private final JoystickButton leftBumper = new JoystickButton(primaryController, XboxController.Button.kLeftBumper.value);
   private final JoystickButton leftStickButton = new JoystickButton(primaryController, XboxController.Button.kLeftStick.value);
+  private final JoystickButton rightStickButton = new JoystickButton(primaryController, XboxController.Button.kRightStick.value);
+  private final JoystickButton secondBButton = new JoystickButton(secondaryController, XboxController.Button.kB.value);
   // The robot's subsystems and commands are defined here...
   private final SwerveDrive SwerveDriveSystem = new SwerveDrive();
   //private final SwerveModule swerveMod = SwerveDriveSystem.getModule(0);
@@ -91,7 +94,10 @@ public class RobotContainer {
     xButton.onTrue(new ArmPositions(TransportConstants.SHELF_SHOULDER_TICKS, TransportConstants.SHELF_ELBOW_TICKS, transport));
     aButton.onTrue(new ArmPositions(TransportConstants.GROUND_SHOULDER_TICKS, TransportConstants.GROUND_ELBOW_TICKS, transport));
     rightBumper.onTrue(new ArmPositions(TransportConstants.START_SHOULDER_TICKS, TransportConstants.START_ELBOW_TICKS, transport));
+    
     leftStickButton.onTrue(new InstantCommand(SwerveDriveSystem::resetGyro));
+    rightStickButton.onTrue(new InstantCommand(SwerveDriveSystem::zeroDrive));
+    secondBButton.onTrue(new InstantCommand(transport::zeroTransportEncoders));
     
 
     // The following code is for the primary controller
@@ -142,10 +148,7 @@ public class RobotContainer {
   public void periodic() {
     SmartDashboard.putNumber("Timer:", 135 - timer.get());
     SmartDashboard.putNumber("Shoulder Ticks", transport.getShoulderMotorPosition());
-    double shoulderPos = transport.getShoulderMotorPosition();
-    double elbowPos = transport.getElbowMotorPosition();
-    SmartDashboard.putNumber("shoulder ticks", shoulderPos);
-    SmartDashboard.putNumber("elbow ticks", elbowPos);
+    
   }
 
   public void disabledInit() {

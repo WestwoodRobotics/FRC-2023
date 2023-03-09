@@ -23,7 +23,11 @@ public class UseIntake extends CommandBase {
     double rightTriggerMagnitude = Math.max(primaryController.getRightTriggerAxis(), secondaryController.getRightTriggerAxis());
     leftTriggerMagnitude = Conversions.deadZoneSquare(leftTriggerMagnitude, 0.1);
     rightTriggerMagnitude = Conversions.deadZoneSquare(rightTriggerMagnitude, 0.1);
-
-    intake.setIntakePower(rightTriggerMagnitude - leftTriggerMagnitude);
+    
+    if(primaryController.getLeftBumper() || secondaryController.getLeftBumper()){
+      intake.setIntakePower(-0.25);
+    } else {
+      intake.setIntakePower(rightTriggerMagnitude - leftTriggerMagnitude);
+    }
   }
 }

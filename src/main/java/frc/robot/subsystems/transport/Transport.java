@@ -39,6 +39,8 @@ public class Transport extends SubsystemBase {
     wristMotor.configReverseSoftLimitThreshold(TransportConstants.MIN_WRIST_TICKS);
     wristMotor.configReverseSoftLimitEnable(true, 0);
     wristMotor.configForwardSoftLimitEnable(true, 0);
+
+    
   }
 
   public void setShoulderMotorPower(double power) {
@@ -103,6 +105,13 @@ public class Transport extends SubsystemBase {
     }
 
   }
+
+public boolean zeroTransportEncoders(){
+  elbowMotor.setSelectedSensorPosition(0);
+  shoulderMotorLead.setSelectedSensorPosition(0);
+  wristMotor.setSelectedSensorPosition(0);
+  return true;
+}  
 
 public void printAllMotorRawEncoderTicks(){
     System.out.println("\n Shoulder Motor Lead Encoder Ticks: " + getShoulderMotorLeadEncoderTicks()
