@@ -105,10 +105,10 @@ public class SwerveDrive extends SubsystemBase {
   }
 
   public void printSteerAngles() {
-    System.out.println("\n\u001B[32mFront Left Steer Motor: " + modules[0].getAngleDegrees() + " degrees" + "\n" +
-      "Front Right Steer Motor: " + modules[1].getAngleDegrees() + " degrees" + "\n" +
-      "Back Left Steer Motor: " + modules[2].getAngleDegrees() + " degrees" + "\n" +
-      "Back Right Steer Motor: " + modules[3].getAngleDegrees() + " degrees\u001B[0m");
+    System.out.println("\n\u001B[32mFront Left Steer Motor: " + modules[1].getAngleDegrees() + " degrees" + "\n" +
+      "Front Right Steer Motor: " + modules[0].getAngleDegrees() + " degrees" + "\n" +
+      "Back Left Steer Motor: " + modules[3].getAngleDegrees() + " degrees" + "\n" +
+      "Back Right Steer Motor: " + modules[2].getAngleDegrees() + " degrees\u001B[0m");
   }
 
   public void resetPose(Pose2d pose) {
