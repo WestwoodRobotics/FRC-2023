@@ -13,6 +13,7 @@ public class Transport extends SubsystemBase {
   private final TalonFX shoulderMotorFollow1 = new TalonFX(PortConstants.shoulderFollow1MotorPort);
   private final TalonFX elbowMotor = new TalonFX(PortConstants.elbowMotorPort);
   private final TalonFX wristMotor = new TalonFX(PortConstants.wristMotorPort);
+  private String currentPosition = "START";
 
 
   public Transport() {
@@ -47,6 +48,14 @@ public class Transport extends SubsystemBase {
     shoulderMotorLead.set(ControlMode.PercentOutput, power);
   }
 
+  public void setElbowMotorPower(double power) {
+    elbowMotor.set(ControlMode.PercentOutput, power);
+  }
+
+  public void setWristMotorPower(double power) {
+    wristMotor.set(ControlMode.PercentOutput, power);
+  }
+
   public double getShoulderMotorPosition() {
     return shoulderMotorLead.getSelectedSensorPosition();
   }
@@ -63,28 +72,12 @@ public class Transport extends SubsystemBase {
     elbowMotor.set(ControlMode.Position, tick);
   }
 
-  public void setElbowMotorPower(double power) {
-    elbowMotor.set(ControlMode.PercentOutput, power);
-  }
-
-  public void setWristMotorPower(double power) {
-    wristMotor.set(ControlMode.PercentOutput, power);
-  }
-
-  public double getShoulderMotorLeadEncoderTicks() {
-    return shoulderMotorLead.getSelectedSensorPosition();
-  }
-
-  /*public double getShoulderMotorFollow1EncoderTicks() {
-    return shoulderMotorFollow1.getSelectedSensorPosition();
-  }*/
-
-  public double getElbowMotorEncoderTicks() {
-    return elbowMotor.getSelectedSensorPosition();
-  }
-
-  public double getWristMotorEncoderTicks() {
+  public double getWristMotorPosition() {
     return wristMotor.getSelectedSensorPosition();
+  }
+
+  public void setWristMotorPosition(double tick) {
+    wristMotor.set(ControlMode.Position, tick);
   }
 
   public double getAngleDegrees(TalonFX selectedMotor) {
@@ -114,9 +107,9 @@ public boolean zeroTransportEncoders(){
 }  
 
 public void printAllMotorRawEncoderTicks(){
-    System.out.println("\n Shoulder Motor Lead Encoder Ticks: " + getShoulderMotorLeadEncoderTicks()
-                     + "\n Shoulder Motor Follow 1 Encoder Ticks: " + "\n Elbow Motor Encoder Ticks: " + getElbowMotorEncoderTicks()
-                     + "\n Wrist Motor Encoder Ticks: " + getWristMotorEncoderTicks());
+    System.out.println("\n Shoulder Motor Lead Encoder Ticks: " + getShoulderMotorPosition()
+                     + "\n Shoulder Motor Follow 1 Encoder Ticks: " + "\n Elbow Motor Encoder Ticks: " + getElbowMotorPosition()
+                     + "\n Wrist Motor Encoder Ticks: " + getWristMotorPosition());
 }
 
 
@@ -127,4 +120,11 @@ public void printAllMotorCalculatedAngles(){
                      + "\n Wrist Motor Angle: " + getAngleDegrees(wristMotor));
 }
 
+public String getPosition(){
+  return currentPosition;
+}
+
+public void setPosition(String pos){
+  currentPosition = pos;
+}
 }

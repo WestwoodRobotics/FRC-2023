@@ -89,11 +89,13 @@ public class RobotContainer {
    */
 
   private void configureButtonBindings() {
-    yButton.onTrue(new ArmPositions(TransportConstants.VERTICAL_SHOULDER_TICKS, TransportConstants.VERTICAL_ELBOW_TICKS, transport).andThen(new ArmPositions(TransportConstants.HIGH_SHOULDER_TICKS, TransportConstants.HIGH_ELBOW_TICKS, transport)));
-    bButton.onTrue(new ArmPositions(TransportConstants.MID_SHOULDER_TICKS, TransportConstants.MID_ELBOW_TICKS, transport));
-    xButton.onTrue(new ArmPositions(TransportConstants.SHELF_SHOULDER_TICKS, TransportConstants.SHELF_ELBOW_TICKS, transport));
-    aButton.onTrue(new ArmPositions(TransportConstants.GROUND_SHOULDER_TICKS, TransportConstants.GROUND_ELBOW_TICKS, transport));
-    rightBumper.onTrue(new ArmPositions(TransportConstants.START_SHOULDER_TICKS, TransportConstants.START_ELBOW_TICKS, transport));
+    yButton.onTrue(new ArmPositions("VERTICAL", TransportConstants.VERTICAL_SHOULDER_TICKS, TransportConstants.VERTICAL_ELBOW_TICKS, TransportConstants.WRIST_START_TICKS, 0.7, transport)
+          .andThen(new ArmPositions("HIGH", TransportConstants.HIGH_SHOULDER_TICKS, TransportConstants.HIGH_ELBOW_TICKS, TransportConstants.WRIST_FLIPPED_TICKS, 0.5, transport)));
+    bButton.onTrue(new ArmPositions("VERTICAL", TransportConstants.VERTICAL_SHOULDER_TICKS, TransportConstants.VERTICAL_ELBOW_TICKS, TransportConstants.WRIST_START_TICKS, 0.7, transport)
+          .andThen(new ArmPositions("MID", TransportConstants.MID_SHOULDER_TICKS, TransportConstants.MID_ELBOW_TICKS, TransportConstants.WRIST_FLIPPED_TICKS, 0.5, transport)));
+    xButton.onTrue(new ArmPositions("SHELF", TransportConstants.SHELF_SHOULDER_TICKS, TransportConstants.SHELF_ELBOW_TICKS, TransportConstants.WRIST_START_TICKS, 0.7, transport));
+    aButton.onTrue(new ArmPositions("GROUND", TransportConstants.GROUND_SHOULDER_TICKS, TransportConstants.GROUND_ELBOW_TICKS, TransportConstants.WRIST_START_TICKS, 0.7, transport));
+    rightBumper.onTrue(new ArmPositions("START", TransportConstants.START_SHOULDER_TICKS, TransportConstants.START_ELBOW_TICKS, TransportConstants.WRIST_START_TICKS, 0.7, transport));
     
     leftStickButton.onTrue(new InstantCommand(SwerveDriveSystem::resetGyro));
     rightStickButton.onTrue(new InstantCommand(SwerveDriveSystem::zeroDrive));
