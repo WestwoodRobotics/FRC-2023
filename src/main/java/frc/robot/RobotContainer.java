@@ -4,16 +4,32 @@
 
 package frc.robot;
 
+import java.util.List;
+import java.util.function.Consumer;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WrapperCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.constants.AutoConstants;
 import frc.robot.constants.PortConstants;
+import frc.robot.constants.SwerveConstants;
 import frc.robot.commands.intake.UseIntake;
 import frc.robot.commands.swerve.DriveConstantControlCommand;
 import frc.robot.commands.swerve.FeedforwardTest;
@@ -135,10 +151,53 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    DriveConstantControlCommand x = new DriveConstantControlCommand(SwerveDriveSystem, primaryController);
-    //SwerveDriveSystem.setDefaultCommand(x);
-    return x;
+    //ngl this is just copied but we can try to make changes to it to make it work.
+    TrajectoryConfig trajConfig = new TrajectoryConfig(AutoConstants.maxVelocity, AutoConstants.maxAcceleration)
+      .setKinematics(SwerveConstants.swerveDriveKinematics);
+
+
+    Trajectory traj = TrajectoryGenerator.generateTrajectory
+    (
+      new Pose2d(0, 0, new Rotation2d(0)),
+      List.of
+      (
+        new Translation2d(0, 1)
+      ),
+      new Pose2d(1, 1, Rotation2d.fromDegrees(0)),
+      trajConfig
+    );
+
+
+    PIDController xController = new PIDController(AutoConstants.PID.kPControllerX, 0, AutoConstants.PID.kDControllerX),
+                  yController = new PIDController(AutoConstants.PID.kPControllerY, 0, AutoConstants.PID.kDControllerY);
+    ProfiledPIDController thetaController = new ProfiledPIDController(AutoConstants.PID.kPControllerTheta, 0, AutoConstants.PID.kDControllerTheta, AutoConstants.thetaControllerConstraints);
+    thetaController.enableContinuousInput(-Math.PI, Math.PI);
+
+
+    SwerveModuleState[] states = new SwerveModuleState[4];
+    SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand
+    (
+      traj,
+      SwerveDriveSystem::getPoseMeters,
+      SwerveConstants.swerveDriveKinematics,
+      xController,
+      yController,
+      thetaController,
+      SwerveDriveSystem::setModuleStatesDirectly,
+      SwerveDriveSystem
+    );
+
+
+    //put any other commands to do during auton in here
+    return new SequentialCommandGroup
+    (
+      new InstantCommand(() -> SwerveDriveSystem.resetPose(traj.getInitialPose())), // Tell it that its initial pose is where it is
+      swerveControllerCommand, // Go through the motions
+      new InstantCommand(() -> SwerveDriveSystem.zeroDrive()).andThen(() -> SwerveDriveSystem.zeroTurn())
+    );
   }
+
+
 
   public void teleopTimer() {
     timer.reset();
