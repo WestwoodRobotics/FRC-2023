@@ -23,7 +23,7 @@ public class ManualArm extends CommandBase {
   public void execute() {
     // todo: check to make sure these are all accurate, and perhaps move values to constants
     m_transport.setShoulderMotorPower(
-      Conversions.deadZoneSquare(-0.5 * controller.getLeftY(), 0.1));
+      Conversions.deadZoneSquare(-0.7 * controller.getLeftY(), 0.1));
 
     m_transport.setElbowMotorPower(
       Conversions.deadZoneSquare(0.5 * controller.getRightY(), 0.1));

@@ -18,7 +18,6 @@ import frc.robot.commands.intake.UseIntake;
 import frc.robot.commands.swerve.DriveConstantControlCommand;
 import frc.robot.commands.swerve.FeedforwardTest;
 import frc.robot.commands.transport.ArmPositions;
-import frc.robot.commands.transport.ArmPositionsV2;
 import frc.robot.commands.transport.ManualArm;
 import frc.robot.subsystems.intake.IntakeModule;
 import frc.robot.subsystems.swerve.SwerveDrive;
@@ -90,11 +89,11 @@ public class RobotContainer {
    */
 
   private void configureButtonBindings() {
-    yButton.onTrue(new ArmPositionsV2(TransportConstants.VERTICAL_SHOULDER_TICKS, TransportConstants.VERTICAL_ELBOW_TICKS, transport).andThen(new ArmPositionsV2(TransportConstants.HIGH_SHOULDER_TICKS, TransportConstants.HIGH_ELBOW_TICKS, transport)));
-    bButton.onTrue(new ArmPositionsV2(TransportConstants.MID_SHOULDER_TICKS, TransportConstants.MID_ELBOW_TICKS, transport));
-    xButton.onTrue(new ArmPositionsV2(TransportConstants.SHELF_SHOULDER_TICKS, TransportConstants.SHELF_ELBOW_TICKS, transport));
-    aButton.onTrue(new ArmPositionsV2(TransportConstants.GROUND_SHOULDER_TICKS, TransportConstants.GROUND_ELBOW_TICKS, transport));
-    rightBumper.onTrue(new ArmPositionsV2(TransportConstants.START_SHOULDER_TICKS, TransportConstants.START_ELBOW_TICKS, transport));
+    yButton.onTrue(new ArmPositions(TransportConstants.VERTICAL_SHOULDER_TICKS, TransportConstants.VERTICAL_ELBOW_TICKS, transport).andThen(new ArmPositions(TransportConstants.HIGH_SHOULDER_TICKS, TransportConstants.HIGH_ELBOW_TICKS, transport)));
+    bButton.onTrue(new ArmPositions(TransportConstants.MID_SHOULDER_TICKS, TransportConstants.MID_ELBOW_TICKS, transport));
+    xButton.onTrue(new ArmPositions(TransportConstants.SHELF_SHOULDER_TICKS, TransportConstants.SHELF_ELBOW_TICKS, transport));
+    aButton.onTrue(new ArmPositions(TransportConstants.GROUND_SHOULDER_TICKS, TransportConstants.GROUND_ELBOW_TICKS, transport));
+    rightBumper.onTrue(new ArmPositions(TransportConstants.START_SHOULDER_TICKS, TransportConstants.START_ELBOW_TICKS, transport));
     
     leftStickButton.onTrue(new InstantCommand(SwerveDriveSystem::resetGyro));
     rightStickButton.onTrue(new InstantCommand(SwerveDriveSystem::zeroDrive));
