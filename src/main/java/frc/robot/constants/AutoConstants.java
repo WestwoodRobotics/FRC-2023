@@ -7,8 +7,8 @@ public final class AutoConstants {
 
   public static final double maxVelocity = 1; // meters per second
   public static final double maxAcceleration = 2; // meters per second squared
-  public static final double maxAngularVelocity = Math.PI / 2;
-  public static final double maxAngularAcceleration = Math.PI / 2;
+  public static final double maxAngularVelocity = Math.PI / 2; // radians per second
+  public static final double maxAngularAcceleration = Math.PI / 2; // radians per second squared
 
   public static final class PID {
     // Proportional gain for the X controller
