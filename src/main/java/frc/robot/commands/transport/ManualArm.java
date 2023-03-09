@@ -1,6 +1,7 @@
 package frc.robot.commands.transport;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.transport.Transport;
 import frc.robot.util.Conversions;
@@ -29,6 +30,9 @@ public class ManualArm extends CommandBase {
 
     m_transport.setWristMotorPower(
       Conversions.deadZoneSquare(-0.5 * controller.getRightX(), 0.1));
+
+    SmartDashboard.putNumber("shoulder ticks", m_transport.getShoulderMotorLeadEncoderTicks());
+    SmartDashboard.putNumber("elbow ticks", m_transport.getElbowMotorEncoderTicks());
   }
 }
 

@@ -144,8 +144,6 @@ public class RobotContainer {
     SmartDashboard.putNumber("Shoulder Ticks", transport.getShoulderMotorPosition());
     double shoulderPos = transport.getShoulderMotorPosition();
     double elbowPos = transport.getElbowMotorPosition();
-    SmartDashboard.putNumber("shoulder ticks", shoulderPos);
-    SmartDashboard.putNumber("elbow ticks", elbowPos);
   }
 
   public void disabledInit() {

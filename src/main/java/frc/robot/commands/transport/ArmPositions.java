@@ -1,5 +1,6 @@
 package frc.robot.commands.transport;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.transport.Transport;
 
@@ -23,11 +24,13 @@ public class ArmPositions extends CommandBase {
     System.out.println(m_transport.getShoulderMotorPosition());
     m_transport.setShoulderMotorPosition(shoulderPos);
     m_transport.setElbowMotorPosition(elbowPos);
+  
+
   }
 
   @Override
   public boolean isFinished() {
-    return (Math.abs(m_transport.getShoulderMotorPosition() - shoulderPos) < 1000) && (Math.abs(m_transport.getElbowMotorPosition() - elbowPos) < 1000);
+    return (Math.abs(m_transport.getShoulderMotorPosition() - shoulderPos) < 1750) && (Math.abs(m_transport.getElbowMotorPosition() - elbowPos) < 1750);
   }
 }
 
