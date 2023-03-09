@@ -24,8 +24,8 @@ public class ArmPositions extends CommandBase {
     System.out.println(m_transport.getShoulderMotorPosition());
     m_transport.setShoulderMotorPosition(shoulderPos);
     m_transport.setElbowMotorPosition(elbowPos);
-  
-
+    SmartDashboard.putNumber("shoulder ticks", m_transport.getShoulderMotorPosition());
+    SmartDashboard.putNumber("elbow ticks", m_transport.getElbowMotorPosition());
   }
 
   @Override
