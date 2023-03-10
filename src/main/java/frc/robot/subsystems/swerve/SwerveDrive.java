@@ -8,12 +8,12 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.PortConstants;
-import frc.robot.util.Conversions;
+import frc.robot.constants.DriveConstants;
+import frc.robot.constants.PortConstants;
+import frc.robot.constants.SwerveConstants;
+
 
 import java.util.Arrays;
 // import odometry from wpi
@@ -39,23 +39,23 @@ public class SwerveDrive extends SubsystemBase {
     gyro = new Gyro();
 
     // Front Left TODO: WHYYYYY ARE THESE SO BAD???
-    modules[1] = new SwerveModule(PortConstants.kFrontLeftDriveMotorPort,
-      PortConstants.kFrontLeftSteerMotorPort, PortConstants.kFrontLeftCANCoderPort, 0);
+    modules[1] = new SwerveModule(PortConstants.frontLeftDriveMotorPort,
+      PortConstants.frontLeftSteerMotorPort, PortConstants.frontLeftEncoderPort, 0);
     // Front Right
-    modules[0] = new SwerveModule(PortConstants.kFrontRightDriveMotorPort,
-      PortConstants.kFrontRightSteerMotorPort, PortConstants.kFrontRightCANCoderPort, 1);
+    modules[0] = new SwerveModule(PortConstants.frontRightDriveMotorPort,
+      PortConstants.frontRightSteerMotorPort, PortConstants.frontRightEncoderPort, 1);
     // Back Left
-    modules[3] = new SwerveModule(PortConstants.kBackLeftDriveMotorPort, PortConstants.kBackLeftSteerMotorPort, PortConstants.kBackLeftCANCoderPort, 2);
+    modules[3] = new SwerveModule(PortConstants.backLeftDriveMotorPort, PortConstants.backLeftSteerMotorPort, PortConstants.backLeftEncoderPort, 2);
     // Back Right
-    modules[2] = new SwerveModule(PortConstants.kBackRightDriveMotorPort,
-      PortConstants.kBackRightSteerMotorPort, PortConstants.kBackRightCANCoderPort, 3);
+    modules[2] = new SwerveModule(PortConstants.backRightDriveMotorPort,
+      PortConstants.backRightSteerMotorPort, PortConstants.backRightEncoderPort, 3);
 
     // initialize classes which require Swerve
     odometry = new Odometry(this);
   }
 
   public void drive(double xSpeed, double ySpeed, double rot, boolean isFieldRelative) {
-    SwerveModuleState[] swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
+    SwerveModuleState[] swerveModuleStates = SwerveConstants.swerveDriveKinematics.toSwerveModuleStates(
       isFieldRelative
         ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, gyro.getYaw())
         : new ChassisSpeeds(xSpeed, ySpeed, rot));
@@ -69,6 +69,8 @@ public class SwerveDrive extends SubsystemBase {
       SwerveModule module = modules[i];
 //      System.out.printf("[%d] %s\n", i, swerveModuleState);
       module.setDesiredState(swerveModuleState);
+      SmartDashboard.putNumber("mod thinky", modules[3].getVelocity(0));
+      SmartDashboard.putNumber("other thinky", modules[0].getVelocity(0));
     }
   }
 
@@ -76,6 +78,11 @@ public class SwerveDrive extends SubsystemBase {
     for (SwerveModule module : modules) {
       module.zeroDriveMotor();
     }
+  }
+
+  public boolean resetGyro(){
+    gyro.zeroGyro();
+    return true;
   }
 
   public Rotation2d getHeading() {
@@ -114,5 +121,10 @@ public class SwerveDrive extends SubsystemBase {
 
   public void resetPose(Pose2d pose) {
     odometry.resetOdometry(pose);
+  }
+  
+  public SwerveModule getModule(int id)
+  {
+    return modules[id];
   }
 }

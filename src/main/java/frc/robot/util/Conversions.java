@@ -27,6 +27,7 @@ public class Conversions {
    */
   public static double falconToRadians(double counts, double gearRatio) {
     return counts * (2 * Math.PI / (gearRatio * 2048.0));
+    //return counts * (1 / 2048) * (gearRatio)
   }
 
   /**
@@ -91,8 +92,10 @@ public class Conversions {
       return 0;
     }
     else {
-      return Math.copySign(Math.pow(input, 2), input);
+      return input;
+      //return Math.copySign(Math.pow(input, 2), input);
     }
+  }
 
   public static double radiansToDegrees(double radians, double gearRatio){
     return radians * (360.0 / (gearRatio * 2048.0));
