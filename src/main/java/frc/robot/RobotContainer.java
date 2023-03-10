@@ -195,10 +195,10 @@ public class RobotContainer {
     return new SequentialCommandGroup
     (
       new InstantCommand(() -> SwerveDriveSystem.resetPose(traj.getInitialPose())), // Tell it that its initial pose is where it is
-      new ArmPositions(TransportConstants.VERTICAL_SHOULDER_TICKS, TransportConstants.VERTICAL_ELBOW_TICKS, transport),
-      new ArmPositions(TransportConstants.HIGH_SHOULDER_TICKS, TransportConstants.HIGH_ELBOW_TICKS, transport),
+      new ArmPositions("VERTICAL", TransportConstants.VERTICAL_SHOULDER_TICKS, TransportConstants.VERTICAL_ELBOW_TICKS, TransportConstants.WRIST_START_TICKS, 0.7, transport),
+      new ArmPositions("HIGH", TransportConstants.HIGH_SHOULDER_TICKS, TransportConstants.HIGH_ELBOW_TICKS, TransportConstants.WRIST_FLIPPED_TICKS, 0.5, transport),
       new slowOuttake(intake),
-      new ArmPositions(TransportConstants.START_SHOULDER_TICKS, TransportConstants.START_ELBOW_TICKS, transport),
+      new ArmPositions("START", TransportConstants.START_SHOULDER_TICKS, TransportConstants.START_ELBOW_TICKS, TransportConstants.WRIST_START_TICKS, 0.7, transport),
       swerveControllerCommand, // Go through the motions
       new InstantCommand(() -> SwerveDriveSystem.zeroDrive()).andThen(() -> SwerveDriveSystem.zeroTurn())
     );
