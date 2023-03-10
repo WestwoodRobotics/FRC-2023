@@ -8,6 +8,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.DriveConstants;
 import frc.robot.constants.PortConstants;
@@ -60,7 +61,7 @@ public class SwerveDrive extends SubsystemBase {
         : new ChassisSpeeds(xSpeed, ySpeed, rot));
 
 //    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, AutoConstants.kMaxSpeedMetersPerSecond);
-    // todo: change based on whether in auton, or teleoperated
+    // todo: change based on whether in auton, or teleoperated <---***NOT NEEDED ANYMORE***
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.maxSpeed * 1.2);
 
     for (int i = 0; i < swerveModuleStates.length; i++) {
@@ -68,6 +69,7 @@ public class SwerveDrive extends SubsystemBase {
       SwerveModule module = modules[i];
 //      System.out.printf("[%d] %s\n", i, swerveModuleState);
       module.setDesiredState(swerveModuleState);
+      SmartDashboard.putNumber("Angle Diff Back Left", modules[3].getAngleDiff());
     }
   }
 

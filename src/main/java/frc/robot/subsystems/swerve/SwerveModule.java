@@ -177,6 +177,11 @@ public class SwerveModule extends SubsystemBase {
       steerMotor.getSelectedSensorPosition() * (360.0 / (SwerveConstants.steerMotorGearRatio * 2048.0)))); // COnverts the encoder ticks to angle
   }
 
+  private double debugAngleDiff = 0; //FOR DEBUGGING PURPOSES, DO NOT USE FOR ACTUAL FUNCTIONS
+  public double getAngleDiff()
+  {
+    return debugAngleDiff;
+  }
   /**
    * Sets the desired state of the swerve module, using the PID controllers to
    * calculate the necessary motor outputs.
@@ -193,13 +198,13 @@ public class SwerveModule extends SubsystemBase {
     SwerveModuleState outputState = CTREModuleState.optimize(state, new Rotation2d(currentAngle));
 
     double angleDiff = currentAngle - outputState.angle.getRadians();
+    debugAngleDiff = angleDiff; // Variable for debugging ONLY
 //    double targetDriveSpeed = outputState.speedMetersPerSecond * ModuleConstants.kDriveEncoderRot2Meter * 10 * Math.cos(angleDiff);
     double targetDriveSpeed = outputState.speedMetersPerSecond * Math.cos(angleDiff);
 
-    double drive_vel = getVelocity(0);
+    double drive_vel = getVelocity();
     // Output for the drive motor (in falcon ticks)
     double driveMotorOutput = drivePIDController.calculate(drive_vel, targetDriveSpeed);
-    // todo: this doesn't work at all (always returns 0)
     double driveFeedforward = driveMotorFeedForward.calculate(targetDriveSpeed);
 
 //    System.out.printf("[%d] Current angle: %f6, target angle: %f6\n", moduleNum, currentAngle, outputState.angle.getRadians());
