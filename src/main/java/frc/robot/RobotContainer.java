@@ -31,6 +31,7 @@ import frc.robot.constants.AutoConstants;
 import frc.robot.constants.PortConstants;
 import frc.robot.constants.SwerveConstants;
 import frc.robot.commands.intake.UseIntake;
+import frc.robot.commands.intake.slowOuttake;
 import frc.robot.commands.swerve.DriveConstantControlCommand;
 import frc.robot.commands.swerve.FeedforwardTest;
 import frc.robot.commands.transport.ArmPositions;
@@ -158,13 +159,13 @@ public class RobotContainer {
 
     Trajectory traj = TrajectoryGenerator.generateTrajectory
     (
-      new Pose2d(0, 0, new Rotation2d(0)), //Initial Pose
+      new Pose2d(0, 0, new Rotation2d(0)),
       List.of
       (
         new Translation2d(0, 1)
-      ), // List of waypoints
-      new Pose2d(1, 1, Rotation2d.fromDegrees(0)), // Ending position
-      trajConfig // The limits and stuff
+      ),
+      new Pose2d(1, 1, Rotation2d.fromDegrees(0)),
+      trajConfig
     );
 
 
@@ -173,7 +174,8 @@ public class RobotContainer {
     ProfiledPIDController thetaController = new ProfiledPIDController(AutoConstants.PID.kPControllerTheta, 0, AutoConstants.PID.kDControllerTheta, AutoConstants.thetaControllerConstraints);
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-    
+
+    SwerveModuleState[] states = new SwerveModuleState[4];
     SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand
     (
       traj,
@@ -191,8 +193,12 @@ public class RobotContainer {
     return new SequentialCommandGroup
     (
       new InstantCommand(() -> SwerveDriveSystem.resetPose(traj.getInitialPose())), // Tell it that its initial pose is where it is
+      new ArmPositions(TransportConstants.VERTICAL_SHOULDER_TICKS, TransportConstants.VERTICAL_ELBOW_TICKS, transport),
+      new ArmPositions(TransportConstants.HIGH_SHOULDER_TICKS, TransportConstants.HIGH_ELBOW_TICKS, transport),
+      new slowOuttake(intake),
+      new ArmPositions(TransportConstants.START_SHOULDER_TICKS, TransportConstants.START_ELBOW_TICKS, transport),
       swerveControllerCommand, // Go through the motions
-      new InstantCommand(() -> SwerveDriveSystem.zeroDrive()).andThen(() -> SwerveDriveSystem.zeroTurn()) // Reset the goofy
+      new InstantCommand(() -> SwerveDriveSystem.zeroDrive()).andThen(() -> SwerveDriveSystem.zeroTurn())
     );
   }
 
@@ -212,6 +218,5 @@ public class RobotContainer {
   public void disabledInit() {
     System.out.println("Saving encoder offsets");
     SwerveDriveSystem.saveEncoderOffsets();
-
   }
 }
