@@ -80,6 +80,14 @@ public class SwerveDrive extends SubsystemBase {
     }
   }
 
+  public void zeroTurn()
+  {
+    for (SwerveModule module : modules)
+    {
+      module.zeroTurnMotor();
+    }
+  }
+
   public boolean resetGyro(){
     gyro.zeroGyro();
     return true;
@@ -126,5 +134,14 @@ public class SwerveDrive extends SubsystemBase {
   public SwerveModule getModule(int id)
   {
     return modules[id];
+  }
+
+  public void setModuleStatesDirectly(SwerveModuleState[] desiredStates)
+  {
+    for (int i = 0; i < desiredStates.length; i++) {
+      SwerveModuleState swerveModuleState = desiredStates[i];
+      SwerveModule module = modules[i];
+      module.setDesiredState(swerveModuleState);
+    }
   }
 }

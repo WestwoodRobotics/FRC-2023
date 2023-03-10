@@ -201,14 +201,11 @@ public class SwerveModule extends SubsystemBase {
     double driveMotorOutput = drivePIDController.calculate(drive_vel, targetDriveSpeed);
     // todo: this doesn't work at all (always returns 0)
     double driveFeedforward = driveMotorFeedForward.calculate(targetDriveSpeed);
-    SmartDashboard.putNumber("Target drive speed", targetDriveSpeed);
-    SmartDashboard.putNumber("Actual drive Speed", drive_vel);
 
 //    System.out.printf("[%d] Current angle: %f6, target angle: %f6\n", moduleNum, currentAngle, outputState.angle.getRadians());
 
-//    if (driveFeedforward != 0) System.out.printf("Drive velocity: %f -- Target speed: %f%n", drive_vel, targetDriveSpeed);
-   if (driveFeedforward != 0) System.out.printf("Drive feed forward: %f -- Drive motor output: %f%n", driveFeedforward, driveMotorOutput);
     driveMotor.set(ControlMode.PercentOutput, driveFeedforward + driveMotorOutput);
+    
     steerMotor.set(ControlMode.Position,
       Conversions.degreesToFalcon(outputState.angle.getDegrees(), SwerveConstants.steerMotorGearRatio));
   }
@@ -218,6 +215,11 @@ public class SwerveModule extends SubsystemBase {
    */
   public void zeroDriveMotor() {
     driveMotor.set(ControlMode.PercentOutput, 0);
+  }
+
+  public void zeroTurnMotor()
+  {
+    steerMotor.set(ControlMode.Position, 0);
   }
 
   public void setBrakeMode(boolean mode) { // True is brake, false is coast
