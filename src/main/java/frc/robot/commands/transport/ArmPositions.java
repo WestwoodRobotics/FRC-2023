@@ -17,7 +17,7 @@ public class ArmPositions extends CommandBase {
   //boolean validPosition;
 
 
-  public ArmPositions(double shoulderPosition, double elbowPosition, double wristPosition, double percentVolts, Transport arm, IntakeModule intake) {
+  public ArmPositions(double shoulderPosition, double elbowPosition, double wristPosition, double percentVolts, Transport arm) {
     
     //checks that the positions transitions do no result in going over height limit
     /*currentPos = arm.getPosition();

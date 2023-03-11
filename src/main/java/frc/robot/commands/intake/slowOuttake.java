@@ -18,7 +18,7 @@ public class slowOuttake extends CommandBase {
   @Override
   public void initialize() {
     intake.setIntakePower(-0.25);
-    new WaitCommand(1);
+    new WaitCommand(1); //This might lead to problems
     intake.setIntakePower(0);
   }
 
