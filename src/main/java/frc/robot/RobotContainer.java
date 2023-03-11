@@ -58,12 +58,14 @@ public class RobotContainer {
   private final JoystickButton yButton = new JoystickButton(primaryController, XboxController.Button.kY.value);
   private final JoystickButton aButton = new JoystickButton(primaryController, XboxController.Button.kA.value);
   private final JoystickButton bButton = new JoystickButton(primaryController, XboxController.Button.kB.value);
-  private final JoystickButton xButton = new JoystickButton(primaryController, XboxController.Button.kX.value);
+  private final JoystickButton xButton = new JoystickButton(primaryController, 3);
   private final JoystickButton rightBumper = new JoystickButton(primaryController, XboxController.Button.kRightBumper.value);
   private final JoystickButton leftBumper = new JoystickButton(primaryController, XboxController.Button.kLeftBumper.value);
   private final JoystickButton leftStickButton = new JoystickButton(primaryController, XboxController.Button.kLeftStick.value);
   private final JoystickButton rightStickButton = new JoystickButton(primaryController, XboxController.Button.kRightStick.value);
   private final JoystickButton secondBButton = new JoystickButton(secondaryController, XboxController.Button.kB.value);
+  private final JoystickButton secondXButton = new JoystickButton(secondaryController, XboxController.Button.kX.value);
+
   // The robot's subsystems and commands are defined here...
   private final SwerveDrive SwerveDriveSystem = new SwerveDrive();
   //private final SwerveModule swerveMod = SwerveDriveSystem.getModule(0);
@@ -106,18 +108,18 @@ public class RobotContainer {
    */
 
   private void configureButtonBindings() {
-    yButton.onTrue(new ArmPositions("VERTICAL", TransportConstants.VERTICAL_SHOULDER_TICKS, TransportConstants.VERTICAL_ELBOW_TICKS, TransportConstants.WRIST_START_TICKS, 0.7, transport)
-          .andThen(new ArmPositions("HIGH", TransportConstants.HIGH_SHOULDER_TICKS, TransportConstants.HIGH_ELBOW_TICKS, TransportConstants.WRIST_FLIPPED_TICKS, 0.5, transport)));
-    bButton.onTrue(new ArmPositions("VERTICAL", TransportConstants.VERTICAL_SHOULDER_TICKS, TransportConstants.VERTICAL_ELBOW_TICKS, TransportConstants.WRIST_START_TICKS, 0.7, transport)
-          .andThen(new ArmPositions("MID", TransportConstants.MID_SHOULDER_TICKS, TransportConstants.MID_ELBOW_TICKS, TransportConstants.WRIST_FLIPPED_TICKS, 0.5, transport)));
-    xButton.onTrue(new ArmPositions("SHELF", TransportConstants.SHELF_SHOULDER_TICKS, TransportConstants.SHELF_ELBOW_TICKS, TransportConstants.WRIST_START_TICKS, 0.7, transport));
-    aButton.onTrue(new ArmPositions("GROUND", TransportConstants.GROUND_SHOULDER_TICKS, TransportConstants.GROUND_ELBOW_TICKS, TransportConstants.WRIST_START_TICKS, 0.7, transport));
-    rightBumper.onTrue(new ArmPositions("START", TransportConstants.START_SHOULDER_TICKS, TransportConstants.START_ELBOW_TICKS, TransportConstants.WRIST_START_TICKS, 0.7, transport));
+    yButton.onTrue(new ArmPositions(TransportConstants.VERTICAL_SHOULDER_TICKS, TransportConstants.VERTICAL_ELBOW_TICKS, TransportConstants.WRIST_START_TICKS, 0.5, transport, intake)
+          .andThen(new ArmPositions(TransportConstants.HIGH_SHOULDER_TICKS, TransportConstants.HIGH_ELBOW_TICKS, TransportConstants.WRIST_FLIPPED_TICKS, 0.3, transport, intake)));
+    bButton.onTrue(new ArmPositions(TransportConstants.VERTICAL_SHOULDER_TICKS, TransportConstants.VERTICAL_ELBOW_TICKS, TransportConstants.WRIST_START_TICKS, 0.5, transport, intake)
+          .andThen(new ArmPositions(TransportConstants.MID_SHOULDER_TICKS, TransportConstants.MID_ELBOW_TICKS, TransportConstants.WRIST_FLIPPED_TICKS, 0.5, transport, intake)));
+    xButton.onTrue(new ArmPositions(TransportConstants.SHELF_SHOULDER_TICKS, TransportConstants.SHELF_ELBOW_TICKS, TransportConstants.WRIST_START_TICKS, 0.5, transport, intake));
+    aButton.onTrue(new ArmPositions(TransportConstants.GROUND_SHOULDER_TICKS, TransportConstants.GROUND_ELBOW_TICKS, TransportConstants.WRIST_START_TICKS, 0.5, transport, intake));
+    rightBumper.onTrue(new ArmPositions(TransportConstants.START_SHOULDER_TICKS, TransportConstants.START_ELBOW_TICKS, TransportConstants.WRIST_START_TICKS, 0.5, transport, intake));
     
-    leftStickButton.onTrue(new InstantCommand(SwerveDriveSystem::resetGyro));
-    rightStickButton.onTrue(new InstantCommand(SwerveDriveSystem::zeroDrive));
+    //leftStickButton.onTrue(new InstantCommand(SwerveDriveSystem::resetGyro));
+    //rightStickButton.onTrue(new InstantCommand(SwerveDriveSystem::zeroDrive));
     secondBButton.onTrue(new InstantCommand(transport::zeroTransportEncoders));
-    
+    secondXButton.onTrue(new InstantCommand(SwerveDriveSystem::resetGyro));
 
     // The following code is for the primary controller
     WrapperCommand resetMotorEncoderCommand = new InstantCommand(SwerveDriveSystem::resetAllEncoders).ignoringDisable(true);
@@ -162,11 +164,13 @@ public class RobotContainer {
     Trajectory traj = TrajectoryGenerator.generateTrajectory
     (
       new Pose2d(0, 0, new Rotation2d(0)),
+      
       List.of
       (
-        new Translation2d(0, 1)
+        new Translation2d(0, -.5)
       ),
-      new Pose2d(1, 1, Rotation2d.fromDegrees(0)),
+      
+      new Pose2d(0, -1, Rotation2d.fromDegrees(0)),
       trajConfig
     );
 
@@ -177,7 +181,6 @@ public class RobotContainer {
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
 
-    SwerveModuleState[] states = new SwerveModuleState[4];
     SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand
     (
       traj,
@@ -192,13 +195,15 @@ public class RobotContainer {
 
 
     //put any other commands to do during auton in here
+    //SmartDashboard.putBoolean("Auton entered", true);
     return new SequentialCommandGroup
     (
       new InstantCommand(() -> SwerveDriveSystem.resetPose(traj.getInitialPose())), // Tell it that its initial pose is where it is
-      new ArmPositions("VERTICAL", TransportConstants.VERTICAL_SHOULDER_TICKS, TransportConstants.VERTICAL_ELBOW_TICKS, TransportConstants.WRIST_START_TICKS, 0.7, transport),
-      new ArmPositions("HIGH", TransportConstants.HIGH_SHOULDER_TICKS, TransportConstants.HIGH_ELBOW_TICKS, TransportConstants.WRIST_FLIPPED_TICKS, 0.5, transport),
-      new slowOuttake(intake),
-      new ArmPositions("START", TransportConstants.START_SHOULDER_TICKS, TransportConstants.START_ELBOW_TICKS, TransportConstants.WRIST_START_TICKS, 0.7, transport),
+      //new InstantCommand(() -> SwerveDriveSystem.setForwardTurn()),
+      //new ArmPositions("VERTICAL", TransportConstants.VERTICAL_SHOULDER_TICKS, TransportConstants.VERTICAL_ELBOW_TICKS, TransportConstants.WRIST_START_TICKS, 0.7, transport),
+      //new ArmPositions("HIGH", TransportConstants.HIGH_SHOULDER_TICKS, TransportConstants.HIGH_ELBOW_TICKS, TransportConstants.WRIST_START_TICKS, 0.5, transport),
+      //new slowOuttake(intake),
+      //new ArmPositions("START", TransportConstants.START_SHOULDER_TICKS, TransportConstants.START_ELBOW_TICKS, TransportConstants.WRIST_START_TICKS, 0.7, transport),
       swerveControllerCommand, // Go through the motions
       new InstantCommand(() -> SwerveDriveSystem.zeroDrive()).andThen(() -> SwerveDriveSystem.zeroTurn())
     );
@@ -213,7 +218,9 @@ public class RobotContainer {
 
   public void periodic() {
     SmartDashboard.putNumber("Timer:", 135 - timer.get());
-    SmartDashboard.putNumber("Shoulder Ticks", transport.getShoulderMotorPosition());
+    //SmartDashboard.putNumber("Shoulder Ticks", transport.getShoulderMotorPosition());
+    //SmartDashboard.putNumber("Elbow Ticks", transport.getElbowMotorPosition());
+    //SmartDashboard.putNumber("Wrist Ticks", transport.getWristMotorPosition());
     double shoulderPos = transport.getShoulderMotorPosition();
     double elbowPos = transport.getElbowMotorPosition();
   }
