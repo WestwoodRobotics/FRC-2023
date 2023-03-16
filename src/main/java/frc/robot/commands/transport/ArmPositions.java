@@ -1,5 +1,6 @@
 package frc.robot.commands.transport;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.transport.Transport;
@@ -12,19 +13,26 @@ public class ArmPositions extends CommandBase {
   double wristPos;
   double percentVolts;
   String currentPos;
-  boolean validPosition;
+  //boolean validPosition;
+  Timer timer;
 
 
-  public ArmPositions(String newPos, double shoulderPosition, double elbowPosition, double wristPosition, double percentVolts, Transport arm) {
+  public ArmPositions(double shoulderPosition, double elbowPosition, double wristPosition, double percentVolts, Transport arm) {
     
     //checks that the positions transitions do no result in going over height limit
+    /*
     currentPos = arm.getPosition();
     if ((currentPos.equals("HIGH") || currentPos.equals("MID")) && (!newPos.equals("START"))) {
       validPosition = false;
     } else {
       validPosition = true;
     }
-    
+    */
+
+    timer = new Timer();
+    timer.reset();
+    timer.start();
+
     this.shoulderPos = shoulderPosition;
     this.elbowPos = elbowPosition;
     this.wristPos = wristPosition;
@@ -33,13 +41,13 @@ public class ArmPositions extends CommandBase {
     m_transport = arm;
     addRequirements(arm);
 
-    m_transport.setPosition(newPos);
+    //m_transport.setPosition(newPos);
   }
 
   @Override
   public void execute() {
     
-    SmartDashboard.putString("Current Position", currentPos);
+    //SmartDashboard.putString("Current Position", currentPos);
 
     //Shoulder
     //Puts percent volts to shoulder until it reaches desired ticks
@@ -124,7 +132,7 @@ public class ArmPositions extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return (determineShoulderFinished() && determineElbowFinished() && determineWristFinished()) || !validPosition;
+    return (determineShoulderFinished() && determineElbowFinished() && determineWristFinished()) || (timer.get() > 5);
   }
 
   //Shoulder
