@@ -36,7 +36,7 @@ public final class TransportConstants {
   public static final double VERTICAL_ELBOW_TICKS = 50000;
   public static final double VERTICAL_PERCENT_VOLTS = 0.5;
   
-  public static final double SHELF_SHOULDER_TICKS = 90000;
+  public static final double SHELF_SHOULDER_TICKS = 85000;
   public static final double SHELF_ELBOW_TICKS = 173000;
   public static final double SHELF_PERCENT_VOLTS = 0.5;
 

@@ -36,7 +36,7 @@ import frc.robot.commands.swerve.DriveConstantControlCommand;
 import frc.robot.commands.swerve.FeedforwardTest;
 import frc.robot.commands.transport.ArmPositions;
 import frc.robot.commands.transport.ManualArm;
-import frc.robot.subsystems.TimeAuton;
+import frc.robot.commands.TimeAutonCommand;
 import frc.robot.subsystems.intake.IntakeModule;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import frc.robot.subsystems.swerve.SwerveModule;
@@ -201,11 +201,11 @@ public class RobotContainer {
     (
       //new InstantCommand(() -> SwerveDriveSystem.resetPose(traj.getInitialPose())), // Tell it that its initial pose is where it is
       new InstantCommand(() -> SwerveDriveSystem.setForwardTurn()),
-      new ArmPositions(TransportConstants.VERTICAL_SHOULDER_TICKS, TransportConstants.VERTICAL_ELBOW_TICKS, TransportConstants.WRIST_START_TICKS, 0.7, transport),
-      new ArmPositions(TransportConstants.HIGH_SHOULDER_TICKS, TransportConstants.HIGH_ELBOW_TICKS, TransportConstants.WRIST_START_TICKS, 0.5, transport),
-      new slowOuttake(intake),
-      new ArmPositions(TransportConstants.START_SHOULDER_TICKS, TransportConstants.START_ELBOW_TICKS, TransportConstants.WRIST_START_TICKS, 0.7, transport),
-      TimeAuton.getTimeAuton(SwerveDriveSystem),
+      //new ArmPositions(TransportConstants.VERTICAL_SHOULDER_TICKS, TransportConstants.VERTICAL_ELBOW_TICKS, TransportConstants.WRIST_START_TICKS, 0.5, transport),
+      //new ArmPositions(255000, TransportConstants.HIGH_ELBOW_TICKS, TransportConstants.WRIST_START_TICKS, 0.5, transport),
+      //new slowOuttake(intake),
+      //new ArmPositions(TransportConstants.START_SHOULDER_TICKS, TransportConstants.START_ELBOW_TICKS, TransportConstants.WRIST_START_TICKS, 0.5, transport),
+      new TimeAutonCommand(SwerveDriveSystem), //Only if you want to do the drive auton time based
       //swerveControllerCommand, // Go through the motions
       new InstantCommand(() -> SwerveDriveSystem.zeroDrive()).andThen(() -> SwerveDriveSystem.zeroTurn())
     );
