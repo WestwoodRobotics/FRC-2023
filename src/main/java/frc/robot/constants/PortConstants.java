@@ -29,7 +29,8 @@ public final class PortConstants {
 
   // PWM ports for Transport subsystem
   public static final int shoulderLeadMotorPort = 20;
-  public static final int shoulderFollow1MotorPort = 22;
+  public static final int shoulderFollow1MotorPort = 21;
+  public static final int shoulderFollow2MotorPort = 22;
   public static final int elbowMotorPort = 29;
   public static final int wristMotorPort = 34;
   public static final int intakeRollerPort = 23;
