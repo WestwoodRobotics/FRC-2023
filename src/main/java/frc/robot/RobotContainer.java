@@ -108,13 +108,13 @@ public class RobotContainer {
    */
 
   private void configureButtonBindings() {
-    yButton.onTrue(new ArmPositions(TransportConstants.VERTICAL_SHOULDER_TICKS, TransportConstants.VERTICAL_ELBOW_TICKS, TransportConstants.WRIST_START_TICKS, 0.7, transport)
-          .andThen(new ArmPositions(TransportConstants.HIGH_SHOULDER_TICKS, TransportConstants.HIGH_ELBOW_TICKS, TransportConstants.WRIST_FLIPPED_TICKS, 0.5, transport)));
-    bButton.onTrue(new ArmPositions(TransportConstants.VERTICAL_SHOULDER_TICKS, TransportConstants.VERTICAL_ELBOW_TICKS, TransportConstants.WRIST_START_TICKS, 0.7, transport)
-          .andThen(new ArmPositions(TransportConstants.MID_SHOULDER_TICKS, TransportConstants.MID_ELBOW_TICKS, TransportConstants.WRIST_FLIPPED_TICKS, 0.5, transport)));
-    xButton.onTrue(new ArmPositions(TransportConstants.SHELF_SHOULDER_TICKS, TransportConstants.SHELF_ELBOW_TICKS, TransportConstants.WRIST_START_TICKS, 0.7, transport));
-    aButton.onTrue(new ArmPositions(TransportConstants.GROUND_SHOULDER_TICKS, TransportConstants.GROUND_ELBOW_TICKS, TransportConstants.WRIST_START_TICKS, 0.7, transport));
-    rightBumper.onTrue(new ArmPositions(TransportConstants.START_SHOULDER_TICKS, TransportConstants.START_ELBOW_TICKS, TransportConstants.WRIST_START_TICKS, 0.7, transport));
+    yButton.onTrue(new ArmPositions(TransportConstants.VERTICAL_SHOULDER_ROT, TransportConstants.VERTICAL_ELBOW_ROT, TransportConstants.WRIST_START_ROT, 0.7, transport)
+          .andThen(new ArmPositions(TransportConstants.HIGH_SHOULDER_ROT, TransportConstants.HIGH_ELBOW_ROT, TransportConstants.WRIST_FLIPPED_ROT, 0.5, transport)));
+    bButton.onTrue(new ArmPositions(TransportConstants.VERTICAL_SHOULDER_ROT, TransportConstants.VERTICAL_ELBOW_ROT, TransportConstants.WRIST_START_ROT, 0.7, transport)
+          .andThen(new ArmPositions(TransportConstants.MID_SHOULDER_ROT, TransportConstants.MID_ELBOW_ROT, TransportConstants.WRIST_FLIPPED_ROT, 0.5, transport)));
+    xButton.onTrue(new ArmPositions(TransportConstants.SHELF_SHOULDER_ROT, TransportConstants.SHELF_ELBOW_ROT, TransportConstants.WRIST_START_ROT, 0.7, transport));
+    aButton.onTrue(new ArmPositions(TransportConstants.GROUND_SHOULDER_ROT, TransportConstants.GROUND_ELBOW_ROT, TransportConstants.WRIST_START_ROT, 0.7, transport));
+    rightBumper.onTrue(new ArmPositions(TransportConstants.START_SHOULDER_ROT, TransportConstants.START_ELBOW_ROT, TransportConstants.WRIST_START_ROT, 0.7, transport));
     
     leftStickButton.onTrue(new InstantCommand(SwerveDriveSystem::resetGyro));
     rightStickButton.onTrue(new InstantCommand(SwerveDriveSystem::zeroDrive));
@@ -178,10 +178,10 @@ public class RobotContainer {
     return new SequentialCommandGroup
     (
       new InstantCommand(() -> SwerveDriveSystem.resetPose(traj.getInitialPose())), // Tell it that its initial pose is where it is
-      new ArmPositions(TransportConstants.VERTICAL_SHOULDER_TICKS, TransportConstants.VERTICAL_ELBOW_TICKS, TransportConstants.WRIST_START_TICKS, 0.7, transport),
-      new ArmPositions(TransportConstants.HIGH_SHOULDER_TICKS, TransportConstants.HIGH_ELBOW_TICKS, TransportConstants.WRIST_FLIPPED_TICKS, 0.5, transport),
+      new ArmPositions(TransportConstants.VERTICAL_SHOULDER_ROT, TransportConstants.VERTICAL_ELBOW_ROT, TransportConstants.WRIST_START_ROT, 0.5, transport),
+      new ArmPositions(TransportConstants.HIGH_SHOULDER_ROT, TransportConstants.HIGH_ELBOW_ROT, TransportConstants.WRIST_FLIPPED_ROT, 0.5, transport),
       new slowOuttake(intake),
-      new ArmPositions(TransportConstants.START_SHOULDER_TICKS, TransportConstants.START_ELBOW_TICKS, TransportConstants.WRIST_START_TICKS, 0.7, transport),
+      new ArmPositions(TransportConstants.START_SHOULDER_ROT, TransportConstants.START_ELBOW_ROT, TransportConstants.WRIST_START_ROT, 0.5, transport),
       swerveControllerCommand, // Go through the motions
       new InstantCommand(() -> SwerveDriveSystem.zeroDrive()).andThen(() -> SwerveDriveSystem.zeroTurn())
     );

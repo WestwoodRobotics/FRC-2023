@@ -30,14 +30,14 @@ public class Transport extends SubsystemBase {
     shoulderMotorFollow1.follow(shoulderMotorLead);
     shoulderMotorFollow2.follow(shoulderMotorLead);
 
-    shoulderMotorLead.setSoftLimit(SoftLimitDirection.kForward ,(float)TransportConstants.MAX_SHOULDER_TICKS);
-    shoulderMotorLead.setSoftLimit(SoftLimitDirection.kReverse ,(float)TransportConstants.MIN_SHOULDER_TICKS);
+    shoulderMotorLead.setSoftLimit(SoftLimitDirection.kForward ,(float)TransportConstants.MAX_SHOULDER_ROT);
+    shoulderMotorLead.setSoftLimit(SoftLimitDirection.kReverse ,(float)TransportConstants.MIN_SHOULDER_ROT);
 
-    elbowMotor.setSoftLimit(SoftLimitDirection.kForward ,(float)TransportConstants.MAX_ELBOW_TICKS);
-    elbowMotor.setSoftLimit(SoftLimitDirection. kReverse,(float)TransportConstants.MIN_ELBOW_TICKS);
+    elbowMotor.setSoftLimit(SoftLimitDirection.kForward ,(float)TransportConstants.MAX_ELBOW_ROT);
+    elbowMotor.setSoftLimit(SoftLimitDirection. kReverse,(float)TransportConstants.MIN_ELBOW_ROT);
 
-    wristMotor.setSoftLimit(SoftLimitDirection.kForward ,(float)TransportConstants.MAX_WRIST_TICKS);
-    wristMotor.setSoftLimit(SoftLimitDirection.kReverse ,(float)TransportConstants.MIN_WRIST_TICKS);
+    wristMotor.setSoftLimit(SoftLimitDirection.kForward ,(float)TransportConstants.MAX_WRIST_ROT);
+    wristMotor.setSoftLimit(SoftLimitDirection.kReverse ,(float)TransportConstants.MIN_WRIST_ROT);
     
   }
 
