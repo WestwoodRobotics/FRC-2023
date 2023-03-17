@@ -74,7 +74,7 @@ public class ArmPositions extends CommandBase {
     }
     else if (!this.determineShoulderFinished() && (m_transport.getShoulderMotorPosition() > shoulderPos)) 
     {
-      m_transport.setShoulderMotorPower(-percentVolts/2);
+      m_transport.setShoulderMotorPower(-(percentVolts/2));
     } 
     else if (this.determineShoulderFinished()) 
     {
@@ -109,20 +109,20 @@ public class ArmPositions extends CommandBase {
     //Puts percent volts to wrist until it reaches desired ticks
     if (!this.determineWristClose() && (m_transport.getWristMotorPosition() < wristPos)) 
     {
-      m_transport.setWristMotorPower(0.8);
+      m_transport.setWristMotorPower(0.6);
     } 
     else if (!this.determineWristClose() && (m_transport.getWristMotorPosition() > wristPos)) 
     {
-      m_transport.setWristMotorPower(-0.8);
+      m_transport.setWristMotorPower(-0.6);
     } 
     //decreases power when it is close to desired ticks to prevent rapidly going to 0 volts
     else if (!this.determineWristFinished() && (m_transport.getWristMotorPosition() < wristPos)) 
     {
-      m_transport.setWristMotorPower(0.3);
+      m_transport.setWristMotorPower(0.2);
     } 
     else if (!this.determineWristFinished() && (m_transport.getWristMotorPosition() > wristPos)) 
     {
-      m_transport.setWristMotorPower(-0.3);
+      m_transport.setWristMotorPower(-0.2);
     } 
     else if (this.determineWristFinished()) 
     {

@@ -29,10 +29,11 @@ public class ManualArm extends CommandBase {
       Conversions.deadZoneSquare(0.5 * controller.getRightY(), 0.1));
 
     m_transport.setWristMotorPower(
-      Conversions.deadZoneSquare(-0.5 * controller.getRightX(), 0.1));
+      Conversions.deadZoneSquare(-0.5 * controller.getRightX(), 0.2));
 
     SmartDashboard.putNumber("shoulder ticks", m_transport.getShoulderMotorPosition());
     SmartDashboard.putNumber("elbow ticks", m_transport.getElbowMotorPosition());
+    SmartDashboard.putNumber("wrist Ticks", m_transport.getWristMotorPosition());
   }
 }
 

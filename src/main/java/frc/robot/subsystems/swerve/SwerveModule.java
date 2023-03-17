@@ -194,7 +194,7 @@ public class SwerveModule extends SubsystemBase {
 
     double angleDiff = currentAngle - outputState.angle.getRadians();
 //    double targetDriveSpeed = outputState.speedMetersPerSecond * ModuleConstants.kDriveEncoderRot2Meter * 10 * Math.cos(angleDiff);
-    double targetDriveSpeed = outputState.speedMetersPerSecond * Math.cos(angleDiff);
+    double targetDriveSpeed = outputState.speedMetersPerSecond; //* Math.cos(angleDiff);
 
     double drive_vel = getVelocity();
     // Output for the drive motor (in falcon ticks)
