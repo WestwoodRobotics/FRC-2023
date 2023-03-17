@@ -17,6 +17,7 @@ public class ArmPositions extends CommandBase {
   String currentPos;
   //boolean validPosition;
   Timer timer;
+  double startTime;
 
 
   public ArmPositions(double shoulderPosition, double elbowPosition, double wristPosition, double percentVolts, Transport arm, IntakeModule intake) {
@@ -32,8 +33,6 @@ public class ArmPositions extends CommandBase {
     */
 
     timer = new Timer();
-    timer.reset();
-    timer.start();
 
     this.shoulderPos = shoulderPosition;
     this.elbowPos = elbowPosition;
@@ -49,6 +48,10 @@ public class ArmPositions extends CommandBase {
 
   @Override
   public void initialize() {
+    timer.reset();
+    timer.start();
+    startTime = timer.get();
+    
     m_intake.setIntakePower(0.25);
   }
 
@@ -142,11 +145,11 @@ public class ArmPositions extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return (determineShoulderFinished() && determineElbowFinished() && determineWristFinished()) || (timer.get() > 4);
+    return (determineShoulderFinished() && determineElbowFinished() && determineWristFinished()) || ((timer.get() - startTime) > 4);
   }
 
   //Shoulder
-  private boolean determineShoulderFinished() {
+  private boolean determineShoulderFinished() { //Should these all be .75 rotations? Different Gear Ratios?
     return (Math.abs(m_transport.getShoulderMotorPosition() - shoulderPos) < 0.75);
   }
   
