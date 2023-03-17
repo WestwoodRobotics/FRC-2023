@@ -1,6 +1,7 @@
 package frc.robot.subsystems.swerve;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
@@ -79,6 +80,7 @@ public class SwerveModule extends SubsystemBase {
 
     steerMotor.configFactoryDefault();
     steerMotor.configAllSettings(swerveAngleFXConfig);
+
 
     resetToAbsolute();
 
@@ -161,10 +163,12 @@ public class SwerveModule extends SubsystemBase {
    * @return return velocity in meters per second
    */
 
-  // TODO: this is WRONG
   public double getVelocity() {
+    double velocityTicksPer100ms = driveMotor.getSelectedSensorVelocity();
+    double distancePerTick = (Math.PI * SwerveConstants.wheelDiameter) / 2048;
+    double velocityMetersPerSecond = (velocityTicksPer100ms * distancePerTick * 10)/SwerveConstants.driveMotorGearRatio;
+    return(velocityMetersPerSecond);
     //return Conversions.falconToRadians(driveMotor.getSelectedSensorVelocity(), SwerveModuleConstants.kDriveMotorGearRatio) * Math.PI * SwerveModuleConstants.kWheelDiameterMeters * 10;
-    return Conversions.falconToMPS(driveMotor.getSelectedSensorVelocity(), SwerveConstants.wheelDiameter * Math.PI, SwerveConstants.driveMotorGearRatio);
   }
 
   public double getVelocity(int pididx) {
