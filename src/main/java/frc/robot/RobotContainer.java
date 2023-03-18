@@ -32,12 +32,14 @@ import frc.robot.constants.PortConstants;
 import frc.robot.constants.SwerveConstants;
 import frc.robot.commands.intake.UseIntake;
 import frc.robot.commands.intake.slowOuttake;
+import frc.robot.commands.swerve.AutoBalance;
 import frc.robot.commands.swerve.DriveConstantControlCommand;
 import frc.robot.commands.swerve.FeedforwardTest;
 import frc.robot.commands.transport.ArmPositions;
 import frc.robot.commands.transport.ManualArm;
 import frc.robot.commands.TimeAutonCommand;
 import frc.robot.subsystems.intake.IntakeModule;
+import frc.robot.subsystems.swerve.Gyro;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import frc.robot.subsystems.swerve.SwerveModule;
 import frc.robot.subsystems.transport.Transport;
@@ -73,6 +75,7 @@ public class RobotContainer {
   //private final SwerveModule swerveMod = SwerveDriveSystem.getModule(0);
   private final Transport transport = new Transport();
   private final IntakeModule intake = new IntakeModule();
+  private final Gyro gyro = new Gyro();
   
 
 
@@ -183,12 +186,12 @@ public class RobotContainer {
     (
       new InstantCommand(() -> SwerveDriveSystem.resetPose(traj.getInitialPose())), // Tell it that its initial pose is where it is
       new InstantCommand(() -> SwerveDriveSystem.setForwardTurn()),
-      new ArmPositions(TransportConstants.VERTICAL_SHOULDER_ROT, TransportConstants.VERTICAL_ELBOW_ROT, TransportConstants.WRIST_START_ROT, 0.5, transport, intake),
-      new ArmPositions(TransportConstants.HIGH_SHOULDER_ROT, TransportConstants.HIGH_ELBOW_ROT, TransportConstants.WRIST_FLIPPED_ROT, 0.5, transport, intake),
+      new ArmPositions(TransportConstants.VERTICAL_SHOULDER_ROT, TransportConstants.VERTICAL_ELBOW_ROT, TransportConstants.WRIST_START_ROT, 0.4, transport, intake),
+      new ArmPositions(115, TransportConstants.HIGH_ELBOW_ROT, TransportConstants.WRIST_FLIPPED_ROT, 0.4, transport, intake),
       new slowOuttake(intake),
       new ArmPositions(TransportConstants.START_SHOULDER_ROT, TransportConstants.START_ELBOW_ROT, TransportConstants.WRIST_START_ROT, 0.5, transport, intake),
       new TimeAutonCommand(SwerveDriveSystem),
-      swerveControllerCommand, // Go through the motions
+      new AutoBalance(SwerveDriveSystem, gyro), // Go through the motions
       new InstantCommand(() -> SwerveDriveSystem.zeroDrive()).andThen(() -> SwerveDriveSystem.zeroTurn())
     );
   }

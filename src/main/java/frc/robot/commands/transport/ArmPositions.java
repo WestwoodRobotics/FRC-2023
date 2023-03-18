@@ -52,7 +52,7 @@ public class ArmPositions extends CommandBase {
     timer.start();
     startTime = timer.get();
     
-    m_intake.setIntakePower(0.25);
+    m_intake.setIntakePower(0.1);
   }
 
   @Override
@@ -112,20 +112,20 @@ public class ArmPositions extends CommandBase {
     //Puts percent volts to wrist until it reaches desired ticks
     if (!this.determineWristClose() && (m_transport.getWristMotorPosition() < wristPos)) 
     {
-      m_transport.setWristMotorPower(0.6);
+      m_transport.setWristMotorPower(0.3);
     } 
     else if (!this.determineWristClose() && (m_transport.getWristMotorPosition() > wristPos)) 
     {
-      m_transport.setWristMotorPower(-0.6);
+      m_transport.setWristMotorPower(-0.3);
     } 
     //decreases power when it is close to desired ticks to prevent rapidly going to 0 volts
     else if (!this.determineWristFinished() && (m_transport.getWristMotorPosition() < wristPos)) 
     {
-      m_transport.setWristMotorPower(0.2);
+      m_transport.setWristMotorPower(0.15);
     } 
     else if (!this.determineWristFinished() && (m_transport.getWristMotorPosition() > wristPos)) 
     {
-      m_transport.setWristMotorPower(-0.2);
+      m_transport.setWristMotorPower(-0.15);
     } 
     else if (this.determineWristFinished()) 
     {
@@ -150,29 +150,29 @@ public class ArmPositions extends CommandBase {
 
   //Shoulder
   private boolean determineShoulderFinished() { //Should these all be .75 rotations? Different Gear Ratios?
-    return (Math.abs(m_transport.getShoulderMotorPosition() - shoulderPos) < 0.75);
+    return (Math.abs(m_transport.getShoulderMotorPosition() - shoulderPos) < 0.5);
   }
   
   private boolean determineShoulderClose() {
-    return (Math.abs(m_transport.getShoulderMotorPosition() - shoulderPos) < 0.75);
+    return (Math.abs(m_transport.getShoulderMotorPosition() - shoulderPos) < 4);
   }
 
   //Elbow
   private boolean determineElbowFinished() {
-    return (Math.abs(m_transport.getElbowMotorPosition() - elbowPos) < 0.75);
+    return (Math.abs(m_transport.getElbowMotorPosition() - elbowPos) < 0.5);
   }
 
   private boolean determineElbowClose() {
-    return (Math.abs(m_transport.getElbowMotorPosition() - elbowPos) < 0.75);
+    return (Math.abs(m_transport.getElbowMotorPosition() - elbowPos) < 4);
   }
 
   //Wrist
   private boolean determineWristFinished() {
-    return (Math.abs(m_transport.getWristMotorPosition() - wristPos) < 0.75);
+    return (Math.abs(m_transport.getWristMotorPosition() - wristPos) < 0.5);
   }
 
   private boolean determineWristClose() {
-    return (Math.abs(m_transport.getWristMotorPosition() - wristPos) < 0.75);
+    return (Math.abs(m_transport.getWristMotorPosition() - wristPos) < 4);
   }
 }
 

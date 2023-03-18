@@ -14,7 +14,7 @@ public final class TransportConstants {
   public static final double kTransportMotorGearRatio = 5.0; //TODO: Verify if this is correct
 
   public static final float WRIST_START_ROT = 0f;
-  public static final float WRIST_FLIPPED_ROT = 34.1796875f;
+  public static final float WRIST_FLIPPED_ROT = 21.1796875f;
 
   public static final float HIGH_SHOULDER_ROT = 119.628906f;
   public static final float HIGH_ELBOW_ROT = 97.65625f;

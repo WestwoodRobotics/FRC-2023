@@ -29,7 +29,7 @@ public class slowOuttake extends CommandBase {
 
   @Override
   public void execute() {
-    intake.setIntakePower(-0.75);
+    intake.setIntakePower(-0.25);
   }
 
   @Override

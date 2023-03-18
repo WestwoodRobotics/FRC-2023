@@ -42,14 +42,15 @@ public class TimeAutonCommand extends CommandBase
     @Override
     public void execute()
     {
-        m_swerveDrive.drive(0, -1, 0, false);
+        m_swerveDrive.drive(0, -1.25, 0, false);
     }
 
     @Override
     public boolean isFinished()
     {
         //SmartDashboard.putNumber("timer", timer.get());
-        return (timer.get() >= 3.5);
+        //return (timer.get() >= 3.5);
+        return (timer.get() >= 1.50);
         //return true;
     }
 
