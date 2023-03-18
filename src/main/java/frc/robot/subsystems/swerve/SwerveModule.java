@@ -164,11 +164,7 @@ public class SwerveModule extends SubsystemBase {
    */
 
   public double getVelocity() {
-    double velocityTicksPer100ms = driveMotor.getSelectedSensorVelocity();
-    double distancePerTick = (Math.PI * SwerveConstants.wheelDiameter) / 2048;
-    double velocityMetersPerSecond = (velocityTicksPer100ms * distancePerTick * 10)/SwerveConstants.driveMotorGearRatio;
-    return(velocityMetersPerSecond);
-    //return Conversions.falconToRadians(driveMotor.getSelectedSensorVelocity(), SwerveModuleConstants.kDriveMotorGearRatio) * Math.PI * SwerveModuleConstants.kWheelDiameterMeters * 10;
+    return Conversions.falconToMPS(driveMotor.getSelectedSensorVelocity(), SwerveConstants.wheelDiameter * Math.PI, SwerveConstants.driveMotorGearRatio);
   }
 
   public double getVelocity(int pididx) {
