@@ -29,12 +29,12 @@ public class slowOuttake extends CommandBase {
 
   @Override
   public void execute() {
-    intake.setIntakePower(-0.25);
+    intake.setIntakePower(-0.175);
   }
 
   @Override
   public boolean isFinished() {
-    return (tim.get() > 0.5);
+    return (tim.get() > 1);
   }
 
   @Override
