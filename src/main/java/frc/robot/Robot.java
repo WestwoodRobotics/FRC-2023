@@ -93,7 +93,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    SmartDashboard.putNumber("gyro pitch teleop", gyro.getPitch());
+    //SmartDashboard.putNumber("gyro pitch teleop", gyro.getPitch());
     SmartDashboard.putNumber("gyro roll teleop", gyro.getRoll());
   }
 

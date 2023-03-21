@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WrapperCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.constants.AutoConstants;
 import frc.robot.constants.PortConstants;
 import frc.robot.constants.SwerveConstants;
@@ -66,6 +67,10 @@ public class RobotContainer {
   private final JoystickButton leftBumper = new JoystickButton(primaryController, XboxController.Button.kLeftBumper.value);
   private final JoystickButton leftStickButton = new JoystickButton(primaryController, XboxController.Button.kLeftStick.value);
   private final JoystickButton rightStickButton = new JoystickButton(primaryController, XboxController.Button.kRightStick.value);
+  private final JoystickButton startButton = new JoystickButton(primaryController, XboxController.Button.kStart.value);
+  private final POVButton dPadUp = new POVButton(primaryController, 0);
+  private final POVButton dPadDown = new POVButton(primaryController, 180);
+  
 
   private final JoystickButton secondBButton = new JoystickButton(secondaryController, XboxController.Button.kB.value);
   private final JoystickButton secondXButton = new JoystickButton(secondaryController, XboxController.Button.kX.value);
@@ -121,8 +126,12 @@ public class RobotContainer {
     aButton.onTrue(new ArmPositions(TransportConstants.GROUND_SHOULDER_ROT, TransportConstants.GROUND_ELBOW_ROT, TransportConstants.WRIST_START_ROT, 0.5, transport, intake));
     rightBumper.onTrue(new ArmPositions(TransportConstants.START_SHOULDER_ROT, TransportConstants.START_ELBOW_ROT, TransportConstants.WRIST_START_ROT, 0.5, transport, intake));
     
+    dPadUp.onTrue(new InstantCommand(() -> transport.setShoulderMotorPower(-0.15)));
+    dPadDown.onTrue(new InstantCommand(() -> transport.setShoulderMotorPower(0.1)));
+
     //leftStickButton.onTrue(new InstantCommand(SwerveDriveSystem::resetGyro));
     //rightStickButton.onTrue(new InstantCommand(SwerveDriveSystem::zeroDrive));
+    startButton.onTrue(new InstantCommand(SwerveDriveSystem::resetGyro));
     secondBButton.onTrue(new InstantCommand(transport::zeroTransportEncoders));
     secondXButton.onTrue(new InstantCommand(SwerveDriveSystem::resetGyro));
 
@@ -184,15 +193,28 @@ public class RobotContainer {
     //SmartDashboard.putBoolean("Auton entered", true);
     return new SequentialCommandGroup
     (
+      //Score High + Autobalance
       new InstantCommand(() -> SwerveDriveSystem.resetPose(traj.getInitialPose())), // Tell it that its initial pose is where it is
       new InstantCommand(() -> SwerveDriveSystem.setForwardTurn()),
       new ArmPositions(TransportConstants.VERTICAL_SHOULDER_ROT, TransportConstants.VERTICAL_ELBOW_ROT, TransportConstants.WRIST_START_ROT, 0.4, transport, intake),
       new ArmPositions(126, TransportConstants.HIGH_ELBOW_ROT, TransportConstants.WRIST_START_ROT, 0.4, transport, intake),
       new slowOuttake(intake),
       new ArmPositions(TransportConstants.START_SHOULDER_ROT, TransportConstants.START_ELBOW_ROT, TransportConstants.WRIST_START_ROT, 0.5, transport, intake),
-      new TimeAutonCommand(SwerveDriveSystem),
+      new TimeAutonCommand(SwerveDriveSystem, 1.25, 1.5),
       new AutoBalance(SwerveDriveSystem, gyro), // Go through the motions
       new InstantCommand(() -> SwerveDriveSystem.zeroDrive()).andThen(() -> SwerveDriveSystem.zeroTurn())
+
+      //Score High + Park Outside Community
+      /*
+      new InstantCommand(() -> SwerveDriveSystem.resetPose(traj.getInitialPose())), // Tell it that its initial pose is where it is
+      new InstantCommand(() -> SwerveDriveSystem.setForwardTurn()),
+      new ArmPositions(TransportConstants.VERTICAL_SHOULDER_ROT, TransportConstants.VERTICAL_ELBOW_ROT, TransportConstants.WRIST_START_ROT, 0.4, transport, intake),
+      new ArmPositions(126, TransportConstants.HIGH_ELBOW_ROT, TransportConstants.WRIST_START_ROT, 0.4, transport, intake),
+      new slowOuttake(intake),
+      new ArmPositions(TransportConstants.START_SHOULDER_ROT, TransportConstants.START_ELBOW_ROT, TransportConstants.WRIST_START_ROT, 0.5, transport, intake),
+      new TimeAutonCommand(SwerveDriveSystem, 1, 3.75);
+      new InstantCommand(() -> SwerveDriveSystem.zeroDrive()).andThen(() -> SwerveDriveSystem.zeroTurn())
+      */
     );
   }
 
