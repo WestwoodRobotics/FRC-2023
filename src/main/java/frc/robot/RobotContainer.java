@@ -106,7 +106,7 @@ public class RobotContainer {
   private void setDefaultCommands() {
     //swerveMod.setDefaultCommand(new FeedforwardTest(swerveMod, 1));
     SwerveDriveSystem.setDefaultCommand(new DriveConstantControlCommand(SwerveDriveSystem, primaryController));
-    transport.setDefaultCommand(new ManualArm(secondaryController, transport));
+    transport.setDefaultCommand(new ManualArm(primaryController, secondaryController, transport));
     intake.setDefaultCommand(new UseIntake(primaryController, secondaryController, intake));
   }
 
@@ -119,15 +119,15 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
     yButton.onTrue(new ArmPositions(TransportConstants.VERTICAL_SHOULDER_ROT, TransportConstants.VERTICAL_ELBOW_ROT, TransportConstants.WRIST_START_ROT, 0.5, transport, intake)
-          .andThen(new ArmPositions(TransportConstants.HIGH_SHOULDER_ROT, TransportConstants.HIGH_ELBOW_ROT, TransportConstants.WRIST_FLIPPED_ROT, 0.3, transport, intake)));
-    bButton.onTrue(new ArmPositions(TransportConstants.VERTICAL_SHOULDER_ROT, TransportConstants.VERTICAL_ELBOW_ROT, TransportConstants.WRIST_START_ROT, 0.5, transport, intake)
+          .andThen(new ArmPositions(TransportConstants.HIGH_SHOULDER_ROT, TransportConstants.HIGH_ELBOW_ROT, TransportConstants.WRIST_FLIPPED_ROT, 0.5, transport, intake)));
+    bButton.onTrue(new ArmPositions(TransportConstants.VERTICAL_SHOULDER_ROT, TransportConstants.VERTICAL_ELBOW_ROT, TransportConstants.WRIST_START_ROT, 0.7, transport, intake)
           .andThen(new ArmPositions(TransportConstants.MID_SHOULDER_ROT, TransportConstants.MID_ELBOW_ROT, TransportConstants.WRIST_FLIPPED_ROT, 0.5, transport, intake)));
     xButton.onTrue(new ArmPositions(TransportConstants.SHELF_SHOULDER_ROT, TransportConstants.SHELF_ELBOW_ROT, TransportConstants.WRIST_START_ROT, 0.5, transport, intake));
     aButton.onTrue(new ArmPositions(TransportConstants.GROUND_SHOULDER_ROT, TransportConstants.GROUND_ELBOW_ROT, TransportConstants.WRIST_START_ROT, 0.5, transport, intake));
-    rightBumper.onTrue(new ArmPositions(TransportConstants.START_SHOULDER_ROT, TransportConstants.START_ELBOW_ROT, TransportConstants.WRIST_START_ROT, 0.5, transport, intake));
+    rightBumper.onTrue(new ArmPositions(TransportConstants.START_SHOULDER_ROT, TransportConstants.START_ELBOW_ROT, TransportConstants.WRIST_START_ROT, 0.7, transport, intake));
     
-    dPadUp.onTrue(new InstantCommand(() -> transport.setShoulderMotorPower(-0.15)));
-    dPadDown.onTrue(new InstantCommand(() -> transport.setShoulderMotorPower(0.1)));
+    dPadUp.whileTrue(new InstantCommand(() -> transport.setShoulderMotorPower(-0.15)));
+    dPadDown.whileTrue(new InstantCommand(() -> transport.setShoulderMotorPower(0.1)));
 
     //leftStickButton.onTrue(new InstantCommand(SwerveDriveSystem::resetGyro));
     //rightStickButton.onTrue(new InstantCommand(SwerveDriveSystem::zeroDrive));
