@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.cscore.VideoSource.ConnectionStrategy;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -21,6 +24,7 @@ public class Robot extends TimedRobot {
 
   private RobotContainer robotContainer;
   private Gyro gyro = new Gyro();
+  private UsbCamera camera;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -30,6 +34,8 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
+    camera = CameraServer.startAutomaticCapture("Camera", 0);
+    camera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
     robotContainer = new RobotContainer();
 
   }
@@ -92,8 +98,9 @@ public class Robot extends TimedRobot {
    * This function is called periodically during operator control.
    */
   @Override
-  public void teleopPeriodic() {
-    SmartDashboard.putNumber("gyro pitch teleop", gyro.getPitch());
+  public void teleopPeriodic() 
+  {
+    CameraServer.getServer().setSource(camera);
     SmartDashboard.putNumber("gyro roll teleop", gyro.getRoll());
   }
 

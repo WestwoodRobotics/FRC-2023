@@ -1,6 +1,8 @@
 package frc.robot.subsystems.transport;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -22,6 +24,8 @@ public class Transport extends SubsystemBase {
     shoulderMotorLead.setIdleMode(IdleMode.kBrake);
     shoulderMotorFollow1.setIdleMode(IdleMode.kBrake);
     shoulderMotorFollow2.setIdleMode(IdleMode.kBrake);
+
+    shoulderMotorLead.getPIDController().setP(TransportConstants.shoulderP);
 
     shoulderMotorLead.setInverted(false);
 
@@ -66,25 +70,30 @@ public class Transport extends SubsystemBase {
     return wristMotor.getEncoder().getPosition();
   }
 
-public boolean zeroTransportEncoders(){
-  elbowMotor.getEncoder().setPosition(0);
-  shoulderMotorLead.getEncoder().setPosition(0);
-  wristMotor.getEncoder().setPosition(0);
-  return true;
+  public boolean zeroTransportEncoders(){
+    elbowMotor.getEncoder().setPosition(0);
+    shoulderMotorLead.getEncoder().setPosition(0);
+    wristMotor.getEncoder().setPosition(0);
+    return true;
 }  
 
-public void printAllMotorRawEncoderTicks(){
-    System.out.println("\n Shoulder Motor Lead Encoder Ticks: " + getShoulderMotorPosition()
-                     + "\n Shoulder Motor Follow 1 Encoder Ticks: " + "\n Elbow Motor Encoder Ticks: " + getElbowMotorPosition()
-                     + "\n Wrist Motor Encoder Ticks: " + getWristMotorPosition());
-}
+  public void printAllMotorRawEncoderTicks(){
+      System.out.println("\n Shoulder Motor Lead Encoder Ticks: " + getShoulderMotorPosition()
+                      + "\n Shoulder Motor Follow 1 Encoder Ticks: " + "\n Elbow Motor Encoder Ticks: " + getElbowMotorPosition()
+                      + "\n Wrist Motor Encoder Ticks: " + getWristMotorPosition());
+  }
 
 
-public String getPosition(){
-  return currentPosition;
-}
+  public String getPosition(){
+    return currentPosition;
+  }
 
-public void setPosition(String pos){
-  currentPosition = pos;
-}
+  public void setPosition(String pos){
+    currentPosition = pos;
+  }
+
+  public void setShoulderMotorPosition(float position)
+  {
+    shoulderMotorLead.getPIDController().setReference(position, ControlType.kPosition);
+  }
 }
