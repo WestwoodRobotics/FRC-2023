@@ -1,130 +1,99 @@
 package frc.robot.subsystems.transport;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.ControlType;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.PortConstants;
 import frc.robot.constants.TransportConstants;
-import frc.robot.util.Conversions;
 
 public class Transport extends SubsystemBase {
-  private final TalonFX shoulderMotorLead = new TalonFX(PortConstants.shoulderLeadMotorPort);
-  private final TalonFX shoulderMotorFollow1 = new TalonFX(PortConstants.shoulderFollow1MotorPort);
-  private final TalonFX elbowMotor = new TalonFX(PortConstants.elbowMotorPort);
-  private final TalonFX wristMotor = new TalonFX(PortConstants.wristMotorPort);
+  private final CANSparkMax shoulderMotorLead = new CANSparkMax(PortConstants.shoulderLeadMotorPort, MotorType.kBrushless);
+  private final CANSparkMax shoulderMotorFollow1 = new CANSparkMax(PortConstants.shoulderFollow1MotorPort, MotorType.kBrushless);
+  private final CANSparkMax shoulderMotorFollow2 = new CANSparkMax(PortConstants.shoulderFollow2MotorPort, MotorType.kBrushless);
+  private final CANSparkMax elbowMotor = new CANSparkMax(PortConstants.elbowMotorPort, MotorType.kBrushless);
+  private final CANSparkMax wristMotor = new CANSparkMax(PortConstants.wristMotorPort, MotorType.kBrushless);
   private String currentPosition = "START";
 
 
   public Transport() {
-    shoulderMotorLead.setNeutralMode(NeutralMode.Brake);
-    shoulderMotorFollow1.setNeutralMode(NeutralMode.Brake);
+    shoulderMotorLead.setIdleMode(IdleMode.kBrake);
+    shoulderMotorFollow1.setIdleMode(IdleMode.kBrake);
+    shoulderMotorFollow2.setIdleMode(IdleMode.kBrake);
+
+    shoulderMotorLead.getPIDController().setP(TransportConstants.shoulderP);
 
     shoulderMotorLead.setInverted(false);
 
     elbowMotor.setInverted(true);
 
-    shoulderMotorFollow1.follow(shoulderMotorLead); // Might need to change the false
+    shoulderMotorFollow1.follow(shoulderMotorLead);
+    shoulderMotorFollow2.follow(shoulderMotorLead);
 
-    shoulderMotorLead.configForwardSoftLimitThreshold(TransportConstants.MAX_SHOULDER_TICKS);
-    shoulderMotorLead.configReverseSoftLimitThreshold(TransportConstants.MIN_SHOULDER_TICKS);
-    shoulderMotorLead.configReverseSoftLimitEnable(true, 0);
-    shoulderMotorLead.configForwardSoftLimitEnable(true, 0);
+    shoulderMotorLead.setSoftLimit(SoftLimitDirection.kForward ,(float)TransportConstants.MAX_SHOULDER_ROT);
+    shoulderMotorLead.setSoftLimit(SoftLimitDirection.kReverse ,(float)TransportConstants.MIN_SHOULDER_ROT);
 
-    elbowMotor.configForwardSoftLimitThreshold(TransportConstants.MAX_ELBOW_TICKS);
-    elbowMotor.configReverseSoftLimitThreshold(TransportConstants.MIN_ELBOW_TICKS);
-    elbowMotor.configReverseSoftLimitEnable(true, 0);
-    elbowMotor.configForwardSoftLimitEnable(true, 0);
+    elbowMotor.setSoftLimit(SoftLimitDirection.kForward ,(float)TransportConstants.MAX_ELBOW_ROT);
+    elbowMotor.setSoftLimit(SoftLimitDirection. kReverse,(float)TransportConstants.MIN_ELBOW_ROT);
 
-    wristMotor.configForwardSoftLimitThreshold(TransportConstants.MAX_WRIST_TICKS);
-    wristMotor.configReverseSoftLimitThreshold(TransportConstants.MIN_WRIST_TICKS);
-    wristMotor.configReverseSoftLimitEnable(true, 0);
-    wristMotor.configForwardSoftLimitEnable(true, 0);
-
+    wristMotor.setSoftLimit(SoftLimitDirection.kForward ,(float)TransportConstants.MAX_WRIST_ROT);
+    wristMotor.setSoftLimit(SoftLimitDirection.kReverse ,(float)TransportConstants.MIN_WRIST_ROT);
     
   }
 
   public void setShoulderMotorPower(double power) {
-    shoulderMotorLead.set(ControlMode.PercentOutput, power);
+    shoulderMotorLead.set(power);
   }
 
   public void setElbowMotorPower(double power) {
-    elbowMotor.set(ControlMode.PercentOutput, power);
+    elbowMotor.set(power);
   }
 
   public void setWristMotorPower(double power) {
-    wristMotor.set(ControlMode.PercentOutput, power);
+    wristMotor.set(
+      power);
   }
 
   public double getShoulderMotorPosition() {
-    return shoulderMotorLead.getSelectedSensorPosition();
-  }
-
-  public void setShoulderMotorPosition(double tick) {
-    shoulderMotorLead.set(ControlMode.Position, tick);
+    return shoulderMotorLead.getEncoder().getPosition();
   }
 
   public double getElbowMotorPosition() {
-    return elbowMotor.getSelectedSensorPosition();
-  }
-
-  public void setElbowMotorPosition(double tick) {
-    elbowMotor.set(ControlMode.Position, tick);
+    return elbowMotor.getEncoder().getPosition();
   }
 
   public double getWristMotorPosition() {
-    return wristMotor.getSelectedSensorPosition();
+    return wristMotor.getEncoder().getPosition();
   }
 
-  public void setWristMotorPosition(double tick) {
-    wristMotor.set(ControlMode.Position, tick);
-  }
-
-  public double getAngleDegrees(TalonFX selectedMotor) {
-    if (selectedMotor == shoulderMotorLead) {
-        return Conversions.falconToDegrees(selectedMotor.getSelectedSensorPosition(), TransportConstants.kTransportMotorGearRatio);
-    }
-    else if (selectedMotor == shoulderMotorFollow1) {
-        return Conversions.falconToDegrees(selectedMotor.getSelectedSensorPosition(), TransportConstants.kTransportMotorGearRatio);
-    }
-    else if (selectedMotor == elbowMotor) {
-        return Conversions.falconToDegrees(selectedMotor.getSelectedSensorPosition(), TransportConstants.kTransportMotorGearRatio);
-    }
-    else if (selectedMotor == wristMotor) {
-        return Conversions.falconToDegrees(selectedMotor.getSelectedSensorPosition(), TransportConstants.kTransportMotorGearRatio);
-    }
-    else {
-        return -1;
-    }
-
-  }
-
-public boolean zeroTransportEncoders(){
-  elbowMotor.setSelectedSensorPosition(0);
-  shoulderMotorLead.setSelectedSensorPosition(0);
-  wristMotor.setSelectedSensorPosition(0);
-  return true;
+  public boolean zeroTransportEncoders(){
+    elbowMotor.getEncoder().setPosition(0);
+    shoulderMotorLead.getEncoder().setPosition(0);
+    wristMotor.getEncoder().setPosition(0);
+    return true;
 }  
 
-public void printAllMotorRawEncoderTicks(){
-    System.out.println("\n Shoulder Motor Lead Encoder Ticks: " + getShoulderMotorPosition()
-                     + "\n Shoulder Motor Follow 1 Encoder Ticks: " + "\n Elbow Motor Encoder Ticks: " + getElbowMotorPosition()
-                     + "\n Wrist Motor Encoder Ticks: " + getWristMotorPosition());
-}
+  public void printAllMotorRawEncoderTicks(){
+      System.out.println("\n Shoulder Motor Lead Encoder Ticks: " + getShoulderMotorPosition()
+                      + "\n Shoulder Motor Follow 1 Encoder Ticks: " + "\n Elbow Motor Encoder Ticks: " + getElbowMotorPosition()
+                      + "\n Wrist Motor Encoder Ticks: " + getWristMotorPosition());
+  }
 
 
-public void printAllMotorCalculatedAngles(){
-    System.out.println("\n Shoulder Motor Lead Angle: " + getAngleDegrees(shoulderMotorLead)
-                     + "\n Shoulder Motor Follow 1 Angle: " + getAngleDegrees(shoulderMotorFollow1)
-                     + "\n Elbow Motor Angle: " + getAngleDegrees(elbowMotor)
-                     + "\n Wrist Motor Angle: " + getAngleDegrees(wristMotor));
-}
+  public String getPosition(){
+    return currentPosition;
+  }
 
-public String getPosition(){
-  return currentPosition;
-}
+  public void setPosition(String pos){
+    currentPosition = pos;
+  }
 
-public void setPosition(String pos){
-  currentPosition = pos;
-}
+  public void setShoulderMotorPosition(float position)
+  {
+    shoulderMotorLead.getPIDController().setReference(position, ControlType.kPosition);
+  }
 }

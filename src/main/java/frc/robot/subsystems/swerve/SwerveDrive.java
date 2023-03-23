@@ -139,9 +139,21 @@ public class SwerveDrive extends SubsystemBase {
   public void setModuleStatesDirectly(SwerveModuleState[] desiredStates)
   {
     for (int i = 0; i < desiredStates.length; i++) {
-      SwerveModuleState swerveModuleState = desiredStates[i];
+      SwerveModuleState desiredState = desiredStates[i];
       SwerveModule module = modules[i];
-      module.setDesiredState(swerveModuleState);
+      module.setDesiredState(desiredState);
+      System.out.printf("[%d] %s\n", i, desiredState);
+      SmartDashboard.putString("Swerve state", desiredState.toString());
     }
+  }
+
+  public void setForwardTurn()
+  {
+    SwerveModuleState [] list = new SwerveModuleState [4];
+    for (int i = 0; i < list.length; i++)
+    {
+      list[i] = new SwerveModuleState(0, Rotation2d.fromDegrees(90));
+    }
+    this.setModuleStatesDirectly(list);
   }
 }

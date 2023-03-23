@@ -80,6 +80,7 @@ public class SwerveModule extends SubsystemBase {
     steerMotor.configFactoryDefault();
     steerMotor.configAllSettings(swerveAngleFXConfig);
 
+
     resetToAbsolute();
 
     // Setting Integrator Range (I in PID) | (Makes sure we don't go over the voltage limit)
@@ -161,10 +162,9 @@ public class SwerveModule extends SubsystemBase {
    * @return return velocity in meters per second
    */
 
-  // TODO: this is WRONG
   public double getVelocity() {
-    //return Conversions.falconToRadians(driveMotor.getSelectedSensorVelocity(), SwerveModuleConstants.kDriveMotorGearRatio) * Math.PI * SwerveModuleConstants.kWheelDiameterMeters * 10;
     return Conversions.falconToMPS(driveMotor.getSelectedSensorVelocity(), SwerveConstants.wheelDiameter * Math.PI, SwerveConstants.driveMotorGearRatio);
+    //return Conversions.falconToRadians(driveMotor.getSelectedSensorVelocity(), SwerveModuleConstants.kDriveMotorGearRatio) * Math.PI * SwerveModuleConstants.kWheelDiameterMeters * 10;
   }
 
   public double getVelocity(int pididx) {
@@ -194,7 +194,7 @@ public class SwerveModule extends SubsystemBase {
 
     double angleDiff = currentAngle - outputState.angle.getRadians();
 //    double targetDriveSpeed = outputState.speedMetersPerSecond * ModuleConstants.kDriveEncoderRot2Meter * 10 * Math.cos(angleDiff);
-    double targetDriveSpeed = outputState.speedMetersPerSecond * Math.cos(angleDiff);
+    double targetDriveSpeed = outputState.speedMetersPerSecond; //* Math.cos(angleDiff);
 
     double drive_vel = getVelocity();
     // Output for the drive motor (in falcon ticks)

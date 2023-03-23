@@ -31,9 +31,9 @@ public class DriveConstantControlCommand extends CommandBase {
   public void execute() {
     double leftX, leftY, rightX;
 
-    leftX = -controller.getLeftX();
-    leftY = -controller.getLeftY();
-    rightX = controller.getRightX();
+    leftX = controller.getLeftX();
+    leftY = controller.getLeftY();
+    rightX = -controller.getRightX();
 
 
     // Find radii for controller dead-zones (circular)
@@ -59,20 +59,24 @@ public class DriveConstantControlCommand extends CommandBase {
     leftY = limJoystickLeft.ySpeed;
     rightX = limJoystickRight.xSpeed;
 
+    leftX *= (leftX < 0 ? -1 : 1) * leftX;
+    leftY *= (leftY < 0 ? -1 : 1) * leftY;
+    rightX *= (rightX < 0 ? -1 : 1) * rightX;
+    
     // apply max speeds
     leftX *= maxSpeed;
     leftY *= maxSpeed;
     rightX *= maxAngularSpeed;
     // if left stick is active, drive in that direction
-    if ((leftRadius >= ControllerConstants.deadzoneRectangle) && (rightRadius >= ControllerConstants.deadzoneRectangle)) {
+    if ((leftRadius >= ControllerConstants.deadzoneCircle) && (rightRadius >= ControllerConstants.deadzoneCircle)) {
       m_swerveDrive.drive(leftX, leftY, rightX, true);
-    } else if (rightRadius >= ControllerConstants.deadzoneRectangle) {
+    } else if (rightRadius >= ControllerConstants.deadzoneCircle) {
       // otherwise, if right stick is active, turn in that direction
       m_swerveDrive.drive(0, 0, rightX, true);
     } else if (controller.getAButton()) {
       // otherwise, if A is pressed, turn the wheels right slowly
       m_swerveDrive.drive(0, 0, 0.1, true);
-    } else if (leftRadius >= ControllerConstants.deadzoneRectangle) {
+    } else if (leftRadius >= ControllerConstants.deadzoneCircle) {
       // otherwise, stop drive motors
       m_swerveDrive.drive(leftX, leftY, 0, true);
     } else {
