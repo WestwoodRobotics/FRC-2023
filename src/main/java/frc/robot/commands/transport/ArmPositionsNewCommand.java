@@ -85,20 +85,20 @@ public class ArmPositionsNewCommand extends CommandBase
     //Puts percent volts to wrist until it reaches desired ticks
     if (!this.determineWristClose() && (m_transport.getWristMotorPosition() < wristPos)) 
     {
-      m_transport.setWristMotorPower(0.3);
+      m_transport.setWristMotorPower(0.4);
     } 
     else if (!this.determineWristClose() && (m_transport.getWristMotorPosition() > wristPos)) 
     {
-      m_transport.setWristMotorPower(-0.3);
+      m_transport.setWristMotorPower(-0.4);
     } 
     //decreases power when it is close to desired ticks to prevent rapidly going to 0 volts
     else if (!this.determineWristFinished() && (m_transport.getWristMotorPosition() < wristPos)) 
     {
-      m_transport.setWristMotorPower(0.15);
+      m_transport.setWristMotorPower(0.2);
     } 
     else if (!this.determineWristFinished() && (m_transport.getWristMotorPosition() > wristPos)) 
     {
-      m_transport.setWristMotorPower(-0.15);
+      m_transport.setWristMotorPower(-0.2);
     } 
     else if (this.determineWristFinished()) 
     {
