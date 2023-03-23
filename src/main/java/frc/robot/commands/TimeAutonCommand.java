@@ -17,11 +17,15 @@ public class TimeAutonCommand extends CommandBase
 {
     private SwerveDrive m_swerveDrive;
     private Timer timer;
+    private double speed;
+    private double time;
     private double startTime;
     
 
-    public TimeAutonCommand(SwerveDrive swerve)
+    public TimeAutonCommand(SwerveDrive swerve, double speed, double time)
     {
+        this.speed = speed;
+        this.time = time;
         m_swerveDrive = swerve;
         timer = new Timer();
         addRequirements(swerve);
@@ -42,7 +46,7 @@ public class TimeAutonCommand extends CommandBase
     @Override
     public void execute()
     {
-        m_swerveDrive.drive(0, -1.25, 0, false);
+        m_swerveDrive.drive(0, -speed, 0, false);
     }
 
     @Override
@@ -50,7 +54,7 @@ public class TimeAutonCommand extends CommandBase
     {
         //SmartDashboard.putNumber("timer", timer.get());
         //return (timer.get() >= 3.5);
-        return (timer.get() >= 1.50);
+        return (timer.get() >= time);
         //return true;
     }
 

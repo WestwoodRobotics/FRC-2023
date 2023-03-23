@@ -28,8 +28,8 @@ public final class TransportConstants {
   public static final float START_ELBOW_ROT = 0f;
   public static final double START_PERCENT_VOLTS = 0.5;
 
-  public static final float GROUND_SHOULDER_ROT = 4.15039062f;  
-  public static final float GROUND_ELBOW_ROT = 53.7109375f;
+  public static final float GROUND_SHOULDER_ROT = 0.15039062f;  
+  public static final float GROUND_ELBOW_ROT = 60.7109375f;
   public static final double GROUND_PERCENT_VOLTS = 0.5;
 
   public static final float VERTICAL_SHOULDER_ROT = 85.4492188f;

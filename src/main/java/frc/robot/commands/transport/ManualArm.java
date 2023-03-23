@@ -9,11 +9,14 @@ import frc.robot.util.Conversions;
 public class ManualArm extends CommandBase {
 
   Transport m_transport;
-  XboxController controller;
+  XboxController primaryController;
+  XboxController secondaryController;
 
 
-  public ManualArm(XboxController controller, Transport arm) {
-    this.controller = controller;
+  public ManualArm(XboxController primaryController, XboxController secondaryController, Transport arm) {
+    this.primaryController = primaryController;
+    this.secondaryController = secondaryController;
+    
 
     m_transport = arm;
     addRequirements(arm);
@@ -22,14 +25,21 @@ public class ManualArm extends CommandBase {
   @Override
   public void execute() {
     // todo: check to make sure these are all accurate, and perhaps move values to constants
-    m_transport.setShoulderMotorPower(
-      Conversions.deadZoneSquare(-0.5 * controller.getLeftY(), 0.1));
+    if(primaryController.getPOV() == 0) {
+      m_transport.setShoulderMotorPower(-0.3);
+    } 
+    else if (primaryController.getPOV() == 180) {
+      m_transport.setShoulderMotorPower(0.3);
+    } else {
+      m_transport.setShoulderMotorPower(
+        -0.5 * Conversions.deadZoneSquare(secondaryController.getLeftY(), 0.1));
+    }
 
     m_transport.setElbowMotorPower(
-      Conversions.deadZoneSquare(0.5 * controller.getRightY(), 0.1));
+      0.5 * Conversions.deadZoneSquare(secondaryController.getRightY(), 0.1));
 
     m_transport.setWristMotorPower(
-      Conversions.deadZoneSquare(-0.5 * controller.getRightX(), 0.2));
+      -0.5 * Conversions.deadZoneSquare(secondaryController.getRightX(), 0.2));
 
     SmartDashboard.putNumber("shoulder ticks", m_transport.getShoulderMotorPosition());
     SmartDashboard.putNumber("elbow ticks", m_transport.getElbowMotorPosition());
