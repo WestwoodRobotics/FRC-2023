@@ -34,12 +34,18 @@ public class Transport extends SubsystemBase {
     shoulderMotorFollow1.follow(shoulderMotorLead);
     shoulderMotorFollow2.follow(shoulderMotorLead);
 
+    shoulderMotorLead.enableSoftLimit(SoftLimitDirection.kForward, true);
+    shoulderMotorLead.enableSoftLimit(SoftLimitDirection.kReverse, true);
     shoulderMotorLead.setSoftLimit(SoftLimitDirection.kForward ,(float)TransportConstants.MAX_SHOULDER_ROT);
     shoulderMotorLead.setSoftLimit(SoftLimitDirection.kReverse ,(float)TransportConstants.MIN_SHOULDER_ROT);
 
+    elbowMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
+    elbowMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
     elbowMotor.setSoftLimit(SoftLimitDirection.kForward ,(float)TransportConstants.MAX_ELBOW_ROT);
     elbowMotor.setSoftLimit(SoftLimitDirection. kReverse,(float)TransportConstants.MIN_ELBOW_ROT);
 
+    wristMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
+    wristMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
     wristMotor.setSoftLimit(SoftLimitDirection.kForward ,(float)TransportConstants.MAX_WRIST_ROT);
     wristMotor.setSoftLimit(SoftLimitDirection.kReverse ,(float)TransportConstants.MIN_WRIST_ROT);
     

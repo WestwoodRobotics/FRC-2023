@@ -46,10 +46,10 @@ public class AutoBalance extends CommandBase
             m_swerveDrive.drive(0, 0.5, 0, false); 
         }
         else if (this.isTiltedBackward()){
-            m_swerveDrive.drive(0, -0.2, 0, false); 
+            m_swerveDrive.drive(0, -0.25, 0, false); 
         }
         else if (this.isTiltedForward()){
-            m_swerveDrive.drive(0, 0.2, 0, false); 
+            m_swerveDrive.drive(0, 0.25, 0, false); 
         }
         SmartDashboard.putNumber("gyro tilt", gyro.getRoll());
     }
@@ -69,22 +69,22 @@ public class AutoBalance extends CommandBase
     }
 
     public boolean isBalance(){
-        return (Math.abs(gyro.getRoll()) <= 5); 
+        return (Math.abs(gyro.getRoll()) <= 3); 
     }
 
     public boolean isCloseTiltedForward(){
-        return (gyro.getRoll() > 10);
+        return (gyro.getRoll() > 8);
     }
 
     public boolean isTiltedForward(){
-        return (gyro.getRoll() > 5);
+        return (gyro.getRoll() > 3);
     }
 
     public boolean isCloseTiltedBackward(){
-        return (gyro.getRoll() < -10);
+        return (gyro.getRoll() < -8);
     }
 
     public boolean isTiltedBackward(){
-        return (gyro.getRoll() < -5);
+        return (gyro.getRoll() < -3);
     }
 }

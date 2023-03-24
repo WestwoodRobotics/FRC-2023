@@ -38,6 +38,7 @@ import frc.robot.commands.swerve.DriveConstantControlCommand;
 import frc.robot.commands.swerve.FeedforwardTest;
 import frc.robot.commands.transport.ArmPositions;
 import frc.robot.commands.transport.ArmPositionsNewCommand;
+import frc.robot.commands.transport.TurnWrist;
 import frc.robot.commands.transport.ManualArm;
 import frc.robot.commands.TimeAutonCommand;
 import frc.robot.subsystems.intake.IntakeModule;
@@ -71,6 +72,9 @@ public class RobotContainer {
   private final JoystickButton startButton = new JoystickButton(primaryController, XboxController.Button.kStart.value);
   private final POVButton dPadUp = new POVButton(primaryController, 0);
   private final POVButton dPadDown = new POVButton(primaryController, 180);
+
+  private final POVButton secondDPadRight = new POVButton(secondaryController, 90);
+  private final POVButton secondDPadLeft = new POVButton(secondaryController, 270);
   
 
   private final JoystickButton secondBButton = new JoystickButton(secondaryController, XboxController.Button.kB.value);
@@ -129,12 +133,17 @@ public class RobotContainer {
     
     yButton.onTrue(new ArmPositionsNewCommand(TransportConstants.VERTICAL_SHOULDER_ROT, TransportConstants.VERTICAL_ELBOW_ROT, TransportConstants.WRIST_START_ROT, transport, intake)
           .andThen(new ArmPositionsNewCommand(TransportConstants.HIGH_SHOULDER_ROT, TransportConstants.HIGH_ELBOW_ROT, TransportConstants.WRIST_START_ROT, transport, intake)));
+    bButton.onTrue(new ArmPositionsNewCommand(TransportConstants.DROP_SHOULDER_ROT, TransportConstants.DROP_ELBOW_ROT, TransportConstants.WRIST_FLIPPED_ROT, transport, intake));
     xButton.onTrue(new ArmPositionsNewCommand(TransportConstants.SHELF_SHOULDER_ROT, TransportConstants.SHELF_ELBOW_ROT, TransportConstants.WRIST_FLIPPED_ROT, transport, intake));
     aButton.onTrue(new ArmPositionsNewCommand(TransportConstants.GROUND_SHOULDER_ROT, TransportConstants.GROUND_ELBOW_ROT, TransportConstants.WRIST_FLIPPED_ROT, transport, intake));
     rightBumper.onTrue(new ArmPositionsNewCommand(TransportConstants.START_SHOULDER_ROT, TransportConstants.START_ELBOW_ROT, TransportConstants.WRIST_START_ROT, transport, intake));
-    
     dPadUp.whileTrue(new InstantCommand(() -> transport.setShoulderMotorPower(-0.15)));
     dPadDown.whileTrue(new InstantCommand(() -> transport.setShoulderMotorPower(0.1)));
+
+    secondDPadLeft.onTrue(new TurnWrist(transport, -TransportConstants.WRIST_HALF_ROT));
+    secondDPadRight.onTrue(new TurnWrist(transport, TransportConstants.WRIST_HALF_ROT));
+
+    //secondDPadLeft.onTrue(new)
 
     //leftStickButton.onTrue(new InstantCommand(SwerveDriveSystem::resetGyro));
     //rightStickButton.onTrue(new InstantCommand(SwerveDriveSystem::zeroDrive));
@@ -203,13 +212,13 @@ public class RobotContainer {
       //Score High + Autobalance
       new InstantCommand(() -> SwerveDriveSystem.resetPose(traj.getInitialPose())), // Tell it that its initial pose is where it is
       new InstantCommand(() -> SwerveDriveSystem.setForwardTurn()),
-      new ArmPositions(TransportConstants.VERTICAL_SHOULDER_ROT, TransportConstants.VERTICAL_ELBOW_ROT, TransportConstants.WRIST_START_ROT, 0.4, transport, intake),
-      new ArmPositions(126, TransportConstants.HIGH_ELBOW_ROT, TransportConstants.WRIST_START_ROT, 0.4, transport, intake),
+      new ArmPositionsNewCommand(TransportConstants.VERTICAL_SHOULDER_ROT, TransportConstants.VERTICAL_ELBOW_ROT, TransportConstants.WRIST_START_ROT, transport, intake),
+      new ArmPositionsNewCommand(126, TransportConstants.HIGH_ELBOW_ROT, TransportConstants.WRIST_START_ROT, transport, intake),
       new slowOuttake(intake),
-      new ArmPositions(TransportConstants.START_SHOULDER_ROT, TransportConstants.START_ELBOW_ROT, TransportConstants.WRIST_START_ROT, 0.5, transport, intake),
+      new ArmPositionsNewCommand(TransportConstants.START_SHOULDER_ROT, TransportConstants.START_ELBOW_ROT, TransportConstants.WRIST_START_ROT, transport, intake),
       new TimeAutonCommand(SwerveDriveSystem, 1.25, 1.5),
-      new AutoBalance(SwerveDriveSystem, gyro), // Go through the motions
-      new InstantCommand(() -> SwerveDriveSystem.zeroDrive()).andThen(() -> SwerveDriveSystem.zeroTurn())
+      new AutoBalance(SwerveDriveSystem, gyro) // Go through the motions
+      //new InstantCommand(() -> SwerveDriveSystem.zeroDrive).andThen(() -> SwerveDriveSystem.zeroTurn())
 
       //Score High + Park Outside Community
       /*

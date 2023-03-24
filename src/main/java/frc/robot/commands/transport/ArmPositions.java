@@ -1,27 +1,25 @@
 package frc.robot.commands.transport;
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.intake.IntakeModule;
 import frc.robot.subsystems.transport.Transport;
 
-public class ArmPositions extends CommandBase {
-
-  Transport m_transport;
-  IntakeModule m_intake;
-  double shoulderPos;
-  double elbowPos;
-  double wristPos;
-  double percentVolts;
-  String currentPos;
+public class ArmPositions extends CommandBase
+{
+  private Transport m_transport;
+  private IntakeModule m_intake;
+  private float shoulderPos;
+  private double elbowPos;
+  private double wristPos;
+  private String currentPos;
   //boolean validPosition;
-  Timer timer;
-  double startTime;
+  private Timer timer;
+  private double startTime;
 
 
-  public ArmPositions(double shoulderPosition, double elbowPosition, double wristPosition, double percentVolts, Transport arm, IntakeModule intake) {
-    
+  public ArmPositions(double shoulderPosition, double elbowPosition, double wristPosition, Transport arm, IntakeModule intake) {
+
     //checks that the positions transitions do no result in going over height limit
     /*
     currentPos = arm.getPosition();
@@ -34,10 +32,9 @@ public class ArmPositions extends CommandBase {
 
     timer = new Timer();
 
-    this.shoulderPos = shoulderPosition;
+    this.shoulderPos = (float) shoulderPosition;
     this.elbowPos = elbowPosition;
     this.wristPos = wristPosition;
-    this.percentVolts = percentVolts;
 
     m_transport = arm;
     m_intake = intake;
@@ -51,83 +48,59 @@ public class ArmPositions extends CommandBase {
     timer.reset();
     timer.start();
     startTime = timer.get();
-    
+
     m_intake.setIntakePower(0.1);
   }
 
   @Override
   public void execute() {
-    
+
     //SmartDashboard.putString("Current Position", currentPos);
-
-    //Shoulder
-    //Puts percent volts to shoulder until it reaches desired ticks
-    if (!this.determineShoulderClose() && (m_transport.getShoulderMotorPosition() < shoulderPos)) 
-    {
-      m_transport.setShoulderMotorPower(percentVolts);
-    } 
-    else if (!this.determineShoulderClose() && (m_transport.getShoulderMotorPosition() > shoulderPos)) 
-    {
-      m_transport.setShoulderMotorPower(-percentVolts);
-    } 
-    //decreases power when it is close to desired ticks to prevent rapidly going to 0 volts
-    else if (!this.determineShoulderFinished() && (m_transport.getShoulderMotorPosition() < shoulderPos)) 
-    {
-      m_transport.setShoulderMotorPower(percentVolts/2);
-    }
-    else if (!this.determineShoulderFinished() && (m_transport.getShoulderMotorPosition() > shoulderPos)) 
-    {
-      m_transport.setShoulderMotorPower(-(percentVolts/2));
-    } 
-    else if (this.determineShoulderFinished()) 
-    {
-      m_transport.setShoulderMotorPower(0);
-    }
-
+    m_transport.setShoulderMotorPosition(shoulderPos);
     //ELbow
     //Puts percent volts to elbow until it reaches desired ticks
-    if (!this.determineElbowClose() && (m_transport.getElbowMotorPosition() < elbowPos)) 
+    if (!this.determineElbowClose() && (m_transport.getElbowMotorPosition() < elbowPos))
     {
       m_transport.setElbowMotorPower(0.8);
-    } 
-    else if (!this.determineElbowClose() && (m_transport.getElbowMotorPosition() > elbowPos)) 
+    }
+    else if (!this.determineElbowClose() && (m_transport.getElbowMotorPosition() > elbowPos))
     {
       m_transport.setElbowMotorPower(-0.8);
-    } 
+    }
     //decreases power when it is close to desired ticks to prevent rapidly going to 0 volts
-    else if (!this.determineElbowFinished() && (m_transport.getElbowMotorPosition() < elbowPos)) 
+    else if (!this.determineElbowFinished() && (m_transport.getElbowMotorPosition() < elbowPos))
     {
       m_transport.setElbowMotorPower(0.3);
-    } 
-    else if (!this.determineElbowFinished() && (m_transport.getElbowMotorPosition() > elbowPos)) 
+    }
+    else if (!this.determineElbowFinished() && (m_transport.getElbowMotorPosition() > elbowPos))
     {
       m_transport.setElbowMotorPower(-0.3);
-    } 
-    else if (this.determineElbowFinished()) 
+    }
+    else if (this.determineElbowFinished())
     {
       m_transport.setElbowMotorPower(0);
     }
 
     //Wrist
     //Puts percent volts to wrist until it reaches desired ticks
-    if (!this.determineWristClose() && (m_transport.getWristMotorPosition() < wristPos)) 
+    if (!this.determineWristClose() && (m_transport.getWristMotorPosition() < wristPos))
     {
-      m_transport.setWristMotorPower(0.3);
-    } 
-    else if (!this.determineWristClose() && (m_transport.getWristMotorPosition() > wristPos)) 
+      m_transport.setWristMotorPower(0.4);
+    }
+    else if (!this.determineWristClose() && (m_transport.getWristMotorPosition() > wristPos))
     {
-      m_transport.setWristMotorPower(-0.3);
-    } 
+      m_transport.setWristMotorPower(-0.4);
+    }
     //decreases power when it is close to desired ticks to prevent rapidly going to 0 volts
-    else if (!this.determineWristFinished() && (m_transport.getWristMotorPosition() < wristPos)) 
+    else if (!this.determineWristFinished() && (m_transport.getWristMotorPosition() < wristPos))
     {
-      m_transport.setWristMotorPower(0.15);
-    } 
-    else if (!this.determineWristFinished() && (m_transport.getWristMotorPosition() > wristPos)) 
+      m_transport.setWristMotorPower(0.2);
+    }
+    else if (!this.determineWristFinished() && (m_transport.getWristMotorPosition() > wristPos))
     {
-      m_transport.setWristMotorPower(-0.15);
-    } 
-    else if (this.determineWristFinished()) 
+      m_transport.setWristMotorPower(-0.2);
+    }
+    else if (this.determineWristFinished())
     {
       m_transport.setWristMotorPower(0);
     }
@@ -152,7 +125,7 @@ public class ArmPositions extends CommandBase {
   private boolean determineShoulderFinished() { //Should these all be .75 rotations? Different Gear Ratios?
     return (Math.abs(m_transport.getShoulderMotorPosition() - shoulderPos) < 0.5);
   }
-  
+
   private boolean determineShoulderClose() {
     return (Math.abs(m_transport.getShoulderMotorPosition() - shoulderPos) < 4);
   }
@@ -175,4 +148,3 @@ public class ArmPositions extends CommandBase {
     return (Math.abs(m_transport.getWristMotorPosition() - wristPos) < 4);
   }
 }
-
