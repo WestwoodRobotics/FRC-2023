@@ -40,16 +40,16 @@ public class AutoBalance extends CommandBase
             m_swerveDrive.drive(0, 0, 0, false); 
         }
         else if (this.isCloseTiltedBackward()){
-            m_swerveDrive.drive(0, -0.5, 0, false); 
+            m_swerveDrive.drive(0, -0.4, 0, false); 
         }
         else if (this.isCloseTiltedForward()){
             m_swerveDrive.drive(0, 0.5, 0, false); 
         }
         else if (this.isTiltedBackward()){
-            m_swerveDrive.drive(0, -0.25, 0, false); 
+            m_swerveDrive.drive(0, -0.4, 0, false); 
         }
         else if (this.isTiltedForward()){
-            m_swerveDrive.drive(0, 0.25, 0, false); 
+            m_swerveDrive.drive(0, 0.2, 0, false); 
         }
         SmartDashboard.putNumber("gyro tilt", gyro.getRoll());
     }
@@ -73,7 +73,7 @@ public class AutoBalance extends CommandBase
     }
 
     public boolean isCloseTiltedForward(){
-        return (gyro.getRoll() > 8);
+        return (gyro.getRoll() > 10);
     }
 
     public boolean isTiltedForward(){
@@ -81,7 +81,7 @@ public class AutoBalance extends CommandBase
     }
 
     public boolean isCloseTiltedBackward(){
-        return (gyro.getRoll() < -8);
+        return (gyro.getRoll() < -10);
     }
 
     public boolean isTiltedBackward(){
