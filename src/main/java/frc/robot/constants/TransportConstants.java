@@ -17,8 +17,8 @@ public final class TransportConstants {
   public static final float WRIST_HALF_ROT = 10.55f;
   public static final float WRIST_FLIPPED_ROT = 21.1796875f;
 
-  public static final float HIGH_SHOULDER_ROT = 119.628906f;
-  public static final float HIGH_ELBOW_ROT = 92.65625f;
+  public static final float HIGH_SHOULDER_ROT = 113.628906f;
+  public static final float HIGH_ELBOW_ROT = 100.65625f;
   public static final double HIGH_PERCENT_VOLTS = 0.5;
 
   public static final float MID_SHOULDER_ROT = 126.953125f;
@@ -34,15 +34,15 @@ public final class TransportConstants {
   public static final double GROUND_PERCENT_VOLTS = 0.5;
 
   public static final float VERTICAL_SHOULDER_ROT = 85.4492188f;
-  public static final float VERTICAL_ELBOW_ROT = 19.4140625f;
+  public static final float VERTICAL_ELBOW_ROT = 32.4140625f;
   public static final double VERTICAL_PERCENT_VOLTS = 0.7;
   
   public static final float SHELF_SHOULDER_ROT = 39f;
   public static final float SHELF_ELBOW_ROT = 83.4492188f;
   public static final double SHELF_PERCENT_VOLTS = 0.7;
 
-  public static final float DROP_SHOULDER_ROT = 0f;
-  public static final float DROP_ELBOW_ROT = 10f;
+  public static final float DROP_SHOULDER_ROT = 35f;
+  public static final float DROP_ELBOW_ROT = 57f;
   
   public static final float shoulderP = 0.8f; // I think this is right but who knows anymore
 

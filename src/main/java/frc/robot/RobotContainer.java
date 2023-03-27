@@ -212,7 +212,7 @@ public class RobotContainer {
       new InstantCommand(() -> SwerveDriveSystem.resetPose(traj.getInitialPose())), // Tell it that its initial pose is where it is
       new InstantCommand(() -> SwerveDriveSystem.setForwardTurn()),
       new ArmPositions(TransportConstants.VERTICAL_SHOULDER_ROT, TransportConstants.VERTICAL_ELBOW_ROT, TransportConstants.WRIST_START_ROT, transport, intake),
-      new ArmPositions(126, TransportConstants.HIGH_ELBOW_ROT, TransportConstants.WRIST_START_ROT, transport, intake),
+      new ArmPositions(130, TransportConstants.HIGH_ELBOW_ROT, TransportConstants.WRIST_START_ROT, transport, intake),
       new slowOuttake(intake),
       new ArmPositions(TransportConstants.START_SHOULDER_ROT, TransportConstants.START_ELBOW_ROT, TransportConstants.WRIST_START_ROT, transport, intake),
       new TimeAutonCommand(SwerveDriveSystem, 1.25, 1.5),

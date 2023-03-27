@@ -70,11 +70,11 @@ public class ArmPositions extends CommandBase
     //decreases power when it is close to desired ticks to prevent rapidly going to 0 volts
     else if (!this.determineElbowFinished() && (m_transport.getElbowMotorPosition() < elbowPos))
     {
-      m_transport.setElbowMotorPower(0.3);
+      m_transport.setElbowMotorPower(0.4);
     }
     else if (!this.determineElbowFinished() && (m_transport.getElbowMotorPosition() > elbowPos))
     {
-      m_transport.setElbowMotorPower(-0.3);
+      m_transport.setElbowMotorPower(-0.4);
     }
     else if (this.determineElbowFinished())
     {

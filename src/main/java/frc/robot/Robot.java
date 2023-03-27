@@ -79,7 +79,9 @@ public class Robot extends TimedRobot {
    * This function is called periodically during autonomous.
    */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    SmartDashboard.putNumber("gyro roll teleop", gyro.getRoll());
+  }
 
   @Override
   public void teleopInit() {
