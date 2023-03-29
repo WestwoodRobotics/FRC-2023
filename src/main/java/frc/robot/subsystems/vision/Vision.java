@@ -22,6 +22,14 @@ public class Vision extends SubsystemBase
         return(detected.getDouble(0.0) == 1);
     }
 
+    public void setLED(boolean lightsOn)
+    {
+      if (lightsOn)
+        networkTable.getEntry("ledMode").setValue(3);
+      else
+        networkTable.getEntry("ledMode").setValue(1);
+    }
+
     public double getHorizontalDiff()
     {
         return horizontalDiff.getDouble(0.0);

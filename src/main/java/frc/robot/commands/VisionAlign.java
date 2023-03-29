@@ -46,6 +46,7 @@ public class VisionAlign extends CommandBase
         timer.reset();
         timer.start();
         startTime = timer.get();
+        m_vision.setLED(true);
     }
 
     @Override
@@ -65,6 +66,7 @@ public class VisionAlign extends CommandBase
     {
         m_swerveDrive.zeroDrive();
         m_swerveDrive.zeroTurn();
+        m_vision.setLED(false);
     }
 
 }

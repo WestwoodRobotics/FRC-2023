@@ -20,7 +20,6 @@ public class Transport extends SubsystemBase {
       MotorType.kBrushless);
   private final CANSparkMax elbowMotor = new CANSparkMax(PortConstants.elbowMotorPort, MotorType.kBrushless);
   private final CANSparkMax wristMotor = new CANSparkMax(PortConstants.wristMotorPort, MotorType.kBrushless);
-  private String currentPosition = "START";
 
   public Transport() {
     shoulderMotorLead.setIdleMode(IdleMode.kBrake);
@@ -89,14 +88,6 @@ public class Transport extends SubsystemBase {
     System.out.println("\n Shoulder Motor Lead Encoder Ticks: " + getShoulderMotorPosition()
         + "\n Shoulder Motor Follow 1 Encoder Ticks: " + "\n Elbow Motor Encoder Ticks: " + getElbowMotorPosition()
         + "\n Wrist Motor Encoder Ticks: " + getWristMotorPosition());
-  }
-
-  public String getPosition() {
-    return currentPosition;
-  }
-
-  public void setPosition(String pos) {
-    currentPosition = pos;
   }
 
   public void setShoulderMotorPosition(float position) {

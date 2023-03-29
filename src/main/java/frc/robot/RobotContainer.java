@@ -70,11 +70,13 @@ public class RobotContainer {
   private final JoystickButton rightStickButton = new JoystickButton(primaryController, XboxController.Button.kRightStick.value);
   private final JoystickButton startButton = new JoystickButton(primaryController, XboxController.Button.kStart.value);
   private final POVButton dPadUp = new POVButton(primaryController, 0);
+  private final POVButton dPadRight = new POVButton(primaryController, 90);
   private final POVButton dPadDown = new POVButton(primaryController, 180);
+  private final POVButton dPadLeft = new POVButton(primaryController, 270);
 
   private final POVButton secondDPadRight = new POVButton(secondaryController, 90);
   private final POVButton secondDPadLeft = new POVButton(secondaryController, 270);
-  
+
 
   private final JoystickButton secondBButton = new JoystickButton(secondaryController, XboxController.Button.kB.value);
   private final JoystickButton secondXButton = new JoystickButton(secondaryController, XboxController.Button.kX.value);
@@ -85,7 +87,7 @@ public class RobotContainer {
   private final Transport transport = new Transport();
   private final IntakeModule intake = new IntakeModule();
   private final Gyro gyro = new Gyro();
-  
+
 
 
   //private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem); <--- This is an example "command" implementation
@@ -129,15 +131,21 @@ public class RobotContainer {
     aButton.onTrue(new ArmPositions(TransportConstants.GROUND_SHOULDER_ROT, TransportConstants.GROUND_ELBOW_ROT, TransportConstants.WRIST_FLIPPED_ROT, 0.5, transport, intake));
     rightBumper.onTrue(new ArmPositions(TransportConstants.START_SHOULDER_ROT, TransportConstants.START_ELBOW_ROT, TransportConstants.WRIST_START_ROT, 0.5, transport, intake));
     */
-    
+
     yButton.onTrue(new ArmPositions(TransportConstants.VERTICAL_SHOULDER_ROT, TransportConstants.VERTICAL_ELBOW_ROT, TransportConstants.WRIST_START_ROT, transport, intake)
           .andThen(new ArmPositions(TransportConstants.HIGH_SHOULDER_ROT, TransportConstants.HIGH_ELBOW_ROT, TransportConstants.WRIST_START_ROT, transport, intake)));
     bButton.onTrue(new ArmPositions(TransportConstants.DROP_SHOULDER_ROT, TransportConstants.DROP_ELBOW_ROT, TransportConstants.WRIST_FLIPPED_ROT, transport, intake));
     xButton.onTrue(new ArmPositions(TransportConstants.SHELF_SHOULDER_ROT, TransportConstants.SHELF_ELBOW_ROT, TransportConstants.WRIST_FLIPPED_ROT, transport, intake));
-    aButton.onTrue(new ArmPositions(TransportConstants.GROUND_SHOULDER_ROT, TransportConstants.GROUND_ELBOW_ROT, TransportConstants.WRIST_FLIPPED_ROT, transport, intake));
+    aButton.onTrue(new ArmPositions(TransportConstants.GROUND_SHOULDER_ROT, TransportConstants.GROUND_ELBOW_ROT, TransportConstants.WRIST_HALF_ROT, transport, intake));
     rightBumper.onTrue(new ArmPositions(TransportConstants.START_SHOULDER_ROT, TransportConstants.START_ELBOW_ROT, TransportConstants.WRIST_START_ROT, transport, intake));
+    leftBumper.onTrue(new InstantCommand((() -> intake.incrementMode())));
     dPadUp.whileTrue(new InstantCommand(() -> transport.setShoulderMotorPower(-0.15)));
     dPadDown.whileTrue(new InstantCommand(() -> transport.setShoulderMotorPower(0.1)));
+
+
+    dPadRight.whileTrue(new InstantCommand(() -> SwerveDriveSystem.drive(-0.3, 0, 0, false)));
+    dPadLeft.whileTrue(new InstantCommand(() -> SwerveDriveSystem.drive(0.3, 0, 0, false)));
+
 
     secondDPadLeft.onTrue(new TurnWrist(transport, -TransportConstants.WRIST_HALF_ROT));
     secondDPadRight.onTrue(new TurnWrist(transport, TransportConstants.WRIST_HALF_ROT));
@@ -174,12 +182,12 @@ public class RobotContainer {
     Trajectory traj = TrajectoryGenerator.generateTrajectory
     (
       new Pose2d(0, 0, new Rotation2d(0)),
-      
+
       List.of
       (
         new Translation2d(0, -.5)
       ),
-      
+
       new Pose2d(0, -1, Rotation2d.fromDegrees(0)),
       trajConfig
     );
@@ -233,8 +241,6 @@ public class RobotContainer {
     );
   }
 
-
-
   public void teleopTimer() {
     timer.reset();
     timer.start();
@@ -247,7 +253,7 @@ public class RobotContainer {
     //SmartDashboard.putNumber("Wrist Ticks", transport.getWristMotorPosition());
     double shoulderPos = transport.getShoulderMotorPosition();
     double elbowPos = transport.getElbowMotorPosition();
-    
+
   }
 
   public void disabledInit() {

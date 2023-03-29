@@ -19,8 +19,6 @@ public class TimeAutonCommand extends CommandBase
     private Timer timer;
     private double speed;
     private double time;
-    private double startTime;
-    
 
     public TimeAutonCommand(SwerveDrive swerve, double speed, double time)
     {
