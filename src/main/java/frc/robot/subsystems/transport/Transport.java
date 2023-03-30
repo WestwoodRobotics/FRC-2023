@@ -21,6 +21,8 @@ public class Transport extends SubsystemBase {
   private final CANSparkMax elbowMotor = new CANSparkMax(PortConstants.elbowMotorPort, MotorType.kBrushless);
   private final CANSparkMax wristMotor = new CANSparkMax(PortConstants.wristMotorPort, MotorType.kBrushless);
 
+  private String currentPos;
+
   public Transport() {
     shoulderMotorLead.setIdleMode(IdleMode.kBrake);
     shoulderMotorFollow1.setIdleMode(IdleMode.kBrake);
@@ -49,6 +51,8 @@ public class Transport extends SubsystemBase {
     wristMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
     wristMotor.setSoftLimit(SoftLimitDirection.kForward, (float) TransportConstants.MAX_WRIST_ROT);
     wristMotor.setSoftLimit(SoftLimitDirection.kReverse, (float) TransportConstants.MIN_WRIST_ROT);
+
+    currentPos = "START";
 
   }
 
@@ -92,5 +96,13 @@ public class Transport extends SubsystemBase {
 
   public void setShoulderMotorPosition(float position) {
     shoulderMotorLead.getPIDController().setReference(position, ControlType.kPosition);
+  }
+
+  public String getPos() {
+    return currentPos;
+  }
+
+  public void setPos(String pos) {
+    currentPos = pos;
   }
 }

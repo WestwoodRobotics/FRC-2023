@@ -37,7 +37,9 @@ import frc.robot.commands.swerve.AutoBalance;
 import frc.robot.commands.swerve.DriveConstantControlCommand;
 import frc.robot.commands.swerve.FeedforwardTest;
 import frc.robot.commands.transport.ArmPositions;
+import frc.robot.commands.transport.ArmPositionsV3;
 import frc.robot.commands.transport.TurnWrist;
+import frc.robot.commands.transport.UpdateWrist;
 import frc.robot.commands.transport.ManualArm;
 import frc.robot.commands.TimeAutonCommand;
 import frc.robot.subsystems.intake.IntakeModule;
@@ -124,14 +126,17 @@ public class RobotContainer {
    */
 
   private void configureButtonBindings() {
-    /*//OLD POSITIONAS METHOD
-    yButton.onTrue(new ArmPositions(TransportConstants.VERTICAL_SHOULDER_ROT, TransportConstants.VERTICAL_ELBOW_ROT, TransportConstants.WRIST_START_ROT, 0.5, transport, intake)
-          .andThen(new ArmPositions(TransportConstants.HIGH_SHOULDER_ROT, TransportConstants.HIGH_ELBOW_ROT, TransportConstants.WRIST_START_ROT, 0.5, transport, intake)));
-    xButton.onTrue(new ArmPositions(TransportConstants.SHELF_SHOULDER_ROT, TransportConstants.SHELF_ELBOW_ROT, TransportConstants.WRIST_FLIPPED_ROT, 0.5, transport, intake));
-    aButton.onTrue(new ArmPositions(TransportConstants.GROUND_SHOULDER_ROT, TransportConstants.GROUND_ELBOW_ROT, TransportConstants.WRIST_FLIPPED_ROT, 0.5, transport, intake));
-    rightBumper.onTrue(new ArmPositions(TransportConstants.START_SHOULDER_ROT, TransportConstants.START_ELBOW_ROT, TransportConstants.WRIST_START_ROT, 0.5, transport, intake));
-    */
+    //NEW POSITIONAS METHOD
+    yButton.onTrue(new ArmPositionsV3("VERTICAL", transport, intake)
+          .andThen(new ArmPositionsV3("HIGH", transport, intake)));
+    //xButton.onTrue(new ArmPositionsV3("SHELF", transport, intake));
+    aButton.onTrue(new ArmPositionsV3("GROUND", transport, intake));
+    rightBumper.onTrue(new ArmPositionsV3("START", transport, intake));
+    leftBumper.onTrue(new InstantCommand((() -> intake.incrementMode()))
+              .andThen(new UpdateWrist(transport, intake)));
+              //.andThen(new ArmPositionsV3("SAME", transport, intake)));
 
+    /*
     yButton.onTrue(new ArmPositions(TransportConstants.VERTICAL_SHOULDER_ROT, TransportConstants.VERTICAL_ELBOW_ROT, TransportConstants.WRIST_START_ROT, transport, intake)
           .andThen(new ArmPositions(TransportConstants.HIGH_SHOULDER_ROT, TransportConstants.HIGH_ELBOW_ROT, TransportConstants.WRIST_START_ROT, transport, intake)));
     bButton.onTrue(new ArmPositions(TransportConstants.DROP_SHOULDER_ROT, TransportConstants.DROP_ELBOW_ROT, TransportConstants.WRIST_FLIPPED_ROT, transport, intake));
@@ -139,12 +144,13 @@ public class RobotContainer {
     aButton.onTrue(new ArmPositions(TransportConstants.GROUND_SHOULDER_ROT, TransportConstants.GROUND_ELBOW_ROT, TransportConstants.WRIST_HALF_ROT, transport, intake));
     rightBumper.onTrue(new ArmPositions(TransportConstants.START_SHOULDER_ROT, TransportConstants.START_ELBOW_ROT, TransportConstants.WRIST_START_ROT, transport, intake));
     leftBumper.onTrue(new InstantCommand((() -> intake.incrementMode())));
+    */
     dPadUp.whileTrue(new InstantCommand(() -> transport.setShoulderMotorPower(-0.15)));
     dPadDown.whileTrue(new InstantCommand(() -> transport.setShoulderMotorPower(0.1)));
 
 
-    dPadRight.whileTrue(new InstantCommand(() -> SwerveDriveSystem.drive(-0.3, 0, 0, false)));
-    dPadLeft.whileTrue(new InstantCommand(() -> SwerveDriveSystem.drive(0.3, 0, 0, false)));
+    dPadRight.whileTrue(new InstantCommand(() -> SwerveDriveSystem.drive(-0.5, 0, 0, false)));
+    dPadLeft.whileTrue(new InstantCommand(() -> SwerveDriveSystem.drive(0.5, 0, 0, false)));
 
 
     secondDPadLeft.onTrue(new TurnWrist(transport, -TransportConstants.WRIST_HALF_ROT));

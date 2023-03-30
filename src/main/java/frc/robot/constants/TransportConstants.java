@@ -11,7 +11,7 @@ public final class TransportConstants {
   public static final float MIN_ELBOW_ROT = -10f,
                             MIN_WRIST_ROT = -21f;
 
-  public static final double kTransportMotorGearRatio = 5.0; //TODO: Verify if this is correct
+  public static final double kTransportMotorGearRatio = 5.0;
 
   public static final float[] INTAKE_MODES = {0f, 11.55f, 21.1796875f};
   public static final float WRIST_START_ROT = 0f;
