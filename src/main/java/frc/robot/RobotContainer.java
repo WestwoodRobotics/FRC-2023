@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WrapperCommand;
@@ -178,72 +179,61 @@ public class RobotContainer {
    * Use this to pass the autonomous command to the main {@link Robot} class.
    */
 
-  public Command getAutonomousCommand() {
+   /*TrajectoryConfig trajConfig = new TrajectoryConfig(AutoConstants.maxVelocity, AutoConstants.maxAcceleration)
+   .setKinematics(SwerveConstants.swerveDriveKinematics);
+
+
+ Trajectory traj = TrajectoryGenerator.generateTrajectory
+ (
+   new Pose2d(0, 0, new Rotation2d(0)),
+
+   List.of
+   (
+     new Translation2d(0, -.5)
+   ),
+
+   new Pose2d(0, -1, Rotation2d.fromDegrees(0)),
+   trajConfig
+ );
+
+
+ PIDController xController = new PIDController(AutoConstants.PID.kPControllerX, 0, AutoConstants.PID.kDControllerX),
+               yController = new PIDController(AutoConstants.PID.kPControllerY, 0, AutoConstants.PID.kDControllerY);
+ ProfiledPIDController thetaController = new ProfiledPIDController(AutoConstants.PID.kPControllerTheta, 0, AutoConstants.PID.kDControllerTheta, AutoConstants.thetaControllerConstraints);
+ thetaController.enableContinuousInput(-Math.PI, Math.PI);
+
+
+ SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand
+ (
+   traj,
+   SwerveDriveSystem::getPoseMeters,
+   SwerveConstants.swerveDriveKinematics,
+   xController,
+   yController,
+   thetaController,
+   SwerveDriveSystem::setModuleStatesDirectly,
+   SwerveDriveSystem
+ );*/
+
+  public Command getChargeStationAuto() {
     // An ExampleCommand will run in autonomous
     //ngl this is just copied but we can try to make changes to it to make it work.
-    TrajectoryConfig trajConfig = new TrajectoryConfig(AutoConstants.maxVelocity, AutoConstants.maxAcceleration)
-      .setKinematics(SwerveConstants.swerveDriveKinematics);
-
-
-    Trajectory traj = TrajectoryGenerator.generateTrajectory
-    (
-      new Pose2d(0, 0, new Rotation2d(0)),
-
-      List.of
-      (
-        new Translation2d(0, -.5)
-      ),
-
-      new Pose2d(0, -1, Rotation2d.fromDegrees(0)),
-      trajConfig
-    );
-
-
-    PIDController xController = new PIDController(AutoConstants.PID.kPControllerX, 0, AutoConstants.PID.kDControllerX),
-                  yController = new PIDController(AutoConstants.PID.kPControllerY, 0, AutoConstants.PID.kDControllerY);
-    ProfiledPIDController thetaController = new ProfiledPIDController(AutoConstants.PID.kPControllerTheta, 0, AutoConstants.PID.kDControllerTheta, AutoConstants.thetaControllerConstraints);
-    thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-
-    SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand
-    (
-      traj,
-      SwerveDriveSystem::getPoseMeters,
-      SwerveConstants.swerveDriveKinematics,
-      xController,
-      yController,
-      thetaController,
-      SwerveDriveSystem::setModuleStatesDirectly,
-      SwerveDriveSystem
-    );
-
 
     //put any other commands to do during auton in here
     //SmartDashboard.putBoolean("Auton entered", true);
     return new SequentialCommandGroup
     (
       //Score High + Autobalance
-      new InstantCommand(() -> SwerveDriveSystem.resetPose(traj.getInitialPose())), // Tell it that its initial pose is where it is
+      //new InstantCommand(() -> SwerveDriveSystem.resetPose(traj.getInitialPose())), // Tell it that its initial pose is where it is
       new InstantCommand(() -> SwerveDriveSystem.setForwardTurn()),
       new ArmPositions(TransportConstants.VERTICAL_SHOULDER_ROT, TransportConstants.VERTICAL_ELBOW_ROT, TransportConstants.WRIST_START_ROT, transport, intake),
       new ArmPositions(130, TransportConstants.HIGH_ELBOW_ROT, TransportConstants.WRIST_START_ROT, transport, intake),
       new slowOuttake(intake),
-      new ArmPositions(TransportConstants.START_SHOULDER_ROT, TransportConstants.START_ELBOW_ROT, TransportConstants.WRIST_START_ROT, transport, intake),
-      new TimeAutonCommand(SwerveDriveSystem, 1.25, 1.5),
+      new ParallelCommandGroup(
+            new ArmPositions(TransportConstants.START_SHOULDER_ROT, TransportConstants.START_ELBOW_ROT, TransportConstants.WRIST_START_ROT, transport, intake),
+            new TimeAutonCommand(SwerveDriveSystem, 1.25, 3)),
+      new TimeAutonCommand(SwerveDriveSystem, -1.25, 1.5),
       new AutoBalance(SwerveDriveSystem, gyro) // Go through the motions
-      //new InstantCommand(() -> SwerveDriveSystem.zeroDrive).andThen(() -> SwerveDriveSystem.zeroTurn())
-
-      //Score High + Park Outside Community
-      /*
-      new InstantCommand(() -> SwerveDriveSystem.resetPose(traj.getInitialPose())), // Tell it that its initial pose is where it is
-      new InstantCommand(() -> SwerveDriveSystem.setForwardTurn()),
-      new ArmPositions(TransportConstants.VERTICAL_SHOULDER_ROT, TransportConstants.VERTICAL_ELBOW_ROT, TransportConstants.WRIST_START_ROT, 0.4, transport, intake),
-      new ArmPositions(126, TransportConstants.HIGH_ELBOW_ROT, TransportConstants.WRIST_START_ROT, 0.4, transport, intake),
-      new slowOuttake(intake),
-      new ArmPositions(TransportConstants.START_SHOULDER_ROT, TransportConstants.START_ELBOW_ROT, TransportConstants.WRIST_START_ROT, 0.5, transport, intake),
-      new TimeAutonCommand(SwerveDriveSystem, 1, 3.75);
-      new InstantCommand(() -> SwerveDriveSystem.zeroDrive()).andThen(() -> SwerveDriveSystem.zeroTurn())
-      */
     );
   }
 
