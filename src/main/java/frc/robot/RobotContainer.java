@@ -16,6 +16,8 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.AddressableLED;
+import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
@@ -42,11 +44,13 @@ import frc.robot.commands.transport.TurnWrist;
 import frc.robot.commands.transport.UpdateWrist;
 import frc.robot.commands.transport.ManualArm;
 import frc.robot.commands.TimeAutonCommand;
+import frc.robot.commands.UpdateLEDs;
 import frc.robot.subsystems.intake.IntakeModule;
 import frc.robot.subsystems.swerve.Gyro;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import frc.robot.subsystems.swerve.SwerveModule;
 import frc.robot.subsystems.transport.Transport;
+import frc.robot.subsystems.vision.LED;
 import frc.robot.constants.TransportConstants;
 
 
@@ -89,6 +93,10 @@ public class RobotContainer {
   private final Transport transport = new Transport();
   private final IntakeModule intake = new IntakeModule();
   private final Gyro gyro = new Gyro();
+  private final LED led;
+
+  private AddressableLED m_led;
+  private AddressableLEDBuffer m_ledBuffer;
 
 
 
@@ -109,6 +117,13 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
     setDefaultCommands();
+
+    m_led = new AddressableLED(PortConstants.LEDPort);
+    m_ledBuffer = new AddressableLEDBuffer(60);
+    m_led.setLength(m_ledBuffer.getLength());
+    m_led.setData(m_ledBuffer);
+
+    led = new LED(m_led, m_ledBuffer);
   }
 
   private void setDefaultCommands() {
@@ -133,6 +148,7 @@ public class RobotContainer {
     aButton.onTrue(new ArmPositionsV3("GROUND", transport, intake));
     rightBumper.onTrue(new ArmPositionsV3("START", transport, intake));
     leftBumper.onTrue(new InstantCommand((() -> intake.incrementMode()))
+              .andThen(new UpdateLEDs(led, intake))
               .andThen(new UpdateWrist(transport, intake)));
               //.andThen(new ArmPositionsV3("SAME", transport, intake)));
 
@@ -230,7 +246,7 @@ public class RobotContainer {
       new slowOuttake(intake),
       new ArmPositions(TransportConstants.START_SHOULDER_ROT, TransportConstants.START_ELBOW_ROT, TransportConstants.WRIST_START_ROT, transport, intake),
       new TimeAutonCommand(SwerveDriveSystem, 1.25, 1.5),
-      new AutoBalance(SwerveDriveSystem, gyro) // Go through the motions
+      new AutoBalance(SwerveDriveSystem, gyro, led) // Go through the motions
       //new InstantCommand(() -> SwerveDriveSystem.zeroDrive).andThen(() -> SwerveDriveSystem.zeroTurn())
 
       //Score High + Park Outside Community

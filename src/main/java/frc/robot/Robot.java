@@ -7,10 +7,14 @@ package frc.robot;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.cscore.VideoSource.ConnectionStrategy;
+import edu.wpi.first.wpilibj.AddressableLED;
+import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.constants.ChassisConstants;
+import frc.robot.constants.PortConstants;
 import frc.robot.subsystems.swerve.Gyro;
 
 /**
@@ -25,6 +29,8 @@ public class Robot extends TimedRobot {
   private RobotContainer robotContainer;
   private Gyro gyro = new Gyro();
   private UsbCamera camera;
+  private AddressableLED m_led;
+  private AddressableLEDBuffer m_ledBuffer;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -36,6 +42,12 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     camera = CameraServer.startAutomaticCapture("Camera", 0);
     camera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
+
+    m_led = new AddressableLED(PortConstants.LEDPort);
+    m_ledBuffer = new AddressableLEDBuffer(60);
+    m_led.setLength(m_ledBuffer.getLength());
+    m_led.setData(m_ledBuffer);
+
     robotContainer = new RobotContainer();
 
   }
@@ -71,7 +83,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     autonomousCommand = robotContainer.getAutonomousCommand();
-    
+
     autonomousCommand.schedule();
   }
 
@@ -92,7 +104,7 @@ public class Robot extends TimedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
-    
+
 
   }
 
@@ -100,7 +112,7 @@ public class Robot extends TimedRobot {
    * This function is called periodically during operator control.
    */
   @Override
-  public void teleopPeriodic() 
+  public void teleopPeriodic()
   {
     CameraServer.getServer().setSource(camera);
     SmartDashboard.putNumber("gyro roll teleop", gyro.getRoll());

@@ -4,17 +4,22 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.swerve.Gyro;
 import frc.robot.subsystems.swerve.SwerveDrive;
+import frc.robot.subsystems.vision.LED;
 
 public class AutoBalance extends CommandBase
 {
     private SwerveDrive m_swerveDrive;
     private Gyro gyro;
     private Timer time;
+    private LED led;
 
-    public AutoBalance(SwerveDrive swerve, Gyro gyro)
+    boolean wasBalanced = false;
+
+    public AutoBalance(SwerveDrive swerve, Gyro gyro, LED led)
     {
         this.gyro = gyro;
         m_swerveDrive = swerve;
+        this.led = led;
         addRequirements(swerve, gyro);
         time = new Timer();
     }
@@ -28,11 +33,11 @@ public class AutoBalance extends CommandBase
     @Override
     public void execute()
     {
-        time.reset();
-        time.start();
+
         //m_swerveDrive.drive(0, -1,0, false);
         if( this.isBalance()){
             m_swerveDrive.drive(0, 0, 0, false);
+
         }
         else if (this.isCloseTiltedBackward()){
             m_swerveDrive.drive(0, -0.4, 0, false);
@@ -46,12 +51,27 @@ public class AutoBalance extends CommandBase
         else if (this.isTiltedForward()){
             m_swerveDrive.drive(0, 0.275, 0, false);
         }
+
+        if ( !wasBalanced && this.isBalance() ) {
+            wasBalanced = true;
+            time.reset();
+            time.start();
+        }
+        else if (!this.isBalance()) {
+            wasBalanced = false;
+            led.setOrange();
+            time.stop();
+        }
+        else if ( wasBalanced && (time.get() > 0.5)) {
+            led.setGreen();
+        }
+
     }
 
     @Override
     public boolean isFinished()
     {
-        return false;
+        return (wasBalanced && (time.get() > 0.5));
     }
 
     @Override
@@ -81,4 +101,6 @@ public class AutoBalance extends CommandBase
     public boolean isTiltedBackward(){
         return (gyro.getRoll() < -5);
     }
+
+
 }
