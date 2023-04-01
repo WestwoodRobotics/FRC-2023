@@ -34,4 +34,6 @@ public final class PortConstants {
   public static final int elbowMotorPort = 29;
   public static final int wristMotorPort = 34;
   public static final int intakeRollerPort = 23;
+
+  public static final int LEDPort = 0;
 }
