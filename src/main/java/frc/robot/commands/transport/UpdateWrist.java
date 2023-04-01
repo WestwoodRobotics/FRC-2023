@@ -36,19 +36,16 @@ public class UpdateWrist extends CommandBase
 
     switch(m_transport.getPos()) {
       case "HIGH":
-        if (m_intake.getIntakeMode() != 2)
+        if (m_intake.getIntakeMode() != 1)
           wristPos = TransportConstants.WRIST_START_ROT;
         else
           wristPos = TransportConstants.WRIST_FLIPPED_ROT;
         break;
       case "GROUND":
         if (m_intake.getIntakeMode() == 0)
-          wristPos = TransportConstants.WRIST_FLIPPED_ROT;
+          wristPos = TransportConstants.WRIST_CONE_ROT;
         else if (m_intake.getIntakeMode() == 1)
-          wristPos = TransportConstants.WRIST_HALF_ROT;
-        else if (m_intake.getIntakeMode() == 2)
-          wristPos = TransportConstants.WRIST_START_ROT;
-        break;
+          wristPos = TransportConstants.WRIST_CUBE_ROT;
       default:
     }
 

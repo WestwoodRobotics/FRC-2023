@@ -27,7 +27,7 @@ public class IntakeModule extends SubsystemBase {
   }
 
   public int intakeInverted(int mode) {
-    if(mode == 2){
+    if(mode == 1){
       return -1;
     } else {
       return 1;
@@ -35,7 +35,7 @@ public class IntakeModule extends SubsystemBase {
   }
 
   public int getIntakeMode() {
-    return intakeMode % 3;
+    return intakeMode % 2;
   }
 
   public void incrementMode() {
@@ -46,9 +46,6 @@ public class IntakeModule extends SubsystemBase {
   public float getRotValue(){
     if(getIntakeMode() == 0) {
       return TransportConstants.WRIST_START_ROT;
-    }
-    else if(getIntakeMode() == 1) {
-      return TransportConstants.WRIST_HALF_ROT;
     }
     else
     {
