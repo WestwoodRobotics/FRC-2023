@@ -41,28 +41,26 @@ public class ArmPositionsV3 extends CommandBase
       case "VERTICAL":
         shoulderPos = TransportConstants.VERTICAL_SHOULDER_ROT;
         elbowPos = TransportConstants.VERTICAL_ELBOW_ROT;
-        if (m_intake.getIntakeMode() != 2)
-          wristPos = TransportConstants.WRIST_START_ROT;
+        if (m_intake.getIntakeMode() != 1)
+          wristPos = TransportConstants.WRIST_CONE_ROT;
         else
-          wristPos = TransportConstants.WRIST_FLIPPED_ROT;
+          wristPos = TransportConstants.WRIST_CUBE_ROT;
         break;
       case "HIGH":
         shoulderPos = TransportConstants.HIGH_SHOULDER_ROT;
         elbowPos = TransportConstants.HIGH_ELBOW_ROT;
-        if (m_intake.getIntakeMode() != 2)
+        if (m_intake.getIntakeMode() != 1)
           wristPos = TransportConstants.WRIST_START_ROT;
         else
-          wristPos = TransportConstants.WRIST_FLIPPED_ROT;
+          wristPos = TransportConstants.WRIST_CONE_ROT;
         break;
       case "GROUND":
         shoulderPos = TransportConstants.GROUND_SHOULDER_ROT;
         elbowPos = TransportConstants.GROUND_ELBOW_ROT;
         if (m_intake.getIntakeMode() == 0)
-          wristPos = TransportConstants.WRIST_FLIPPED_ROT;
+          wristPos = TransportConstants.WRIST_CONE_ROT;
         else if (m_intake.getIntakeMode() == 1)
-          wristPos = TransportConstants.WRIST_HALF_ROT;
-        else if (m_intake.getIntakeMode() == 2)
-          wristPos = TransportConstants.WRIST_START_ROT;
+          wristPos = TransportConstants.WRIST_CUBE_ROT;
         break;
       case "START":
         shoulderPos = TransportConstants.START_SHOULDER_ROT;
@@ -82,7 +80,7 @@ public class ArmPositionsV3 extends CommandBase
     timer.start();
     startTime = timer.get();
 
-    m_intake.setIntakePower(0.1);
+    m_intake.setIntakePower(m_intake.intakeInverted(m_intake.getIntakeMode()) * 0.1);
   }
 
   @Override

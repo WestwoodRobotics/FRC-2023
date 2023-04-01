@@ -15,6 +15,8 @@ public final class TransportConstants {
 
   public static final float[] INTAKE_MODES = {0f, 11.55f, 21.1796875f};
   public static final float WRIST_START_ROT = 0f;
+  public static final float WRIST_CUBE_ROT = 11.55f;
+  public static final float WRIST_CONE_ROT = -11.55f;
   public static final float WRIST_HALF_ROT = 11.55f;
   public static final float WRIST_FLIPPED_ROT = 21.1796875f;
 
