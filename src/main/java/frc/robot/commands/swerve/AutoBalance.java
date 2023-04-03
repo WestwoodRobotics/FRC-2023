@@ -1,6 +1,7 @@
 package frc.robot.commands.swerve;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.swerve.Gyro;
 import frc.robot.subsystems.swerve.SwerveDrive;
@@ -30,6 +31,7 @@ public class AutoBalance extends CommandBase
     {
         time.reset();
         time.start();
+        SmartDashboard.putNumber("gyro tilt", gyro.getRoll());
         //m_swerveDrive.drive(0, -1,0, false);
         if( this.isBalance()){
             m_swerveDrive.drive(0, 0, 0, false);

@@ -27,7 +27,7 @@ public class UseIntake extends CommandBase {
     rightTriggerMagnitude = Conversions.deadZoneSquare(rightTriggerMagnitude, 0.1);
 
     if(secondaryController.getLeftBumper()){
-      intake.setIntakePower(-0.25);
+      intake.setIntakePower(-intake.intakeInverted(intake.getIntakeMode()) * 0.25);
     } else {
       intake.setIntakePower(intake.intakeInverted(intake.getIntakeMode()) * 0.8 * (rightTriggerMagnitude - leftTriggerMagnitude));
     }

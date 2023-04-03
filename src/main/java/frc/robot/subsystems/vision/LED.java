@@ -8,7 +8,6 @@ public class LED extends SubsystemBase
 {
   private AddressableLED m_LED;
   private AddressableLEDBuffer m_buffer;
-  private boolean cycleSpot = true;
   
 
   public LED(AddressableLED led, AddressableLEDBuffer buff)
@@ -18,85 +17,39 @@ public class LED extends SubsystemBase
     m_LED.start();
   }
 
-  private void setColor(int R, int G, int B)
+  public void setGreen(int index)
   {
-    if ((R <= 255) && (G <= 255) && (B <= 255))
-    {
-      for (int i = 0; i < m_buffer.getLength(); i++)
-      {
-        m_buffer.setRGB(i, R, G, B);
-      }
-    }
+    m_buffer.setRGB(index, 0, 255, 0);
+  }
+
+  public void setOrange(int index)
+  {
+    m_buffer.setRGB(index, 255, 103, 0);
+  }
+
+  public void setPurple(int index)
+  {
+    m_buffer.setRGB(index, 255, 0, 255);
+  }
+
+  public void setYellow(int index)
+  {
+    m_buffer.setRGB(index, 255, 255, 0);
+  }
+
+  public void lightOff(int index)
+  {
+    m_buffer.setRGB(index, 0, 0, 0);
+  }
+
+  public AddressableLEDBuffer getBuffer()
+  {
+    return m_buffer;
+  }
+
+  public void setData()
+  {
     m_LED.setData(m_buffer);
-  }
-
-  public void setGreen()
-  {
-    this.setColor(0, 255, 0);
-  }
-
-  public void setOrange()
-  {
-    this.setColor(255, 103, 0);
-  }
-
-  public void setPurple()
-  {
-    this.setColor(255, 0, 255);
-  }
-
-  public void setYellow()
-  {
-    this.setColor(255, 255, 0);
-  }
-
-  public void lightsOff()
-  {
-    this.setColor(0, 0, 0);
-  }
-
-  public void cycle (boolean tele, boolean cubeMode)
-  {
-    for (int i = 0; i < m_buffer.getLength(); i++)
-    {
-      if (tele)
-      {
-        if (cubeMode)
-        {
-          if (cycleSpot)
-          {
-            this.setPurple();
-          }
-          else
-          {
-            this.lightsOff();
-          }
-        }
-        else
-        {
-          if (cycleSpot)
-          {
-            this.setYellow();
-          }
-          else
-          {
-            this.lightsOff();
-          }
-        }
-      }
-      else
-      {
-        if (cycleSpot)
-          {
-            this.setOrange();
-          }
-          else
-          {
-            this.setGreen();
-          }
-      }
-      cycleSpot = !cycleSpot;
-    }
   }
 
 }

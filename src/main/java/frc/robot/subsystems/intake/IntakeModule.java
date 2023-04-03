@@ -38,6 +38,13 @@ public class IntakeModule extends SubsystemBase {
     return intakeMode % 2;
   }
 
+  public boolean getCubeMode()
+  {
+    if (this.getIntakeMode() == 1)
+      return true;
+    return false;
+  }
+
   public void incrementMode() {
     intakeMode++;
     SmartDashboard.putNumber("Intake Mode", this.getIntakeMode());

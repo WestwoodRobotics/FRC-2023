@@ -7,7 +7,7 @@ import frc.robot.constants.TransportConstants;
 import frc.robot.subsystems.intake.IntakeModule;
 import frc.robot.subsystems.transport.Transport;
 
-public class ArmPositionsV3 extends CommandBase
+public class WristPosition extends CommandBase
 {
   private Transport m_transport;
   private IntakeModule m_intake;
@@ -21,7 +21,7 @@ public class ArmPositionsV3 extends CommandBase
   private double startTime;
 
 
-  public ArmPositionsV3(String position, Transport arm, IntakeModule intake) {
+  public WristPosition(String position, Transport arm, IntakeModule intake) {
 
     timer = new Timer();
     //mode = intake.getIntakeMode();

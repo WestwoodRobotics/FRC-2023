@@ -27,6 +27,7 @@ public class Robot extends TimedRobot {
   private RobotContainer robotContainer;
   private Gyro gyro = new Gyro();
   private UsbCamera camera;
+  
 
   private static final String chargeStationAuto = "Charging Station Auton";
   private static final String shortSideAuto = "Park Auton Short Side";
@@ -46,9 +47,9 @@ public class Robot extends TimedRobot {
     camera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
     robotContainer = new RobotContainer();
 
-    m_chooser.setDefaultOption("Charge Station Auton", chargeStationAuto);
-    m_chooser.addOption("Park Auton Short Side", shortSideAuto);
-    m_chooser.addOption("Park Auton Long Side", longSideAuto);
+    m_chooser.setDefaultOption("Charge Station Auto", chargeStationAuto);
+    m_chooser.addOption("Park Auto Short Side", shortSideAuto);
+    m_chooser.addOption("Park Auto Long Side", longSideAuto);
 
     SmartDashboard.putData("Auto choices", m_chooser);
 
@@ -67,6 +68,7 @@ public class Robot extends TimedRobot {
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
+    this.geContainer().setCubeMode(this.geContainer().getIntake().getCubeMode());
     CommandScheduler.getInstance().run();
   }
 
@@ -92,8 +94,10 @@ public class Robot extends TimedRobot {
 
     switch (m_autoSelected){
       case shortSideAuto:
+        autonomousCommand = robotContainer.getShortSideAuto();
         break;
       case longSideAuto:
+        autonomousCommand = robotContainer.getLongSideAuto();
         break;
       case chargeStationAuto:
         default:
