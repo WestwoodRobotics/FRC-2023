@@ -119,7 +119,7 @@ public class ArmPositionsV3 extends CommandBase
     {
       m_transport.setElbowMotorPower(0);
     }
-
+    /*
     //Wrist
     //Puts percent volts to wrist until it reaches desired ticks
     if (!this.determineWristClose() && (m_transport.getWristMotorPosition() < wristPos))
@@ -143,6 +143,7 @@ public class ArmPositionsV3 extends CommandBase
     {
       m_transport.setWristMotorPower(0);
     }
+   */
     //m_transport.setShoulderMotorPosition(shoulderPos);
     //m_transport.setElbowMotorPosition(elbowPos);
   }
@@ -151,13 +152,13 @@ public class ArmPositionsV3 extends CommandBase
   public void end(boolean interrupted) {
     m_transport.setShoulderMotorPower(0);
     m_transport.setElbowMotorPower(0);
-    m_transport.setWristMotorPower(0);
+    //m_transport.setWristMotorPower(0);
     m_intake.setIntakePower(0);
   }
 
   @Override
   public boolean isFinished() {
-    return (determineShoulderFinished() && determineElbowFinished() && determineWristFinished()) || ((timer.get() - startTime) > 4);
+    return (determineShoulderFinished() && determineElbowFinished()) || ((timer.get() - startTime) > 3);
   }
 
   //Shoulder

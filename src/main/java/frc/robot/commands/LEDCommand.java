@@ -60,7 +60,16 @@ public class LEDCommand extends CommandBase
         startTime = timer.get();
     }
 
+    @Override
+    public void execute()
+    {
+        if (cubeMode)
+            m_LED.setAllPurple();
+        else
+            m_LED.setAllYellow();
+    }
 
+    /*
     @Override
     public void execute()
     {
@@ -100,5 +109,6 @@ public class LEDCommand extends CommandBase
         }
         SmartDashboard.putBoolean("Cycling", false);
     }
+    */
 }
 

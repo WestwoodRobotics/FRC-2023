@@ -32,6 +32,24 @@ public class LED extends SubsystemBase
     m_buffer.setRGB(index, 255, 0, 255);
   }
 
+  public void setAllPurple()
+  {
+    for (int i = 0; i < m_buffer.getLength(); i++)
+    {
+      setPurple(i);
+    }
+    m_LED.setData(m_buffer);
+  }
+
+  public void setAllYellow()
+  {
+    for (int i = 0; i < m_buffer.getLength(); i++)
+    {
+      setYellow(i);
+    }
+    m_LED.setData(m_buffer);
+  }
+
   public void setYellow(int index)
   {
     m_buffer.setRGB(index, 255, 255, 0);

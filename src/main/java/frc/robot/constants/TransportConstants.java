@@ -30,10 +30,10 @@ public final class TransportConstants {
   public static final float START_SHOULDER_ROT = 0f;
   public static final float START_ELBOW_ROT = 0f;
 
-  public static final float GROUND_CONE_SHOULDER_ROT = 10.15039062f;
-  public static final float GROUND_CONE_ELBOW_ROT = 80.7109375f;
-  public static final float GROUND_CUBE_SHOULDER_ROT = 15.15039062f;
-  public static final float GROUND_CUBE_ELBOW_ROT = 75.7109375f;
+  public static final float GROUND_CONE_SHOULDER_ROT = 15.15039062f;
+  public static final float GROUND_CONE_ELBOW_ROT = 90.7109375f;
+  public static final float GROUND_CUBE_SHOULDER_ROT = 20.15039062f;
+  public static final float GROUND_CUBE_ELBOW_ROT = 90.7109375f;
 
   public static final float VERTICAL_SHOULDER_ROT = 85.4492188f;
   public static final float VERTICAL_ELBOW_ROT = 32.4140625f;

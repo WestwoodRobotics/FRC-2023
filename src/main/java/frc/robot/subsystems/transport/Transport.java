@@ -65,8 +65,7 @@ public class Transport extends SubsystemBase {
   }
 
   public void setWristMotorPower(double power) {
-    wristMotor.set(
-        power);
+    wristMotor.set(power);
   }
 
   public double getShoulderMotorPosition() {

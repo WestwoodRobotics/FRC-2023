@@ -38,22 +38,18 @@ public class WristPosition extends CommandBase
 
     if(position.equals("UPDATE")) {
       position = m_transport.getPos();
+    } else {
+      m_transport.setPos(position);
     }
-
-    m_transport.setPos(position);
 
     switch(this.position) {
       case "VERTICAL":
-        shoulderPos = TransportConstants.VERTICAL_SHOULDER_ROT;
-        elbowPos = TransportConstants.VERTICAL_ELBOW_ROT;
         if (m_intake.getIntakeMode() != 1)
           wristPos = TransportConstants.WRIST_CONE_ROT;
         else
           wristPos = TransportConstants.WRIST_CUBE_ROT;
         break;
       case "HIGH":
-        shoulderPos = TransportConstants.HIGH_SHOULDER_ROT;
-        elbowPos = TransportConstants.HIGH_ELBOW_ROT;
         if (m_intake.getIntakeMode() != 1)
           wristPos = TransportConstants.WRIST_START_ROT;
         else
@@ -61,19 +57,13 @@ public class WristPosition extends CommandBase
         break;
       case "GROUND":
         if (m_intake.getIntakeMode() == 0) {
-          shoulderPos = TransportConstants.GROUND_CONE_SHOULDER_ROT;
-          elbowPos = TransportConstants.GROUND_CONE_ELBOW_ROT;
           wristPos = TransportConstants.WRIST_CONE_ROT;
         }
         else if (m_intake.getIntakeMode() == 1) {
-          shoulderPos = TransportConstants.GROUND_CUBE_SHOULDER_ROT;
-          elbowPos = TransportConstants.GROUND_CUBE_ELBOW_ROT;
           wristPos = TransportConstants.WRIST_CUBE_ROT;
         }
         break;
       case "START":
-        shoulderPos = TransportConstants.START_SHOULDER_ROT;
-        elbowPos = TransportConstants.START_ELBOW_ROT;
         wristPos = TransportConstants.WRIST_START_ROT;
         break;
       default:
@@ -94,32 +84,6 @@ public class WristPosition extends CommandBase
 
   @Override
   public void execute() {
-
-    m_transport.setShoulderMotorPosition(shoulderPos);
-    //ELbow
-    //Puts percent volts to elbow until it reaches desired ticks
-    if (!this.determineElbowClose() && (m_transport.getElbowMotorPosition() < elbowPos))
-    {
-      m_transport.setElbowMotorPower(1);
-    }
-    else if (!this.determineElbowClose() && (m_transport.getElbowMotorPosition() > elbowPos))
-    {
-      m_transport.setElbowMotorPower(-1);
-    }
-    //decreases power when it is close to desired ticks to prevent rapidly going to 0 volts
-    else if (!this.determineElbowFinished() && (m_transport.getElbowMotorPosition() < elbowPos))
-    {
-      m_transport.setElbowMotorPower(0.4);
-    }
-    else if (!this.determineElbowFinished() && (m_transport.getElbowMotorPosition() > elbowPos))
-    {
-      m_transport.setElbowMotorPower(-0.4);
-    }
-    else if (this.determineElbowFinished())
-    {
-      m_transport.setElbowMotorPower(0);
-    }
-
     //Wrist
     //Puts percent volts to wrist until it reaches desired ticks
     if (!this.determineWristClose() && (m_transport.getWristMotorPosition() < wristPos))
@@ -157,25 +121,7 @@ public class WristPosition extends CommandBase
 
   @Override
   public boolean isFinished() {
-    return (determineShoulderFinished() && determineElbowFinished() && determineWristFinished()) || ((timer.get() - startTime) > 4);
-  }
-
-  //Shoulder
-  private boolean determineShoulderFinished() { //Should these all be .75 rotations? Different Gear Ratios?
-    return (Math.abs(m_transport.getShoulderMotorPosition() - shoulderPos) < 0.5);
-  }
-
-  private boolean determineShoulderClose() {
-    return (Math.abs(m_transport.getShoulderMotorPosition() - shoulderPos) < 4);
-  }
-
-  //Elbow
-  private boolean determineElbowFinished() {
-    return (Math.abs(m_transport.getElbowMotorPosition() - elbowPos) < 0.5);
-  }
-
-  private boolean determineElbowClose() {
-    return (Math.abs(m_transport.getElbowMotorPosition() - elbowPos) < 4);
+    return (determineWristFinished()) || ((timer.get() - startTime) > 2);
   }
 
   //Wrist

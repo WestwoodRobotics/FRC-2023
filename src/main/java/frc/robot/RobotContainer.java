@@ -44,6 +44,7 @@ import frc.robot.commands.transport.ArmPositions;
 import frc.robot.commands.transport.ArmPositionsV3;
 import frc.robot.commands.transport.TurnWrist;
 import frc.robot.commands.transport.UpdateWrist;
+import frc.robot.commands.transport.WristPosition;
 import frc.robot.commands.transport.ManualArm;
 import frc.robot.commands.LEDCommand;
 import frc.robot.commands.TimeAutonCommand;
@@ -151,12 +152,16 @@ public class RobotContainer {
   private void configureButtonBindings() {
     //NEW POSITIONAS METHOD
     yButton.onTrue(new ArmPositionsV3("VERTICAL", transport, intake)
-          .andThen(new ArmPositionsV3("HIGH", transport, intake)));
-    //xButton.onTrue(new ArmPositionsV3("SHELF", transport, intake));
-    aButton.onTrue(new ArmPositionsV3("GROUND", transport, intake));
-    rightBumper.onTrue(new ArmPositionsV3("START", transport, intake));
+          .andThen(new WristPosition("VERTICAL", transport, intake)));
+    bButton.onTrue(new ArmPositionsV3("MID", transport, intake)
+          .andThen(new WristPosition("MID", transport, intake)));
+    aButton.onTrue(new ArmPositionsV3("GROUND", transport, intake)
+          .andThen(new WristPosition("GROUND", transport, intake)));
+    rightBumper.onTrue(new WristPosition("START", transport, intake)
+          .andThen(new ArmPositionsV3("START", transport, intake)));
     leftBumper.onTrue(new InstantCommand((() -> intake.incrementMode()))
-              .andThen(new ArmPositionsV3("UPDATE", transport, intake)));
+              .andThen(new ArmPositionsV3("UPDATE", transport, intake))
+              .andThen(new WristPosition("UPDATE", transport, intake)));
               //.andThen(new ArmPositionsV3("SAME", transport, intake)));
 
     /*

@@ -69,8 +69,8 @@ public class SwerveDrive extends SubsystemBase {
       SwerveModule module = modules[i];
 //      System.out.printf("[%d] %s\n", i, swerveModuleState);
       module.setDesiredState(swerveModuleState);
-      SmartDashboard.putNumber("mod thinky", modules[3].getVelocity(0));
-      SmartDashboard.putNumber("other thinky", modules[0].getVelocity(0));
+      //SmartDashboard.putNumber("mod thinky", modules[3].getVelocity(0));
+      //SmartDashboard.putNumber("other thinky", modules[0].getVelocity(0));
     }
   }
 

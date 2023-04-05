@@ -26,9 +26,9 @@ public class IntakeModule extends SubsystemBase {
     intakeMotor.set(power);
   }
 
-  public int intakeInverted(int mode) {
+  public double intakeInverted(int mode) {
     if(mode == 1){
-      return -1;
+      return -0.75;
     } else {
       return 1;
     }

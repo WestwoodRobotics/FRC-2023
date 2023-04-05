@@ -30,7 +30,7 @@ public class RunIntake extends CommandBase {
 
   @Override
   public void execute() {
-    intake.setIntakePower(-0.5);
+    intake.setIntakePower(-intake.intakeInverted(intake.getIntakeMode()) * 0.5);
   }
 
   @Override
