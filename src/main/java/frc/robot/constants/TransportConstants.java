@@ -30,8 +30,8 @@ public final class TransportConstants {
   public static final float START_SHOULDER_ROT = 0f;
   public static final float START_ELBOW_ROT = 0f;
 
-  public static final float GROUND_CONE_SHOULDER_ROT = 15.15039062f;
-  public static final float GROUND_CONE_ELBOW_ROT = 90.7109375f;
+  public static final float GROUND_CONE_SHOULDER_ROT = 13f;
+  public static final float GROUND_CONE_ELBOW_ROT = 83f;
   public static final float GROUND_CUBE_SHOULDER_ROT = 20.15039062f;
   public static final float GROUND_CUBE_ELBOW_ROT = 90.7109375f;
 
@@ -46,7 +46,10 @@ public final class TransportConstants {
   public static final float DROP_SHOULDER_ROT = 35f;
   public static final float DROP_ELBOW_ROT = 57f;
 
-  public static final float shoulderP = 0.8f; // I think this is right but who knows anymore
+  public static final float shoulderP = 0.6f; // I think this is right but who knows anymore
+  public static final float shoulderI = 0f;
+  public static final float shoulderD = 0f;
+  public static final double shoulderMaxSpeed = 3f;// In RPS
 
   //public static final int FALCON500_OGTICKS = 2048;
   //public static final int FALCON500_544TICKS = 491520;

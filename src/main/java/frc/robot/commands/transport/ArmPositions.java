@@ -16,9 +16,10 @@ public class ArmPositions extends CommandBase
   //boolean validPosition;
   private Timer timer;
   private double startTime;
+  private int intakeMod;
 
 
-  public ArmPositions(double shoulderPosition, double elbowPosition, double wristPosition, Transport arm, IntakeModule intake) {
+  public ArmPositions(double shoulderPosition, double elbowPosition, double wristPosition, Transport arm, IntakeModule intake, int intakeMod) {
 
     //checks that the positions transitions do no result in going over height limit
     /*
@@ -31,6 +32,7 @@ public class ArmPositions extends CommandBase
     */
 
     timer = new Timer();
+    this.intakeMod = intakeMod;
 
     this.shoulderPos = (float) shoulderPosition;
     this.elbowPos = elbowPosition;
@@ -49,14 +51,14 @@ public class ArmPositions extends CommandBase
     timer.start();
     startTime = timer.get();
 
-    m_intake.setIntakePower(0.1);
+    m_intake.setIntakePower(intakeMod * 0.1);
   }
 
   @Override
   public void execute() {
 
     //SmartDashboard.putString("Current Position", currentPos);
-    m_transport.setShoulderMotorPosition(shoulderPos);
+    m_transport.setShoulderMotorPosition(shoulderPos, 0);
     //ELbow
     //Puts percent volts to elbow until it reaches desired ticks
     if (!this.determineElbowClose() && (m_transport.getElbowMotorPosition() < elbowPos))

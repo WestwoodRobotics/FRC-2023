@@ -1,5 +1,8 @@
 package frc.robot.commands.transport;
 
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -19,6 +22,12 @@ public class ArmPositionsV3 extends CommandBase
   //boolean validPosition;
   private Timer timer;
   private double startTime;
+  private double updateBegin;
+  private double updateEnd;
+  private Constraints constraints;
+  private TrapezoidProfile shoulderProfile;
+  private State start;
+  private State target;
 
 
   public ArmPositionsV3(String position, Transport arm, IntakeModule intake) {
@@ -28,6 +37,7 @@ public class ArmPositionsV3 extends CommandBase
     this.position = position;
     m_transport = arm;
     m_intake = intake;
+    constraints = new TrapezoidProfile.Constraints(1, 1);
     addRequirements(arm, intake);
 
     //m_transport.setPosition(newPos);
@@ -57,7 +67,7 @@ public class ArmPositionsV3 extends CommandBase
         if (m_intake.getIntakeMode() != 1)
           wristPos = TransportConstants.WRIST_START_ROT;
         else
-          wristPos = TransportConstants.WRIST_FLIPPED_ROT;
+          wristPos = TransportConstants.WRIST_HALF_ROT;
         break;
       case "GROUND":
         if (m_intake.getIntakeMode() == 0) {
@@ -82,20 +92,31 @@ public class ArmPositionsV3 extends CommandBase
         wristPos = 0;
     }
 
-    m_transport.setPos(position);
+    //m_transport.setPos(position);
     SmartDashboard.putString("Transport Position", position);
 
     timer.reset();
     timer.start();
     startTime = timer.get();
+    updateBegin = timer.get();
 
     m_intake.setIntakePower(m_intake.intakeInverted(m_intake.getIntakeMode()) * 0.1);
+
+    start = new TrapezoidProfile.State(m_transport.getShoulderMotorPosition(), m_transport.getShoulderMotorVelocityRPS());
+
+    shoulderProfile = new TrapezoidProfile(constraints, new TrapezoidProfile.State(shoulderPos, 0), start);
   }
 
   @Override
   public void execute() {
+    /*
+    updateEnd = timer.get();
+    target = shoulderProfile.calculate(updateEnd - updateBegin);
+    m_transport.setShoulderMotorPosition((float)(target.position), (float)(target.velocity / TransportConstants.shoulderMaxSpeed));
+    updateBegin = timer.get();
+    */
 
-    m_transport.setShoulderMotorPosition(shoulderPos);
+    m_transport.setShoulderMotorPosition(shoulderPos, 0);
     //ELbow
     //Puts percent volts to elbow until it reaches desired ticks
     if (!this.determineElbowClose() && (m_transport.getElbowMotorPosition() < elbowPos))

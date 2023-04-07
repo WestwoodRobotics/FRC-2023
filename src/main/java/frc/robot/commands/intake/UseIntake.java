@@ -29,7 +29,7 @@ public class UseIntake extends CommandBase {
     if(secondaryController.getLeftBumper()){
       intake.setIntakePower(-intake.intakeInverted(intake.getIntakeMode()) * 0.25);
     } else {
-      intake.setIntakePower(intake.intakeInverted(intake.getIntakeMode()) * (rightTriggerMagnitude - leftTriggerMagnitude));
+      intake.setIntakePower(0.75 * intake.intakeInverted(intake.getIntakeMode()) * (rightTriggerMagnitude - leftTriggerMagnitude));
     }
   }
 }

@@ -6,7 +6,11 @@ import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkMaxPIDController.AccelStrategy;
+import com.revrobotics.SparkMaxPIDController.ArbFFUnits;
 
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.PortConstants;
 import frc.robot.constants.TransportConstants;
@@ -20,6 +24,8 @@ public class Transport extends SubsystemBase {
       MotorType.kBrushless);
   private final CANSparkMax elbowMotor = new CANSparkMax(PortConstants.elbowMotorPort, MotorType.kBrushless);
   private final CANSparkMax wristMotor = new CANSparkMax(PortConstants.wristMotorPort, MotorType.kBrushless);
+
+  private ProfiledPIDController shoulderController;
 
   private String currentPos;
 
@@ -51,6 +57,8 @@ public class Transport extends SubsystemBase {
     wristMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
     wristMotor.setSoftLimit(SoftLimitDirection.kForward, (float) TransportConstants.MAX_WRIST_ROT);
     wristMotor.setSoftLimit(SoftLimitDirection.kReverse, (float) TransportConstants.MIN_WRIST_ROT);
+
+    shoulderController = new ProfiledPIDController(TransportConstants.shoulderP, TransportConstants.shoulderI, TransportConstants.shoulderD, new TrapezoidProfile.Constraints(2, 2));
 
     currentPos = "START";
 
@@ -93,8 +101,13 @@ public class Transport extends SubsystemBase {
         + "\n Wrist Motor Encoder Ticks: " + getWristMotorPosition());
   }
 
-  public void setShoulderMotorPosition(float position) {
-    shoulderMotorLead.getPIDController().setReference(position, ControlType.kPosition);
+  public void setShoulderMotorPosition(float position, float ff) {
+    shoulderMotorLead.getPIDController().setReference(position, ControlType.kPosition, 0, ff, ArbFFUnits.kPercentOut);
+  }
+
+  public void setShoulderMotorPositionPID(double position)
+  {
+    shoulderController.calculate(this.getShoulderMotorPosition(), position);
   }
 
   public String getPos() {
@@ -104,4 +117,15 @@ public class Transport extends SubsystemBase {
   public void setPos(String pos) {
     currentPos = pos;
   }
+
+  public double getShoulderMotorVelocityRPS()
+  {
+    return shoulderMotorLead.getEncoder().getVelocity() / 60;
+  }
+
+  public double getShoulderMotorVelocity()
+  {
+    return shoulderMotorLead.getEncoder().getVelocity();
+  }
+
 }

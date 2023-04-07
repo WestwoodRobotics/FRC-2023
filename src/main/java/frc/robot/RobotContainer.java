@@ -78,6 +78,7 @@ public class RobotContainer {
   private final JoystickButton leftStickButton = new JoystickButton(primaryController, XboxController.Button.kLeftStick.value);
   private final JoystickButton rightStickButton = new JoystickButton(primaryController, XboxController.Button.kRightStick.value);
   private final JoystickButton startButton = new JoystickButton(primaryController, XboxController.Button.kStart.value);
+  private final JoystickButton startButtontwo = new JoystickButton(secondaryController, XboxController.Button.kStart.value);
   private final POVButton dPadUp = new POVButton(primaryController, 0);
   private final POVButton dPadRight = new POVButton(primaryController, 90);
   private final POVButton dPadDown = new POVButton(primaryController, 180);
@@ -152,7 +153,8 @@ public class RobotContainer {
   private void configureButtonBindings() {
     //NEW POSITIONAS METHOD
     yButton.onTrue(new ArmPositionsV3("VERTICAL", transport, intake)
-          .andThen(new WristPosition("VERTICAL", transport, intake)));
+          .andThen(new ArmPositionsV3("HIGH", transport, intake))
+          .andThen(new WristPosition("HIGH", transport, intake)));
     bButton.onTrue(new ArmPositionsV3("MID", transport, intake)
           .andThen(new WristPosition("MID", transport, intake)));
     aButton.onTrue(new ArmPositionsV3("GROUND", transport, intake)
@@ -177,12 +179,14 @@ public class RobotContainer {
     dPadDown.whileTrue(new InstantCommand(() -> transport.setShoulderMotorPower(0.1)));
 
 
-    dPadRight.whileTrue(new InstantCommand(() -> SwerveDriveSystem.drive(-0.5, 0, 0, false)));
-    dPadLeft.whileTrue(new InstantCommand(() -> SwerveDriveSystem.drive(0.5, 0, 0, false)));
+    dPadRight.whileTrue(new InstantCommand(() -> SwerveDriveSystem.drive(-1, 0, 0, false)));
+    dPadLeft.whileTrue(new InstantCommand(() -> SwerveDriveSystem.drive(1, 0, 0, false)));
 
 
     secondDPadLeft.onTrue(new TurnWrist(transport, -TransportConstants.WRIST_HALF_ROT));
     secondDPadRight.onTrue(new TurnWrist(transport, TransportConstants.WRIST_HALF_ROT));
+
+    startButtontwo.onTrue(new InstantCommand(() -> led.setAllPurple()));
 
     //secondDPadLeft.onTrue(new)
 
@@ -258,15 +262,15 @@ public class RobotContainer {
       //Score High + Autobalance
       //new InstantCommand(() -> SwerveDriveSystem.resetPose(traj.getInitialPose())), // Tell it that its initial pose is where it is
       new InstantCommand(() -> SwerveDriveSystem.setForwardTurn()),
-      new ArmPositions(TransportConstants.VERTICAL_SHOULDER_ROT, TransportConstants.VERTICAL_ELBOW_ROT, TransportConstants.WRIST_START_ROT, transport, intake),
-      new ArmPositions(130, TransportConstants.HIGH_ELBOW_ROT, TransportConstants.WRIST_START_ROT, transport, intake),
+      new ArmPositions(TransportConstants.VERTICAL_SHOULDER_ROT, TransportConstants.VERTICAL_ELBOW_ROT, TransportConstants.WRIST_START_ROT, transport, intake, 1),
+      new ArmPositions(130f, 110f, TransportConstants.WRIST_START_ROT, transport, intake, 1),
       new RunIntake(intake),
       //new ParallelCommandGroup(
-            new ArmPositions(TransportConstants.START_SHOULDER_ROT, TransportConstants.START_ELBOW_ROT, TransportConstants.WRIST_START_ROT, transport, intake),
-            new TimeAutonCommand(SwerveDriveSystem, 1.5, 3.25),
+            new ArmPositions(TransportConstants.START_SHOULDER_ROT, TransportConstants.START_ELBOW_ROT, TransportConstants.WRIST_START_ROT, transport, intake, -1),
+            new TimeAutonCommand(SwerveDriveSystem, 1.5, 1.75),
             new TimeAutonCommand(SwerveDriveSystem, 0, 1),
-      new InstantCommand(() -> gyro.resetRoll()),
-      new TimeAutonCommand(SwerveDriveSystem, -1.5, 2.25),
+      //new InstantCommand(() -> gyro.resetRoll()),
+      //new TimeAutonCommand(SwerveDriveSystem, -1.5, 2.25),
       new AutoBalance(SwerveDriveSystem, gyro) // Go through the motions
     );
   }
@@ -283,11 +287,11 @@ public class RobotContainer {
       //Score High + Autobalance
       //new InstantCommand(() -> SwerveDriveSystem.resetPose(traj.getInitialPose())), // Tell it that its initial pose is where it is
       new InstantCommand(() -> SwerveDriveSystem.setForwardTurn()),
-      new ArmPositions(TransportConstants.VERTICAL_SHOULDER_ROT, TransportConstants.VERTICAL_ELBOW_ROT, TransportConstants.WRIST_START_ROT, transport, intake),
-      new ArmPositions(130, TransportConstants.HIGH_ELBOW_ROT, TransportConstants.WRIST_START_ROT, transport, intake),
+      new ArmPositions(TransportConstants.VERTICAL_SHOULDER_ROT, TransportConstants.VERTICAL_ELBOW_ROT, TransportConstants.WRIST_START_ROT, transport, intake,1),
+      new ArmPositions(130f, 110f, TransportConstants.WRIST_START_ROT, transport, intake, 1),
       new RunIntake(intake),
       new ParallelCommandGroup(
-            new ArmPositions(TransportConstants.START_SHOULDER_ROT, TransportConstants.START_ELBOW_ROT, TransportConstants.WRIST_START_ROT, transport, intake),
+            new ArmPositions(TransportConstants.START_SHOULDER_ROT, TransportConstants.START_ELBOW_ROT, TransportConstants.WRIST_START_ROT, transport, intake, -1),
             new TimeAutonCommand(SwerveDriveSystem, 1.25, 1.5))
     );
   }
@@ -304,11 +308,11 @@ public class RobotContainer {
       //Score High + Autobalance
       //new InstantCommand(() -> SwerveDriveSystem.resetPose(traj.getInitialPose())), // Tell it that its initial pose is where it is
       new InstantCommand(() -> SwerveDriveSystem.setForwardTurn()),
-      new ArmPositions(TransportConstants.VERTICAL_SHOULDER_ROT, TransportConstants.VERTICAL_ELBOW_ROT, TransportConstants.WRIST_START_ROT, transport, intake),
-      new ArmPositions(130, TransportConstants.HIGH_ELBOW_ROT, TransportConstants.WRIST_START_ROT, transport, intake),
+      new ArmPositions(TransportConstants.VERTICAL_SHOULDER_ROT, TransportConstants.VERTICAL_ELBOW_ROT, TransportConstants.WRIST_START_ROT, transport, intake, 1),
+      new ArmPositions(130f, 110f, TransportConstants.WRIST_START_ROT, transport, intake, 1),
       new RunIntake(intake),
       new ParallelCommandGroup(
-            new ArmPositions(TransportConstants.START_SHOULDER_ROT, TransportConstants.START_ELBOW_ROT, TransportConstants.WRIST_START_ROT, transport, intake),
+            new ArmPositions(TransportConstants.START_SHOULDER_ROT, TransportConstants.START_ELBOW_ROT, TransportConstants.WRIST_START_ROT, transport, intake, -1),
             new TimeAutonCommand(SwerveDriveSystem, 1, 3.25))
     );
   }
