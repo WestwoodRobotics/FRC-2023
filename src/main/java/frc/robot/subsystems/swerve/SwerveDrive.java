@@ -156,4 +156,12 @@ public class SwerveDrive extends SubsystemBase {
     }
     this.setModuleStatesDirectly(list);
   }
+
+  public double getAverageDriveEncoderPositions(){
+    double sum = 0;
+    for (SwerveModule module : modules) {
+      sum += module.getDriveMotorEncoderValue();
+    }
+    return sum / modules.length;
+  }
 }

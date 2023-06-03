@@ -9,17 +9,17 @@ public class Vision extends SubsystemBase
 {
     private final NetworkTable networkTable;
     private NetworkTableEntry detected;
-    private NetworkTableEntry horizontalDiff;
-    private NetworkTableEntry verticalDiff;
-    private NetworkTableEntry area;
+    private NetworkTableEntry targetHorizontalDiffAngle;
+    private NetworkTableEntry targetVerticalDiffAngle;
+    private NetworkTableEntry targetArea;
 
     public Vision()
     {
         networkTable = NetworkTableInstance.getDefault().getTable("limelight");
         detected = networkTable.getEntry("tv");
-        horizontalDiff = networkTable.getEntry("tx");
-        verticalDiff = networkTable.getEntry("ty");
-        area = networkTable.getEntry("ta");
+        targetHorizontalDiffAngle = networkTable.getEntry("tx");
+        targetVerticalDiffAngle = networkTable.getEntry("ty");
+        targetArea = networkTable.getEntry("ta");
     }
 
     public boolean found(){
@@ -36,21 +36,23 @@ public class Vision extends SubsystemBase
 
     public double getHorizontalDiff()
     {
-        return horizontalDiff.getDouble(0.0);
+        return targetHorizontalDiffAngle.getDouble(0.0);
     }
 
     public double getVerticalDiff(){
-        return verticalDiff.getDouble(0.0);
+        return targetVerticalDiffAngle.getDouble(0.0);
     }
 
     public double getTargetArea(){
         if (this.found()){
-            return area.getDouble(0.0);
+            return targetArea.getDouble(0.0);
         }
         else{
             return -1;
         }
     }
+
+    
 
 
     
