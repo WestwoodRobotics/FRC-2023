@@ -12,8 +12,11 @@ public class RunIntake extends CommandBase {
   IntakeModule intake;
   Timer tim;
   double power;
+  double modifier;
 
-  public RunIntake(IntakeModule i) {
+  public RunIntake(IntakeModule i, double modifier) {
+    
+    this.modifier = modifier;
     intake = i;
     addRequirements(i);
     tim = new Timer();
@@ -30,7 +33,7 @@ public class RunIntake extends CommandBase {
 
   @Override
   public void execute() {
-    intake.setIntakePower(-1 * intake.intakeInverted(intake.getIntakeMode()) * 0.25);
+    intake.setIntakePower(-1 * modifier * intake.intakeInverted(intake.getIntakeMode()) * 0.25);
   }
 
   @Override

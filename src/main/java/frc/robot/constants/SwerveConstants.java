@@ -12,7 +12,7 @@ import edu.wpi.first.math.util.Units;
 public final class SwerveConstants {
 
   // Drivetrain Dimensions
-  public static final double wheelDiameter = Units.inchesToMeters(3);
+  public static final double wheelDiameter = Units.inchesToMeters(4);
   // Gear ratio of the drive motor
   public static final double driveMotorGearRatio = 6.75;
   // Gear ratio of the steer motor

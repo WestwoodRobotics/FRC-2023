@@ -89,6 +89,48 @@ public class SwerveModule extends SubsystemBase {
     this.driveMotorFeedForward = new SimpleMotorFeedforward(SwerveConstants.PID.driveFeedS, SwerveConstants.PID.driveFeedV, SwerveConstants.PID.driveFeedA);
   }
 
+  public SwerveModule(int driveMotorCANId, int steerMotorCANId, int moduleNum) {
+    this.moduleNum = moduleNum;
+
+    // Initialize the can devices using provided ids
+    driveMotor = new WPI_TalonFX(driveMotorCANId);
+    steerMotor = new WPI_TalonFX(steerMotorCANId);
+
+    absoluteEncoder = null;
+
+    driveMotor.setNeutralMode(NeutralMode.Brake);
+    steerMotor.setNeutralMode(NeutralMode.Coast);
+    steerMotor.setInverted(false);
+
+    driveMotor.clearStickyFaults();
+    steerMotor.clearStickyFaults();
+
+    TalonFXConfiguration swerveAngleFXConfig = new TalonFXConfiguration();
+
+    /* Swerve Angle Motor Configurations */
+    SupplyCurrentLimitConfiguration angleSupplyLimit = new SupplyCurrentLimitConfiguration(true, 20, 30, 0.1);
+
+    swerveAngleFXConfig.slot0.kP = SwerveConstants.PID.steerP;
+    swerveAngleFXConfig.slot0.kI = SwerveConstants.PID.steerI;
+    swerveAngleFXConfig.slot0.kD = SwerveConstants.PID.steerD;
+    swerveAngleFXConfig.slot0.kF = 0.0;
+    swerveAngleFXConfig.supplyCurrLimit = angleSupplyLimit;
+
+    drivePIDController = new PIDController(SwerveConstants.PID.driveP,
+      SwerveConstants.PID.driveI, SwerveConstants.PID.driveD);
+
+    steerMotor.configFactoryDefault();
+    steerMotor.configAllSettings(swerveAngleFXConfig);
+
+
+    resetToAbsolute();
+
+    // Setting Integrator Range (I in PID) | (Makes sure we don't go over the voltage limit)
+    drivePIDController.setIntegratorRange(-SwerveConstants.falconMaxRatedVoltage, SwerveConstants.falconMaxRatedVoltage);
+
+    this.driveMotorFeedForward = new SimpleMotorFeedforward(SwerveConstants.PID.driveFeedS, SwerveConstants.PID.driveFeedV, SwerveConstants.PID.driveFeedA);
+  }
+
   /*
    * Gets the persisted encoder offset from the previous robot session.
    *
@@ -191,7 +233,6 @@ public class SwerveModule extends SubsystemBase {
       SwerveConstants.steerMotorGearRatio);
 
     SwerveModuleState outputState = CTREModuleState.optimize(state, new Rotation2d(currentAngle));
-
     double angleDiff = currentAngle - outputState.angle.getRadians();
 //    double targetDriveSpeed = outputState.speedMetersPerSecond * ModuleConstants.kDriveEncoderRot2Meter * 10 * Math.cos(angleDiff);
     double targetDriveSpeed = outputState.speedMetersPerSecond; //* Math.cos(angleDiff);
@@ -249,9 +290,9 @@ public class SwerveModule extends SubsystemBase {
 
   public SwerveModulePosition getPosition() {
     double position = Conversions.falconToMeters(driveMotor.getSelectedSensorPosition(),
-      SwerveConstants.wheelDiameter, SwerveConstants.driveMotorGearRatio);
-    Rotation2d angle = Rotation2d.fromDegrees(Conversions.falconToDegrees(steerMotor.getSelectedSensorPosition(),
-      SwerveConstants.steerMotorGearRatio));
+      SwerveConstants.wheelDiameter*Math.PI, SwerveConstants.driveMotorGearRatio);
+    Rotation2d angle = Rotation2d.fromDegrees(-Conversions.falconToDegrees(steerMotor.getSelectedSensorPosition(),
+      SwerveConstants.steerMotorGearRatio) - 90);
     return new SwerveModulePosition(position, angle);
   }
 
