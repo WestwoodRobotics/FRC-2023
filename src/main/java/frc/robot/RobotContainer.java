@@ -13,6 +13,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
@@ -33,11 +34,13 @@ import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.constants.AutoConstants;
+import frc.robot.constants.DriveConstants;
 import frc.robot.constants.PortConstants;
 import frc.robot.constants.SwerveConstants;
 import frc.robot.commands.intake.UseIntake;
 import frc.robot.commands.intake.RunIntake;
 import frc.robot.commands.swerve.AutoBalance;
+import frc.robot.commands.swerve.AutoPathing;
 import frc.robot.commands.swerve.DriveConstantControlCommand;
 import frc.robot.commands.swerve.FeedforwardTest;
 import frc.robot.commands.transport.ArmPositions;
@@ -253,6 +256,25 @@ public class RobotContainer {
   public IntakeModule getIntake()
   {
     return intake;
+  }
+
+  public Command getTestPathAuto()
+  {
+    TrajectoryConfig config = new TrajectoryConfig(2, 1).setKinematics(SwerveConstants.swerveDriveKinematics);
+    return new SequentialCommandGroup(
+      new AutoPathing(
+        SwerveDriveSystem,
+        TrajectoryGenerator.generateTrajectory(
+          new Pose2d(0, 0, new Rotation2d(0)),
+          List.of(
+            new Translation2d(4.47 + 0.457, 0),
+            new Translation2d(4.47 + 0.457, -1.829)
+          ),
+          new Pose2d(4.47 + 0.457 - 1.372, -1.829, new Rotation2d(0)),
+          config
+        )
+      )
+    );
   }
 
   public Command getConeChargeStationAuto() {

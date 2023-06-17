@@ -1,5 +1,9 @@
 package frc.robot.subsystems.swerve;
 
+import edu.wpi.first.math.controller.HolonomicDriveController;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+
 // import com.ctre.phoenix.sensors.WPI_Pigeon2;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -10,6 +14,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -36,6 +41,7 @@ public class SwerveDrive extends SubsystemBase {
    */
   private final SwerveModule[] modules = new SwerveModule[4];
   private final SwerveDriveOdometry odometry;
+  private final HolonomicDriveController holo_controller;
   private final Field2d field;
 
   public SwerveDrive() {
@@ -49,7 +55,8 @@ public class SwerveDrive extends SubsystemBase {
     modules[1] = new SwerveModule(PortConstants.frontRightDriveMotorPort,
       PortConstants.frontRightSteerMotorPort, PortConstants.frontRightEncoderPort, 1);
     // Back Left
-    modules[2] = new SwerveModule(PortConstants.backLeftDriveMotorPort, PortConstants.backLeftSteerMotorPort, PortConstants.backLeftEncoderPort, 2);
+    modules[2] = new SwerveModule(PortConstants.backLeftDriveMotorPort,
+      PortConstants.backLeftSteerMotorPort, PortConstants.backLeftEncoderPort, 2);
     // Back Right
     modules[3] = new SwerveModule(PortConstants.backRightDriveMotorPort,
       PortConstants.backRightSteerMotorPort, PortConstants.backRightEncoderPort, 3);
@@ -64,7 +71,13 @@ public class SwerveDrive extends SubsystemBase {
         modules[2].getPosition(),
         modules[3].getPosition()
       },
-      new Pose2d(5, 5, new Rotation2d())
+      new Pose2d(0, 0, new Rotation2d())
+    );
+    // TODO: dont hardcode PID constants
+    holo_controller = new HolonomicDriveController(
+      new PIDController(1, 0, 0),
+      new PIDController(1, 0, 0),
+      new ProfiledPIDController(10, 0, 0, new TrapezoidProfile.Constraints(6.28, 3.14))
     );
     SmartDashboard.putData("Field", field);
     
@@ -81,14 +94,8 @@ public class SwerveDrive extends SubsystemBase {
       }
     );
     field.setRobotPose(this.getPoseMeters());
-    // SmartDashboard.putNumber("Front left pos", modules[0].getPosition().distanceMeters);
-    // SmartDashboard.putNumber("Front right pos", modules[1].getPosition().distanceMeters);
-    // SmartDashboard.putNumber("Back left pos", modules[2].getPosition().distanceMeters);
-    // SmartDashboard.putNumber("Back right pos", modules[3].getPosition().distanceMeters);
-    // SmartDashboard.putNumber("Front left ang", modules[0].getPosition().angle.getDegrees());
-    // SmartDashboard.putNumber("Front right ang", modules[1].getPosition().angle.getDegrees());
-    // SmartDashboard.putNumber("Back left ang", modules[2].getPosition().angle.getDegrees());
-    // SmartDashboard.putNumber("Back right ang", modules[3].getPosition().angle.getDegrees());
+    SmartDashboard.putNumber("Front left caster angle", modules[0].getAngle().getDegrees() % 360);
+    SmartDashboard.putNumber("Yaw", getHeading().getDegrees() % 360);
   }
 
   public void drive(double xSpeed, double ySpeed, double rot, boolean isFieldRelative) {
@@ -158,14 +165,23 @@ public class SwerveDrive extends SubsystemBase {
   }
 
   public void printSteerAngles() {
-    System.out.println("\n\u001B[32mFront Left Steer Motor: " + modules[0].getAngleDegrees() + " degrees" + "\n" +
-      "Front Right Steer Motor: " + modules[1].getAngleDegrees() + " degrees" + "\n" +
-      "Back Left Steer Motor: " + modules[2].getAngleDegrees() + " degrees" + "\n" +
-      "Back Right Steer Motor: " + modules[3].getAngleDegrees() + " degrees\u001B[0m");
+    System.out.println("\n\u001B[32mFront Left Steer Motor: " + modules[0].getAngle().getDegrees() + " degrees" + "\n" +
+      "Front Right Steer Motor: " + modules[1].getAngle().getDegrees() + " degrees" + "\n" +
+      "Back Left Steer Motor: " + modules[2].getAngle().getDegrees() + " degrees" + "\n" +
+      "Back Right Steer Motor: " + modules[3].getAngle().getDegrees() + " degrees\u001B[0m");
   }
 
   public void resetPose(Pose2d pose) {
-    // odometry.resetPosition(pose);
+    odometry.resetPosition(
+      getHeading(),
+      new SwerveModulePosition[] {
+        modules[0].getPosition(),
+        modules[1].getPosition(),
+        modules[2].getPosition(),
+        modules[3].getPosition()
+      },
+      pose
+    );
   }
   
   public SwerveModule getModule(int id)
@@ -192,6 +208,11 @@ public class SwerveDrive extends SubsystemBase {
       list[i] = new SwerveModuleState(0, Rotation2d.fromDegrees(90));
     }
     this.setModuleStatesDirectly(list);
+  }
+
+  public HolonomicDriveController getHolonomicDriveController()
+  {
+    return holo_controller;
   }
 
   public double getAverageDriveEncoderPositions(){

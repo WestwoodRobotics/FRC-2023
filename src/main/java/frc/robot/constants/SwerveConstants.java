@@ -30,7 +30,12 @@ public final class SwerveConstants {
   public static final double falconMaxRatedVoltage = 12;
 
   // Kinematics of the swerve drive system
-  public static final SwerveDriveKinematics swerveDriveKinematics = new SwerveDriveKinematics(new Translation2d(ChassisConstants.frontLeftModuleX, ChassisConstants.frontLeftModuleY), new Translation2d(ChassisConstants.frontRightModuleX, ChassisConstants.frontRightModuleY), new Translation2d(ChassisConstants.backLeftModuleX, ChassisConstants.backLeftModuleY), new Translation2d(ChassisConstants.backRightModuleX, ChassisConstants.backRightModuleY));
+  public static final SwerveDriveKinematics swerveDriveKinematics = new SwerveDriveKinematics(
+    new Translation2d(ChassisConstants.frontLeftModuleX, ChassisConstants.frontLeftModuleY),
+    new Translation2d(ChassisConstants.frontRightModuleX, ChassisConstants.frontRightModuleY),
+    new Translation2d(ChassisConstants.backLeftModuleX, ChassisConstants.backLeftModuleY),
+    new Translation2d(ChassisConstants.backRightModuleX, ChassisConstants.backRightModuleY)
+  );
 
   public static final class PID {
     // Drive PID

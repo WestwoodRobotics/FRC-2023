@@ -44,6 +44,7 @@ public class ManualArm extends CommandBase {
     SmartDashboard.putNumber("shoulder ticks", m_transport.getShoulderMotorPosition());
     SmartDashboard.putNumber("elbow ticks", m_transport.getElbowMotorPosition());
     SmartDashboard.putNumber("wrist Ticks", m_transport.getWristMotorPosition());
+    SmartDashboard.putNumber("shoulder abs", m_transport.getShoulderAbsPosition());
   }
 }
 

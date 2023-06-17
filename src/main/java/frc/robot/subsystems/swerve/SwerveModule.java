@@ -229,8 +229,7 @@ public class SwerveModule extends SubsystemBase {
   public void setDesiredState(SwerveModuleState state) {
 //    state.speedMetersPerSecond = state.speedMetersPerSecond * 204800 / 6.12;
 
-    double currentAngle = Conversions.falconToRadians(steerMotor.getSelectedSensorPosition(),
-      SwerveConstants.steerMotorGearRatio);
+    double currentAngle = getAngle().getRadians();
 
     SwerveModuleState outputState = CTREModuleState.optimize(state, new Rotation2d(currentAngle));
     double angleDiff = currentAngle - outputState.angle.getRadians();
@@ -248,7 +247,7 @@ public class SwerveModule extends SubsystemBase {
     driveMotor.set(ControlMode.PercentOutput, driveFeedforward + driveMotorOutput);
     
     steerMotor.set(ControlMode.Position,
-      Conversions.degreesToFalcon(outputState.angle.getDegrees(), SwerveConstants.steerMotorGearRatio));
+      Conversions.degreesToFalcon(-outputState.angle.getDegrees() - 90, SwerveConstants.steerMotorGearRatio));
   }
 
   /**
@@ -284,15 +283,15 @@ public class SwerveModule extends SubsystemBase {
     scheduler.schedule(this::resetToAbsolute, 300, TimeUnit.MILLISECONDS);
   }
 
-  public double getAngleDegrees() {
-    return Conversions.falconToDegrees(steerMotor.getSelectedSensorPosition(), SwerveConstants.steerMotorGearRatio);
+  public Rotation2d getAngle() {
+    return Rotation2d.fromDegrees(-Conversions.falconToDegrees(steerMotor.getSelectedSensorPosition(),
+    SwerveConstants.steerMotorGearRatio) - 90);
   }
 
   public SwerveModulePosition getPosition() {
     double position = Conversions.falconToMeters(driveMotor.getSelectedSensorPosition(),
       SwerveConstants.wheelDiameter*Math.PI, SwerveConstants.driveMotorGearRatio);
-    Rotation2d angle = Rotation2d.fromDegrees(-Conversions.falconToDegrees(steerMotor.getSelectedSensorPosition(),
-      SwerveConstants.steerMotorGearRatio) - 90);
+    Rotation2d angle = getAngle();
     return new SwerveModulePosition(position, angle);
   }
 

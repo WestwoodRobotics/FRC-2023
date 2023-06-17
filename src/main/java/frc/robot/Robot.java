@@ -37,6 +37,7 @@ public class Robot extends TimedRobot {
   private static final String cubeshortSideAuto = "Cube Park Auton Short Side";
   private static final String cubelongSideAuto = "Cube Park Auton Long Side";
   private static final String cubehighOnlyAuto = "Cube High Cone Only";
+  private static final String testPathAuto = "Test Path Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
@@ -60,6 +61,7 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("Cube Park Auto Short Side", cubeshortSideAuto);
     m_chooser.addOption("Cube Park Auto Long Side", cubelongSideAuto);
     m_chooser.addOption("Cube High Only", cubehighOnlyAuto);
+    m_chooser.addOption("Test Path Auto", testPathAuto);
 
     SmartDashboard.putData("Auto choices", m_chooser);
 
@@ -103,6 +105,9 @@ public class Robot extends TimedRobot {
     SmartDashboard.putString("Auto selected: ", m_autoSelected);
 
     switch (m_autoSelected){
+      case testPathAuto:
+        autonomousCommand = robotContainer.getTestPathAuto();
+        break;
       case coneshortSideAuto:
         autonomousCommand = robotContainer.getConeShortSideAuto();
         break;
