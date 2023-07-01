@@ -37,10 +37,10 @@ public class AutoBalance extends CommandBase
             m_swerveDrive.drive(0, 0, 0, false);
         }
         else if (this.isCloseTiltedBackward()){
-            m_swerveDrive.drive(0, -0.55, 0, false);
+            m_swerveDrive.drive(0, -0.35, 0, false);
         }
         else if (this.isCloseTiltedForward()){
-            m_swerveDrive.drive(0, 0.55, 0, false);
+            m_swerveDrive.drive(0, 0.35, 0, false);
         }
         else if (this.isTiltedBackward()){
             m_swerveDrive.drive(0, -0.275, 0, false);

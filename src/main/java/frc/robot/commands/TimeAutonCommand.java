@@ -44,7 +44,7 @@ public class TimeAutonCommand extends CommandBase
     @Override
     public void execute()
     {
-        m_swerveDrive.drive(0, -speed, 0, false);
+        m_swerveDrive.drive(-0.1, -speed, 0, false);
     }
 
     @Override

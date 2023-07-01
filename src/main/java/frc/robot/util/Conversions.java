@@ -8,7 +8,7 @@ public class Conversions {
    * @return Degrees of Rotation of Mechanism
    */
   public static double falconToDegrees(double counts, double gearRatio) {
-    return counts * (360.0 / (2048));
+    return counts * (360.0 / (2048)) / gearRatio;
   }
 
   /**

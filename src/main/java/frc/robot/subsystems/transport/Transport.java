@@ -1,11 +1,13 @@
 package frc.robot.subsystems.transport;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 import com.revrobotics.SparkMaxPIDController.AccelStrategy;
 import com.revrobotics.SparkMaxPIDController.ArbFFUnits;
 
@@ -43,10 +45,10 @@ public class Transport extends SubsystemBase {
     shoulderMotorFollow1.follow(shoulderMotorLead);
     shoulderMotorFollow2.follow(shoulderMotorLead);
 
-    shoulderMotorLead.enableSoftLimit(SoftLimitDirection.kForward, true);
-    shoulderMotorLead.enableSoftLimit(SoftLimitDirection.kReverse, true);
-    shoulderMotorLead.setSoftLimit(SoftLimitDirection.kForward, (float) TransportConstants.MAX_SHOULDER_ROT);
-    shoulderMotorLead.setSoftLimit(SoftLimitDirection.kReverse, (float) TransportConstants.MIN_SHOULDER_ROT);
+    // shoulderMotorLead.enableSoftLimit(SoftLimitDirection.kForward, true);
+    // shoulderMotorLead.enableSoftLimit(SoftLimitDirection.kReverse, true);
+    // shoulderMotorLead.setSoftLimit(SoftLimitDirection.kForward, (float) TransportConstants.MAX_SHOULDER_ROT);
+    // shoulderMotorLead.setSoftLimit(SoftLimitDirection.kReverse, (float) TransportConstants.MIN_SHOULDER_ROT);
 
     elbowMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
     elbowMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
@@ -59,12 +61,18 @@ public class Transport extends SubsystemBase {
     wristMotor.setSoftLimit(SoftLimitDirection.kReverse, (float) TransportConstants.MIN_WRIST_ROT);
 
     shoulderController = new ProfiledPIDController(TransportConstants.shoulderP, TransportConstants.shoulderI, TransportConstants.shoulderD, new TrapezoidProfile.Constraints(2, 2));
-
     currentPos = "START";
 
   }
 
   public void setShoulderMotorPower(double power) {
+    double abs_position = getShoulderAbsPosition();
+    if(abs_position > 0.9 && abs_position <= 0.9999) {
+      power = Math.max(power, 0);
+    }
+    else if(abs_position > 0.7 && abs_position <= 0.89) {
+      power = Math.min(power, 0);
+    }
     shoulderMotorLead.set(power);
   }
 
@@ -78,6 +86,11 @@ public class Transport extends SubsystemBase {
 
   public double getShoulderMotorPosition() {
     return shoulderMotorLead.getEncoder().getPosition();
+  }
+
+  public double getShoulderAbsPosition() {
+    //shoulderMotorLead.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle).
+    return shoulderMotorLead.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle).getPosition();
   }
 
   public double getElbowMotorPosition() {
@@ -120,7 +133,7 @@ public class Transport extends SubsystemBase {
 
   public double getShoulderMotorVelocityRPS()
   {
-    return shoulderMotorLead.getEncoder().getVelocity() / 60;
+    return shoulderMotorLead.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle).getVelocity() / 60;
   }
 
   public double getShoulderMotorVelocity()

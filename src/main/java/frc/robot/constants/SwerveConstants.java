@@ -12,7 +12,7 @@ import edu.wpi.first.math.util.Units;
 public final class SwerveConstants {
 
   // Drivetrain Dimensions
-  public static final double wheelDiameter = Units.inchesToMeters(3);
+  public static final double wheelDiameter = Units.inchesToMeters(4);
   // Gear ratio of the drive motor
   public static final double driveMotorGearRatio = 6.75;
   // Gear ratio of the steer motor
@@ -30,7 +30,12 @@ public final class SwerveConstants {
   public static final double falconMaxRatedVoltage = 12;
 
   // Kinematics of the swerve drive system
-  public static final SwerveDriveKinematics swerveDriveKinematics = new SwerveDriveKinematics(new Translation2d(ChassisConstants.frontLeftModuleX, ChassisConstants.frontLeftModuleY), new Translation2d(ChassisConstants.frontRightModuleX, ChassisConstants.frontRightModuleY), new Translation2d(ChassisConstants.backLeftModuleX, ChassisConstants.backLeftModuleY), new Translation2d(ChassisConstants.backRightModuleX, ChassisConstants.backRightModuleY));
+  public static final SwerveDriveKinematics swerveDriveKinematics = new SwerveDriveKinematics(
+    new Translation2d(ChassisConstants.frontLeftModuleX, ChassisConstants.frontLeftModuleY),
+    new Translation2d(ChassisConstants.frontRightModuleX, ChassisConstants.frontRightModuleY),
+    new Translation2d(ChassisConstants.backLeftModuleX, ChassisConstants.backLeftModuleY),
+    new Translation2d(ChassisConstants.backRightModuleX, ChassisConstants.backRightModuleY)
+  );
 
   public static final class PID {
     // Drive PID

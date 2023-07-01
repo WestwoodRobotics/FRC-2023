@@ -29,9 +29,15 @@ public class Robot extends TimedRobot {
   private UsbCamera camera;
   
 
-  private static final String chargeStationAuto = "Charging Station Auton";
-  private static final String shortSideAuto = "Park Auton Short Side";
-  private static final String longSideAuto = "Park Auton Long Side";
+  private static final String conechargeStationAuto = "Cone Charging Station Auton";
+  private static final String coneshortSideAuto = "Cone Park Auton Short Side";
+  private static final String conelongSideAuto = "Cone Park Auton Long Side";
+  private static final String conehighOnlyAuto = "Cone High Cone Only";
+  private static final String cubechargeStationAuto = "Cube Charging Station Auton";
+  private static final String cubeshortSideAuto = "Cube Park Auton Short Side";
+  private static final String cubelongSideAuto = "Cube Park Auton Long Side";
+  private static final String cubehighOnlyAuto = "Cube High Cone Only";
+  private static final String testPathAuto = "Test Path Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
@@ -47,9 +53,15 @@ public class Robot extends TimedRobot {
     camera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
     robotContainer = new RobotContainer();
 
-    m_chooser.setDefaultOption("Charge Station Auto", chargeStationAuto);
-    m_chooser.addOption("Park Auto Short Side", shortSideAuto);
-    m_chooser.addOption("Park Auto Long Side", longSideAuto);
+    m_chooser.setDefaultOption("Cone Charge Station Auto", conechargeStationAuto);
+    m_chooser.addOption("Cone Park Auto Short Side", coneshortSideAuto);
+    m_chooser.addOption("Cone Park Auto Long Side", conelongSideAuto);
+    m_chooser.addOption("Cone High Only", conehighOnlyAuto);
+    m_chooser.setDefaultOption("Cube Charge Station Auto", cubechargeStationAuto);
+    m_chooser.addOption("Cube Park Auto Short Side", cubeshortSideAuto);
+    m_chooser.addOption("Cube Park Auto Long Side", cubelongSideAuto);
+    m_chooser.addOption("Cube High Only", cubehighOnlyAuto);
+    m_chooser.addOption("Test Path Auto", testPathAuto);
 
     SmartDashboard.putData("Auto choices", m_chooser);
 
@@ -93,15 +105,32 @@ public class Robot extends TimedRobot {
     SmartDashboard.putString("Auto selected: ", m_autoSelected);
 
     switch (m_autoSelected){
-      case shortSideAuto:
-        autonomousCommand = robotContainer.getShortSideAuto();
+      case testPathAuto:
+        autonomousCommand = robotContainer.getTestPathAuto();
         break;
-      case longSideAuto:
-        autonomousCommand = robotContainer.getLongSideAuto();
+      case coneshortSideAuto:
+        autonomousCommand = robotContainer.getConeShortSideAuto();
         break;
-      case chargeStationAuto:
+      case conelongSideAuto:
+        autonomousCommand = robotContainer.getConeLongSideAuto();
+        break;
+      case conehighOnlyAuto:
+        autonomousCommand = robotContainer.getConeHighOnlyAuto();
+      case cubeshortSideAuto:
+        autonomousCommand = robotContainer.getCubeShortSideAuto();
+        break;
+      case cubelongSideAuto:
+        autonomousCommand = robotContainer.getCubeLongSideAuto();
+        break;
+      case cubehighOnlyAuto:
+        autonomousCommand = robotContainer.getCubeHighOnlyAuto();
+        break;
+      case cubechargeStationAuto:
+        autonomousCommand = robotContainer.getCubeChargeStationAuto();
+        break;
+      case conechargeStationAuto:
         default:
-          autonomousCommand = robotContainer.getChargeStationAuto();
+          autonomousCommand = robotContainer.getConeChargeStationAuto();
           break;
     }
     autonomousCommand.schedule();

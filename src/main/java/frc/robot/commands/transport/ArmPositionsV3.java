@@ -62,12 +62,23 @@ public class ArmPositionsV3 extends CommandBase
           wristPos = TransportConstants.WRIST_CUBE_ROT;
         break;
       case "HIGH":
-        shoulderPos = TransportConstants.HIGH_SHOULDER_ROT;
         elbowPos = TransportConstants.HIGH_ELBOW_ROT;
+        if (m_intake.getIntakeMode() != 1){
+          wristPos = TransportConstants.WRIST_START_ROT;
+          shoulderPos = TransportConstants.HIGH_SHOULDER_ROT;
+        }
+        else {
+          wristPos = TransportConstants.WRIST_CONE_ROT;
+          shoulderPos = TransportConstants.HIGH_CUBE_SHOULDER_ROT;
+        }
+        break;
+      case "MIDDLE":
+        shoulderPos = TransportConstants.SHELF_SHOULDER_ROT;
+        elbowPos = TransportConstants.SHELF_ELBOW_ROT;
         if (m_intake.getIntakeMode() != 1)
           wristPos = TransportConstants.WRIST_START_ROT;
         else
-          wristPos = TransportConstants.WRIST_HALF_ROT;
+          wristPos = TransportConstants.WRIST_CUBE_ROT;
         break;
       case "GROUND":
         if (m_intake.getIntakeMode() == 0) {

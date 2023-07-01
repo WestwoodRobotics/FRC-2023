@@ -21,6 +21,7 @@ public final class TransportConstants {
   public static final float WRIST_FLIPPED_ROT = 21.1796875f;
 
   public static final float HIGH_SHOULDER_ROT = 113.628906f;
+  public static final float HIGH_CUBE_SHOULDER_ROT = 128.628906f;
   public static final float HIGH_ELBOW_ROT = 100.65625f;
 
   public static final float MID_SHOULDER_ROT = 126.953125f;

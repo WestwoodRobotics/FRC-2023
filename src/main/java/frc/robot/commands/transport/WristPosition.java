@@ -53,7 +53,13 @@ public class WristPosition extends CommandBase
         if (m_intake.getIntakeMode() != 1)
           wristPos = TransportConstants.WRIST_START_ROT;
         else
-          wristPos = TransportConstants.WRIST_FLIPPED_ROT;
+          wristPos = TransportConstants.WRIST_CONE_ROT;
+        break;
+      case "MIDDLE":
+        if (m_intake.getIntakeMode() != 1)
+          wristPos = TransportConstants.WRIST_START_ROT;
+        else
+          wristPos = TransportConstants.WRIST_CUBE_ROT;
         break;
       case "GROUND":
         if (m_intake.getIntakeMode() == 0) {
@@ -62,6 +68,12 @@ public class WristPosition extends CommandBase
         else if (m_intake.getIntakeMode() == 1) {
           wristPos = TransportConstants.WRIST_CUBE_ROT;
         }
+        break;
+      case "SCORE START":
+        wristPos = TransportConstants.WRIST_START_ROT;
+        break;
+      case "SCORE FLIP":
+        wristPos = TransportConstants.WRIST_FLIPPED_ROT;
         break;
       case "START":
         wristPos = TransportConstants.WRIST_START_ROT;
@@ -88,11 +100,11 @@ public class WristPosition extends CommandBase
     //Puts percent volts to wrist until it reaches desired ticks
     if (!this.determineWristClose() && (m_transport.getWristMotorPosition() < wristPos))
     {
-      m_transport.setWristMotorPower(0.3);
+      m_transport.setWristMotorPower(0.5);
     }
     else if (!this.determineWristClose() && (m_transport.getWristMotorPosition() > wristPos))
     {
-      m_transport.setWristMotorPower(-0.3);
+      m_transport.setWristMotorPower(-0.5);
     }
     //decreases power when it is close to desired ticks to prevent rapidly going to 0 volts
     else if (!this.determineWristFinished() && (m_transport.getWristMotorPosition() < wristPos))
