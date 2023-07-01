@@ -99,9 +99,12 @@ public class SwerveDrive extends SubsystemBase {
   }
 
   public void drive(double xSpeed, double ySpeed, double rot, boolean isFieldRelative) {
+    Rotation2d yaw = gyro.getYaw();
+    // Field relative was backwards at 90 and 270 degrees, so flip the heading
+    Rotation2d reversedYaw = Rotation2d.fromRadians(-yaw.getRadians());
     SwerveModuleState[] swerveModuleStates = SwerveConstants.swerveDriveKinematics.toSwerveModuleStates(
       isFieldRelative
-        ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, gyro.getYaw())
+        ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, reversedYaw)
         : new ChassisSpeeds(xSpeed, ySpeed, rot));
 
 //    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, AutoConstants.kMaxSpeedMetersPerSecond);

@@ -61,8 +61,6 @@ public class Transport extends SubsystemBase {
     wristMotor.setSoftLimit(SoftLimitDirection.kReverse, (float) TransportConstants.MIN_WRIST_ROT);
 
     shoulderController = new ProfiledPIDController(TransportConstants.shoulderP, TransportConstants.shoulderI, TransportConstants.shoulderD, new TrapezoidProfile.Constraints(2, 2));
-    shoulderMotorLead.getPIDController().setFeedbackDevice(shoulderMotorLead.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle));
-
     currentPos = "START";
 
   }
