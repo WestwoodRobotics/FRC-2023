@@ -260,5 +260,12 @@ public class SwerveModule extends SubsystemBase {
     driveMotor.set(ControlMode.PercentOutput, percent);
     return driveMotor.getMotorOutputPercent();
   }
+  
+  public double getDriveMotorEncoderValue(){
+    return driveMotor.getSelectedSensorPosition();
+  }
 
+  public double getSteerMotorEncoderValue(){
+    return steerMotor.getSelectedSensorPosition();
+  }
 }

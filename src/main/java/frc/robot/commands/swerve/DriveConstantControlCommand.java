@@ -3,6 +3,7 @@ package frc.robot.commands.swerve;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.constants.ControllerConstants;
+import frc.robot.constants.DriveConstants;
 import frc.robot.subsystems.swerve.DriveSpeed;
 import frc.robot.subsystems.swerve.SwerveDrive;
 
@@ -15,6 +16,7 @@ public class DriveConstantControlCommand extends CommandBase {
   private final DriveSpeed limJoystickLeft = new DriveSpeed(0.05);
   private final DriveSpeed limJoystickRight = new DriveSpeed(0.05);
   private XboxController controller;
+  private boolean slowMode;
 
   public DriveConstantControlCommand(SwerveDrive swerveDrive, XboxController controller) {
     m_swerveDrive = swerveDrive;
@@ -24,12 +26,19 @@ public class DriveConstantControlCommand extends CommandBase {
 
 
   @Override
-  public void initialize() {}
+  public void initialize() 
+  {
+    slowMode = false;
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     double leftX, leftY, rightX;
+    if (controller.getBackButtonPressed())
+    {
+      slowMode = !slowMode;
+    }
 
     leftX = controller.getLeftX();
     leftY = controller.getLeftY();
@@ -67,6 +76,13 @@ public class DriveConstantControlCommand extends CommandBase {
     leftX *= maxSpeed;
     leftY *= maxSpeed;
     rightX *= maxAngularSpeed;
+
+    if (slowMode)
+    {
+      leftX *= DriveConstants.slowModeMultiplier;
+      leftY *= DriveConstants.slowModeMultiplier;
+      rightX *= DriveConstants.slowModeMultiplier;
+    }
     // if left stick is active, drive in that direction
     if ((leftRadius >= ControllerConstants.deadzoneCircle) && (rightRadius >= ControllerConstants.deadzoneCircle)) {
       m_swerveDrive.drive(leftX, leftY, rightX, true);

@@ -60,6 +60,10 @@ public class Gyro extends SubsystemBase {
     return pigeon.getPitch();
   }
 
+  public void resetRoll(){
+    pigeon.reset();
+  }
+
   public double getRoll(){
     return pigeon.getRoll();
   }

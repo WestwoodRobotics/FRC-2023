@@ -8,6 +8,8 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.cscore.VideoSource.ConnectionStrategy;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SendableBuilderImpl;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -25,6 +27,13 @@ public class Robot extends TimedRobot {
   private RobotContainer robotContainer;
   private Gyro gyro = new Gyro();
   private UsbCamera camera;
+  
+
+  private static final String chargeStationAuto = "Charging Station Auton";
+  private static final String shortSideAuto = "Park Auton Short Side";
+  private static final String longSideAuto = "Park Auton Long Side";
+  private String m_autoSelected;
+  private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -37,6 +46,12 @@ public class Robot extends TimedRobot {
     camera = CameraServer.startAutomaticCapture("Camera", 0);
     camera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
     robotContainer = new RobotContainer();
+
+    m_chooser.setDefaultOption("Charge Station Auto", chargeStationAuto);
+    m_chooser.addOption("Park Auto Short Side", shortSideAuto);
+    m_chooser.addOption("Park Auto Long Side", longSideAuto);
+
+    SmartDashboard.putData("Auto choices", m_chooser);
 
   }
 
@@ -53,6 +68,7 @@ public class Robot extends TimedRobot {
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
+    this.geContainer().setCubeMode(this.geContainer().getIntake().getCubeMode());
     CommandScheduler.getInstance().run();
   }
 
@@ -70,8 +86,24 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    autonomousCommand = robotContainer.getAutonomousCommand();
+    /*autnomousCommand = robotContainer.getAutonomousCommand();
     
+    autonomousCommand.schedule();o*/
+    m_autoSelected = m_chooser.getSelected();
+    SmartDashboard.putString("Auto selected: ", m_autoSelected);
+
+    switch (m_autoSelected){
+      case shortSideAuto:
+        autonomousCommand = robotContainer.getShortSideAuto();
+        break;
+      case longSideAuto:
+        autonomousCommand = robotContainer.getLongSideAuto();
+        break;
+      case chargeStationAuto:
+        default:
+          autonomousCommand = robotContainer.getChargeStationAuto();
+          break;
+    }
     autonomousCommand.schedule();
   }
 
@@ -79,7 +111,10 @@ public class Robot extends TimedRobot {
    * This function is called periodically during autonomous.
    */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    SmartDashboard.putNumber("gyro roll teleop", gyro.getRoll());
+    
+  }
 
   @Override
   public void teleopInit() {

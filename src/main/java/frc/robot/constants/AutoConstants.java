@@ -24,6 +24,5 @@ public final class AutoConstants {
 
   // Constraints for the Theta controller
   public static final TrapezoidProfile.Constraints thetaControllerConstraints = //
-    new TrapezoidProfile.Constraints(maxAngularVelocity,
-      maxAngularAcceleration);
-}
+    new TrapezoidProfile.Constraints(maxAngularVelocity, maxAngularAcceleration);
+} 

@@ -7,12 +7,13 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.intake.IntakeModule;
 import frc.robot.util.Conversions;
 
-public class slowOuttake extends CommandBase {
+public class RunIntake extends CommandBase {
 
   IntakeModule intake;
   Timer tim;
+  double power;
 
-  public slowOuttake(IntakeModule i) {
+  public RunIntake(IntakeModule i) {
     intake = i;
     addRequirements(i);
     tim = new Timer();
@@ -29,7 +30,7 @@ public class slowOuttake extends CommandBase {
 
   @Override
   public void execute() {
-    intake.setIntakePower(-0.175);
+    intake.setIntakePower(-1 * intake.intakeInverted(intake.getIntakeMode()) * 0.25);
   }
 
   @Override

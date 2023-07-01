@@ -1,45 +1,43 @@
 package frc.robot.commands.transport;
 
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.constants.TransportConstants;
 import frc.robot.subsystems.intake.IntakeModule;
 import frc.robot.subsystems.transport.Transport;
 
-public class ArmPositions extends CommandBase
+public class ArmPositionsV3 extends CommandBase
 {
   private Transport m_transport;
   private IntakeModule m_intake;
   private float shoulderPos;
   private double elbowPos;
   private double wristPos;
-  private String currentPos;
+  private String position;
+  //private int mode;
   //boolean validPosition;
   private Timer timer;
   private double startTime;
-  private int intakeMod;
+  private double updateBegin;
+  private double updateEnd;
+  private Constraints constraints;
+  private TrapezoidProfile shoulderProfile;
+  private State start;
+  private State target;
 
 
-  public ArmPositions(double shoulderPosition, double elbowPosition, double wristPosition, Transport arm, IntakeModule intake, int intakeMod) {
-
-    //checks that the positions transitions do no result in going over height limit
-    /*
-    currentPos = arm.getPosition();
-    if ((currentPos.equals("HIGH") || currentPos.equals("MID")) && (!newPos.equals("START"))) {
-      validPosition = false;
-    } else {
-      validPosition = true;
-    }
-    */
+  public ArmPositionsV3(String position, Transport arm, IntakeModule intake) {
 
     timer = new Timer();
-    this.intakeMod = intakeMod;
-
-    this.shoulderPos = (float) shoulderPosition;
-    this.elbowPos = elbowPosition;
-    this.wristPos = wristPosition;
-
+    //mode = intake.getIntakeMode();
+    this.position = position;
     m_transport = arm;
     m_intake = intake;
+    constraints = new TrapezoidProfile.Constraints(1, 1);
     addRequirements(arm, intake);
 
     //m_transport.setPosition(newPos);
@@ -47,27 +45,87 @@ public class ArmPositions extends CommandBase
 
   @Override
   public void initialize() {
+
+    if(position.equals("UPDATE")) {
+      position = m_transport.getPos();
+    }
+
+    m_transport.setPos(position);
+
+    switch(this.position) {
+      case "VERTICAL":
+        shoulderPos = TransportConstants.VERTICAL_SHOULDER_ROT;
+        elbowPos = TransportConstants.VERTICAL_ELBOW_ROT;
+        if (m_intake.getIntakeMode() != 1)
+          wristPos = TransportConstants.WRIST_CONE_ROT;
+        else
+          wristPos = TransportConstants.WRIST_CUBE_ROT;
+        break;
+      case "HIGH":
+        shoulderPos = TransportConstants.HIGH_SHOULDER_ROT;
+        elbowPos = TransportConstants.HIGH_ELBOW_ROT;
+        if (m_intake.getIntakeMode() != 1)
+          wristPos = TransportConstants.WRIST_START_ROT;
+        else
+          wristPos = TransportConstants.WRIST_HALF_ROT;
+        break;
+      case "GROUND":
+        if (m_intake.getIntakeMode() == 0) {
+          shoulderPos = TransportConstants.GROUND_CONE_SHOULDER_ROT;
+          elbowPos = TransportConstants.GROUND_CONE_ELBOW_ROT;
+          wristPos = TransportConstants.WRIST_CONE_ROT;
+        }
+        else if (m_intake.getIntakeMode() == 1) {
+          shoulderPos = TransportConstants.GROUND_CUBE_SHOULDER_ROT;
+          elbowPos = TransportConstants.GROUND_CUBE_ELBOW_ROT;
+          wristPos = TransportConstants.WRIST_CUBE_ROT;
+        }
+        break;
+      case "START":
+        shoulderPos = TransportConstants.START_SHOULDER_ROT;
+        elbowPos = TransportConstants.START_ELBOW_ROT;
+        wristPos = TransportConstants.WRIST_START_ROT;
+        break;
+      default:
+        shoulderPos = 0;
+        elbowPos = 0;
+        wristPos = 0;
+    }
+
+    //m_transport.setPos(position);
+    SmartDashboard.putString("Transport Position", position);
+
     timer.reset();
     timer.start();
     startTime = timer.get();
+    updateBegin = timer.get();
 
-    m_intake.setIntakePower(intakeMod * 0.1);
+    m_intake.setIntakePower(m_intake.intakeInverted(m_intake.getIntakeMode()) * 0.1);
+
+    start = new TrapezoidProfile.State(m_transport.getShoulderMotorPosition(), m_transport.getShoulderMotorVelocityRPS());
+
+    shoulderProfile = new TrapezoidProfile(constraints, new TrapezoidProfile.State(shoulderPos, 0), start);
   }
 
   @Override
   public void execute() {
+    /*
+    updateEnd = timer.get();
+    target = shoulderProfile.calculate(updateEnd - updateBegin);
+    m_transport.setShoulderMotorPosition((float)(target.position), (float)(target.velocity / TransportConstants.shoulderMaxSpeed));
+    updateBegin = timer.get();
+    */
 
-    //SmartDashboard.putString("Current Position", currentPos);
     m_transport.setShoulderMotorPosition(shoulderPos, 0);
     //ELbow
     //Puts percent volts to elbow until it reaches desired ticks
     if (!this.determineElbowClose() && (m_transport.getElbowMotorPosition() < elbowPos))
     {
-      m_transport.setElbowMotorPower(0.8);
+      m_transport.setElbowMotorPower(1);
     }
     else if (!this.determineElbowClose() && (m_transport.getElbowMotorPosition() > elbowPos))
     {
-      m_transport.setElbowMotorPower(-0.8);
+      m_transport.setElbowMotorPower(-1);
     }
     //decreases power when it is close to desired ticks to prevent rapidly going to 0 volts
     else if (!this.determineElbowFinished() && (m_transport.getElbowMotorPosition() < elbowPos))
@@ -82,16 +140,16 @@ public class ArmPositions extends CommandBase
     {
       m_transport.setElbowMotorPower(0);
     }
-
+    /*
     //Wrist
     //Puts percent volts to wrist until it reaches desired ticks
     if (!this.determineWristClose() && (m_transport.getWristMotorPosition() < wristPos))
     {
-      m_transport.setWristMotorPower(0.4);
+      m_transport.setWristMotorPower(0.3);
     }
     else if (!this.determineWristClose() && (m_transport.getWristMotorPosition() > wristPos))
     {
-      m_transport.setWristMotorPower(-0.4);
+      m_transport.setWristMotorPower(-0.3);
     }
     //decreases power when it is close to desired ticks to prevent rapidly going to 0 volts
     else if (!this.determineWristFinished() && (m_transport.getWristMotorPosition() < wristPos))
@@ -106,6 +164,7 @@ public class ArmPositions extends CommandBase
     {
       m_transport.setWristMotorPower(0);
     }
+   */
     //m_transport.setShoulderMotorPosition(shoulderPos);
     //m_transport.setElbowMotorPosition(elbowPos);
   }
@@ -114,13 +173,13 @@ public class ArmPositions extends CommandBase
   public void end(boolean interrupted) {
     m_transport.setShoulderMotorPower(0);
     m_transport.setElbowMotorPower(0);
-    m_transport.setWristMotorPower(0);
+    //m_transport.setWristMotorPower(0);
     m_intake.setIntakePower(0);
   }
 
   @Override
   public boolean isFinished() {
-    return (determineShoulderFinished() && determineElbowFinished() && determineWristFinished()) || ((timer.get() - startTime) > 4);
+    return (determineShoulderFinished() && determineElbowFinished()) || ((timer.get() - startTime) > 3);
   }
 
   //Shoulder

@@ -6,19 +6,28 @@ import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkMaxPIDController.AccelStrategy;
+import com.revrobotics.SparkMaxPIDController.ArbFFUnits;
 
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.PortConstants;
 import frc.robot.constants.TransportConstants;
 
 public class Transport extends SubsystemBase {
-  private final CANSparkMax shoulderMotorLead = new CANSparkMax(PortConstants.shoulderLeadMotorPort, MotorType.kBrushless);
-  private final CANSparkMax shoulderMotorFollow1 = new CANSparkMax(PortConstants.shoulderFollow1MotorPort, MotorType.kBrushless);
-  private final CANSparkMax shoulderMotorFollow2 = new CANSparkMax(PortConstants.shoulderFollow2MotorPort, MotorType.kBrushless);
+  private final CANSparkMax shoulderMotorLead = new CANSparkMax(PortConstants.shoulderLeadMotorPort,
+      MotorType.kBrushless);
+  private final CANSparkMax shoulderMotorFollow1 = new CANSparkMax(PortConstants.shoulderFollow1MotorPort,
+      MotorType.kBrushless);
+  private final CANSparkMax shoulderMotorFollow2 = new CANSparkMax(PortConstants.shoulderFollow2MotorPort,
+      MotorType.kBrushless);
   private final CANSparkMax elbowMotor = new CANSparkMax(PortConstants.elbowMotorPort, MotorType.kBrushless);
   private final CANSparkMax wristMotor = new CANSparkMax(PortConstants.wristMotorPort, MotorType.kBrushless);
-  private String currentPosition = "START";
 
+  private ProfiledPIDController shoulderController;
+
+  private String currentPos;
 
   public Transport() {
     shoulderMotorLead.setIdleMode(IdleMode.kBrake);
@@ -34,15 +43,25 @@ public class Transport extends SubsystemBase {
     shoulderMotorFollow1.follow(shoulderMotorLead);
     shoulderMotorFollow2.follow(shoulderMotorLead);
 
-    shoulderMotorLead.setSoftLimit(SoftLimitDirection.kForward ,(float)TransportConstants.MAX_SHOULDER_ROT);
-    shoulderMotorLead.setSoftLimit(SoftLimitDirection.kReverse ,(float)TransportConstants.MIN_SHOULDER_ROT);
+    shoulderMotorLead.enableSoftLimit(SoftLimitDirection.kForward, true);
+    shoulderMotorLead.enableSoftLimit(SoftLimitDirection.kReverse, true);
+    shoulderMotorLead.setSoftLimit(SoftLimitDirection.kForward, (float) TransportConstants.MAX_SHOULDER_ROT);
+    shoulderMotorLead.setSoftLimit(SoftLimitDirection.kReverse, (float) TransportConstants.MIN_SHOULDER_ROT);
 
-    elbowMotor.setSoftLimit(SoftLimitDirection.kForward ,(float)TransportConstants.MAX_ELBOW_ROT);
-    elbowMotor.setSoftLimit(SoftLimitDirection. kReverse,(float)TransportConstants.MIN_ELBOW_ROT);
+    elbowMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
+    elbowMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+    elbowMotor.setSoftLimit(SoftLimitDirection.kForward, (float) TransportConstants.MAX_ELBOW_ROT);
+    elbowMotor.setSoftLimit(SoftLimitDirection.kReverse, (float) TransportConstants.MIN_ELBOW_ROT);
 
-    wristMotor.setSoftLimit(SoftLimitDirection.kForward ,(float)TransportConstants.MAX_WRIST_ROT);
-    wristMotor.setSoftLimit(SoftLimitDirection.kReverse ,(float)TransportConstants.MIN_WRIST_ROT);
-    
+    wristMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
+    wristMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+    wristMotor.setSoftLimit(SoftLimitDirection.kForward, (float) TransportConstants.MAX_WRIST_ROT);
+    wristMotor.setSoftLimit(SoftLimitDirection.kReverse, (float) TransportConstants.MIN_WRIST_ROT);
+
+    shoulderController = new ProfiledPIDController(TransportConstants.shoulderP, TransportConstants.shoulderI, TransportConstants.shoulderD, new TrapezoidProfile.Constraints(2, 2));
+
+    currentPos = "START";
+
   }
 
   public void setShoulderMotorPower(double power) {
@@ -54,8 +73,7 @@ public class Transport extends SubsystemBase {
   }
 
   public void setWristMotorPower(double power) {
-    wristMotor.set(
-      power);
+    wristMotor.set(power);
   }
 
   public double getShoulderMotorPosition() {
@@ -70,30 +88,44 @@ public class Transport extends SubsystemBase {
     return wristMotor.getEncoder().getPosition();
   }
 
-  public boolean zeroTransportEncoders(){
+  public boolean zeroTransportEncoders() {
     elbowMotor.getEncoder().setPosition(0);
     shoulderMotorLead.getEncoder().setPosition(0);
     wristMotor.getEncoder().setPosition(0);
     return true;
-}  
-
-  public void printAllMotorRawEncoderTicks(){
-      System.out.println("\n Shoulder Motor Lead Encoder Ticks: " + getShoulderMotorPosition()
-                      + "\n Shoulder Motor Follow 1 Encoder Ticks: " + "\n Elbow Motor Encoder Ticks: " + getElbowMotorPosition()
-                      + "\n Wrist Motor Encoder Ticks: " + getWristMotorPosition());
   }
 
-
-  public String getPosition(){
-    return currentPosition;
+  public void printAllMotorRawEncoderTicks() {
+    System.out.println("\n Shoulder Motor Lead Encoder Ticks: " + getShoulderMotorPosition()
+        + "\n Shoulder Motor Follow 1 Encoder Ticks: " + "\n Elbow Motor Encoder Ticks: " + getElbowMotorPosition()
+        + "\n Wrist Motor Encoder Ticks: " + getWristMotorPosition());
   }
 
-  public void setPosition(String pos){
-    currentPosition = pos;
+  public void setShoulderMotorPosition(float position, float ff) {
+    shoulderMotorLead.getPIDController().setReference(position, ControlType.kPosition, 0, ff, ArbFFUnits.kPercentOut);
   }
 
-  public void setShoulderMotorPosition(float position)
+  public void setShoulderMotorPositionPID(double position)
   {
-    shoulderMotorLead.getPIDController().setReference(position, ControlType.kPosition);
+    shoulderController.calculate(this.getShoulderMotorPosition(), position);
   }
+
+  public String getPos() {
+    return currentPos;
+  }
+
+  public void setPos(String pos) {
+    currentPos = pos;
+  }
+
+  public double getShoulderMotorVelocityRPS()
+  {
+    return shoulderMotorLead.getEncoder().getVelocity() / 60;
+  }
+
+  public double getShoulderMotorVelocity()
+  {
+    return shoulderMotorLead.getEncoder().getVelocity();
+  }
+
 }
