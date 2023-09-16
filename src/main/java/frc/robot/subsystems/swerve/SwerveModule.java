@@ -175,8 +175,8 @@ public class SwerveModule extends SubsystemBase {
       getEncoderOffset();
     }
 
-    double currentAngle = Conversions.falconToDegrees(steerMotor.getSelectedSensorPosition(), SwerveConstants.steerMotorGearRatio);
-    double offset = absoluteEncoder.getAbsolutePosition() - currentAngle;
+    double currentAngle = getAngle().getDegrees();
+    double offset = (absoluteEncoder.getAbsolutePosition() - currentAngle) % 360;
     turnEncoderOffsets[moduleNum] = offset;
 
     saveEncoderOffset();
@@ -186,9 +186,9 @@ public class SwerveModule extends SubsystemBase {
   private void resetToAbsolute() {
     double offset = getEncoderOffset();
     double currentAngle = (absoluteEncoder.getAbsolutePosition() + 360 - offset) % 360;
-    double absolutePosition = Conversions.degreesToFalcon(currentAngle, SwerveConstants.steerMotorGearRatio);
-    steerMotor.setSelectedSensorPosition(absolutePosition);
-    System.out.printf("\u001b[35m====Current angle: %f, offset: %f\u001b%n  Steer motor angle: %f[0m%n", currentAngle, offset, Conversions.falconToDegrees(steerMotor.getSelectedSensorPosition(), SwerveConstants.steerMotorGearRatio));
+    double absolutePosition = -Conversions.degreesToFalcon(currentAngle, SwerveConstants.steerMotorGearRatio) + 90;
+    steerMotor.setSelectedSensorPosition(-absolutePosition - 90);
+    System.out.printf("\u001b[35m====Current angle: %f, offset: %f\u001b%n  Steer motor angle: %f[0m%n", currentAngle, offset, -Conversions.falconToDegrees(steerMotor.getSelectedSensorPosition(), SwerveConstants.steerMotorGearRatio) - 90);
     System.out.println(currentAngle - Conversions.falconToDegrees(Conversions.degreesToFalcon(currentAngle, SwerveConstants.steerMotorGearRatio), SwerveConstants.steerMotorGearRatio));
   }
 
