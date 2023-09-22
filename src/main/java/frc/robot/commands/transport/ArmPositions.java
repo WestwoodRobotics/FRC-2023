@@ -11,7 +11,6 @@ public class ArmPositions extends CommandBase
   private IntakeModule m_intake;
   private float shoulderPos;
   private double elbowPos;
-  private double wristPos;
   private String currentPos;
   //boolean validPosition;
   private Timer timer;
@@ -19,7 +18,7 @@ public class ArmPositions extends CommandBase
   private int intakeMod;
 
 
-  public ArmPositions(double shoulderPosition, double elbowPosition, double wristPosition, Transport arm, IntakeModule intake, int intakeMod) {
+  public ArmPositions(double shoulderPosition, double elbowPosition, Transport arm, IntakeModule intake, int intakeMod) {
 
     //checks that the positions transitions do no result in going over height limit
     /*
@@ -36,7 +35,6 @@ public class ArmPositions extends CommandBase
 
     this.shoulderPos = (float) shoulderPosition;
     this.elbowPos = elbowPosition;
-    this.wristPos = wristPosition;
 
     m_transport = arm;
     m_intake = intake;
@@ -82,45 +80,20 @@ public class ArmPositions extends CommandBase
     {
       m_transport.setElbowMotorPower(0);
     }
-
+  }
     //Wrist
     //Puts percent volts to wrist until it reaches desired ticks
-    if (!this.determineWristClose() && (m_transport.getWristMotorPosition() < wristPos))
-    {
-      m_transport.setWristMotorPower(0.4);
-    }
-    else if (!this.determineWristClose() && (m_transport.getWristMotorPosition() > wristPos))
-    {
-      m_transport.setWristMotorPower(-0.4);
-    }
-    //decreases power when it is close to desired ticks to prevent rapidly going to 0 volts
-    else if (!this.determineWristFinished() && (m_transport.getWristMotorPosition() < wristPos))
-    {
-      m_transport.setWristMotorPower(0.2);
-    }
-    else if (!this.determineWristFinished() && (m_transport.getWristMotorPosition() > wristPos))
-    {
-      m_transport.setWristMotorPower(-0.2);
-    }
-    else if (this.determineWristFinished())
-    {
-      m_transport.setWristMotorPower(0);
-    }
-    //m_transport.setShoulderMotorPosition(shoulderPos);
-    //m_transport.setElbowMotorPosition(elbowPos);
-  }
+  
 
   @Override
   public void end(boolean interrupted) {
     m_transport.setShoulderMotorPower(0);
     m_transport.setElbowMotorPower(0);
-    m_transport.setWristMotorPower(0);
-    m_intake.setIntakePower(0);
   }
 
   @Override
   public boolean isFinished() {
-    return (determineShoulderFinished() && determineElbowFinished() && determineWristFinished()) || ((timer.get() - startTime) > 4);
+    return (determineShoulderFinished() && determineElbowFinished()) || ((timer.get() - startTime) > 4);
   }
 
   //Shoulder
@@ -139,14 +112,5 @@ public class ArmPositions extends CommandBase
 
   private boolean determineElbowClose() {
     return (Math.abs(m_transport.getElbowMotorPosition() - elbowPos) < 4);
-  }
-
-  //Wrist
-  private boolean determineWristFinished() {
-    return (Math.abs(m_transport.getWristMotorPosition() - wristPos) < 0.5);
-  }
-
-  private boolean determineWristClose() {
-    return (Math.abs(m_transport.getWristMotorPosition() - wristPos) < 4);
   }
 }

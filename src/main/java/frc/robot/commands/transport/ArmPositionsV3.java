@@ -56,46 +56,36 @@ public class ArmPositionsV3 extends CommandBase
       case "VERTICAL":
         shoulderPos = TransportConstants.VERTICAL_SHOULDER_ROT;
         elbowPos = TransportConstants.VERTICAL_ELBOW_ROT;
-        if (m_intake.getIntakeMode() != 1)
-          wristPos = TransportConstants.WRIST_CONE_ROT;
-        else
-          wristPos = TransportConstants.WRIST_CUBE_ROT;
-        break;
       case "HIGH":
         elbowPos = TransportConstants.HIGH_ELBOW_ROT;
         if (m_intake.getIntakeMode() != 1){
-          wristPos = TransportConstants.WRIST_START_ROT;
           shoulderPos = TransportConstants.HIGH_SHOULDER_ROT;
         }
         else {
-          wristPos = TransportConstants.WRIST_CONE_ROT;
+
           shoulderPos = TransportConstants.HIGH_CUBE_SHOULDER_ROT;
         }
         break;
       case "MIDDLE":
         shoulderPos = TransportConstants.SHELF_SHOULDER_ROT;
         elbowPos = TransportConstants.SHELF_ELBOW_ROT;
-        if (m_intake.getIntakeMode() != 1)
-          wristPos = TransportConstants.WRIST_START_ROT;
-        else
-          wristPos = TransportConstants.WRIST_CUBE_ROT;
-        break;
+
       case "GROUND":
         if (m_intake.getIntakeMode() == 0) {
           shoulderPos = TransportConstants.GROUND_CONE_SHOULDER_ROT;
           elbowPos = TransportConstants.GROUND_CONE_ELBOW_ROT;
-          wristPos = TransportConstants.WRIST_CONE_ROT;
+
         }
         else if (m_intake.getIntakeMode() == 1) {
           shoulderPos = TransportConstants.GROUND_CUBE_SHOULDER_ROT;
           elbowPos = TransportConstants.GROUND_CUBE_ELBOW_ROT;
-          wristPos = TransportConstants.WRIST_CUBE_ROT;
+
         }
         break;
       case "START":
         shoulderPos = TransportConstants.START_SHOULDER_ROT;
         elbowPos = TransportConstants.START_ELBOW_ROT;
-        wristPos = TransportConstants.WRIST_START_ROT;
+
         break;
       default:
         shoulderPos = 0;
@@ -185,7 +175,6 @@ public class ArmPositionsV3 extends CommandBase
     m_transport.setShoulderMotorPower(0);
     m_transport.setElbowMotorPower(0);
     //m_transport.setWristMotorPower(0);
-    m_intake.setIntakePower(0);
   }
 
   @Override
@@ -211,12 +200,4 @@ public class ArmPositionsV3 extends CommandBase
     return (Math.abs(m_transport.getElbowMotorPosition() - elbowPos) < 4);
   }
 
-  //Wrist
-  private boolean determineWristFinished() {
-    return (Math.abs(m_transport.getWristMotorPosition() - wristPos) < 0.5);
-  }
-
-  private boolean determineWristClose() {
-    return (Math.abs(m_transport.getWristMotorPosition() - wristPos) < 4);
-  }
 }

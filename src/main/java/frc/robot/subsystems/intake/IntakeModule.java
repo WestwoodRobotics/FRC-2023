@@ -50,15 +50,5 @@ public class IntakeModule extends SubsystemBase {
     SmartDashboard.putNumber("Intake Mode", this.getIntakeMode());
   }
 
-  public float getRotValue(){
-    if(getIntakeMode() == 0) {
-      return TransportConstants.WRIST_START_ROT;
-    }
-    else
-    {
-      return TransportConstants.WRIST_FLIPPED_ROT;
-    }
-  }
-
 
 }

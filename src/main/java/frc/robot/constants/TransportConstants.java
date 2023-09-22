@@ -4,21 +4,14 @@ import java.lang.reflect.Array;
 
 public final class TransportConstants {
   public static final float MAX_SHOULDER_ROT = 175.78125f;
-  public static final float MAX_ELBOW_ROT = 205.078125f,
-                            MAX_WRIST_ROT = 25f;
+  public static final float MAX_ELBOW_ROT = 205.078125f;
 
   public static final float MIN_SHOULDER_ROT = -4.8828125f;
-  public static final float MIN_ELBOW_ROT = -10f,
-                            MIN_WRIST_ROT = -21f;
+  public static final float MIN_ELBOW_ROT = -10f;
 
   public static final double kTransportMotorGearRatio = 5.0;
 
   public static final float[] INTAKE_MODES = {0f, 11.55f, 21.1796875f};
-  public static final float WRIST_START_ROT = 0f;
-  public static final float WRIST_CUBE_ROT = 11.55f;
-  public static final float WRIST_CONE_ROT = -11.55f;
-  public static final float WRIST_HALF_ROT = 11.55f;
-  public static final float WRIST_FLIPPED_ROT = 21.1796875f;
 
   public static final float HIGH_SHOULDER_ROT = 113.628906f;
   public static final float HIGH_CUBE_SHOULDER_ROT = 128.628906f;
