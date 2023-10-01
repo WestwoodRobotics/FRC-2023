@@ -17,17 +17,17 @@ public final class TransportConstants {
   public static final float HIGH_CUBE_SHOULDER_ROT = 128.628906f;
   public static final float HIGH_ELBOW_ROT = 100.65625f;
 
-  public static final float MID_SHOULDER_ROT = 126.953125f;
-  public static final float MID_ELBOW_ROT = 92.65625f;
+  public static final float MID_SHOULDER_ROT = 30f;
+  public static final float MID_ELBOW_ROT = 70f;
   public static final double MID_PERCENT_VOLTS = 0.5;
 
   public static final float START_SHOULDER_ROT = 0f;
   public static final float START_ELBOW_ROT = 0f;
 
-  public static final float GROUND_CONE_SHOULDER_ROT = 13f;
-  public static final float GROUND_CONE_ELBOW_ROT = 83f;
-  public static final float GROUND_CUBE_SHOULDER_ROT = 20.15039062f;
-  public static final float GROUND_CUBE_ELBOW_ROT = 90.7109375f;
+  public static final float GROUND_CONE_SHOULDER_ROT = 5f;
+  public static final float GROUND_CONE_ELBOW_ROT = 65f;
+  public static final float GROUND_CUBE_SHOULDER_ROT =5;
+  public static final float GROUND_CUBE_ELBOW_ROT = 65f;
 
   public static final float VERTICAL_SHOULDER_ROT = 85.4492188f;
   public static final float VERTICAL_ELBOW_ROT = 32.4140625f;

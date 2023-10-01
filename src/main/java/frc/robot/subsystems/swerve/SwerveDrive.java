@@ -4,7 +4,7 @@ import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 
-// import com.ctre.phoenix.sensors.WPI_Pigeon2;
+// import com.ctre.phoenix.sensor`s.WPI_Pigeon2;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -153,9 +153,6 @@ public class SwerveDrive extends SubsystemBase {
   }
 
   public void saveEncoderOffsets() {
-    for (SwerveModule module : modules) {
-      module.setEncoderOffset();
-    }
   }
 
   public void resetAllEncoders() {

@@ -159,6 +159,7 @@ public class RobotContainer {
     bButton.onTrue(new ArmPositionsV3("MIDDLE", transport, intake));
     aButton.onTrue(new ArmPositionsV3("GROUND", transport, intake));
     rightBumper.onTrue(new ArmPositionsV3("START", transport, intake));
+  
     leftBumper.onTrue(new InstantCommand((() -> intake.incrementMode()))
               .andThen(new ArmPositionsV3("UPDATE", transport, intake)));
               //.andThen(new ArmPositionsV3("SAME", transport, intake)));
