@@ -158,14 +158,11 @@ public class RobotContainer {
   private void configureButtonBindings() {
     //NEW POSITIONAS METHOD
     yButton.onTrue(new ArmPositionsV3("VERTICAL", transport, intake)
-          .andThen(new ArmPositionsV3("HIGH", transport, intake))
-          .andThen(new WristPosition("HIGH", transport, intake)));
-    bButton.onTrue(new ArmPositionsV3("MIDDLE", transport, intake)
-          .andThen(new WristPosition("MIDDLE", transport, intake)));
-    aButton.onTrue(new ArmPositionsV3("GROUND", transport, intake)
-          .andThen(new WristPosition("GROUND", transport, intake)));
-    rightBumper.onTrue(new WristPosition("START", transport, intake)
-          .andThen(new ArmPositionsV3("START", transport, intake)));
+          .andThen(new ArmPositionsV3("HIGH", transport, intake)));
+    bButton.onTrue(new ArmPositionsV3("MIDDLE", transport, intake));
+    aButton.onTrue(new ArmPositionsV3("GROUND", transport, intake));
+    rightBumper.onTrue(new ArmPositionsV3("START", transport, intake));
+  
     leftBumper.onTrue(new InstantCommand((() -> intake.incrementMode()))
               .andThen(new ArmPositionsV3("UPDATE", transport, intake))
               .andThen(new WristPosition("UPDATE", transport, intake)));

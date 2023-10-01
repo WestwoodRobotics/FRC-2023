@@ -73,12 +73,8 @@ public class ArmPositionsV3 extends CommandBase
         }
         break;
       case "MIDDLE":
-        shoulderPos = TransportConstants.SHELF_SHOULDER_ROT;
-        elbowPos = TransportConstants.SHELF_ELBOW_ROT;
-        if (m_intake.getIntakeMode() != 1)
-          wristPos = TransportConstants.WRIST_START_ROT;
-        else
-          wristPos = TransportConstants.WRIST_CUBE_ROT;
+        shoulderPos = TransportConstants.MID_SHOULDER_ROT;
+        elbowPos = TransportConstants.MID_ELBOW_ROT;
         break;
       case "GROUND":
         if (m_intake.getIntakeMode() == 0) {
@@ -111,7 +107,7 @@ public class ArmPositionsV3 extends CommandBase
     startTime = timer.get();
     updateBegin = timer.get();
 
-    m_intake.setIntakePower(m_intake.intakeInverted(m_intake.getIntakeMode()) * 0.1);
+    m_intake.setIntakePower(0.1);
 
     start = new TrapezoidProfile.State(m_transport.getShoulderMotorPosition(), m_transport.getShoulderMotorVelocityRPS());
 
