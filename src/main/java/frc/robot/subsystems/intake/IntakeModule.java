@@ -20,6 +20,7 @@ public class IntakeModule extends SubsystemBase {
   public IntakeModule() {
     intakeMotor = new CANSparkMax(PortConstants.intakeRollerPort, MotorType.kBrushless);
     intakeMotor.setInverted(false);
+    intakeMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
   }
 
   public void setIntakePower(double power) {
